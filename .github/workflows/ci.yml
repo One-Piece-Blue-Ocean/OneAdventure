@@ -18,6 +18,8 @@ jobs:
         run: npm ci
       - name: JEST Testing
         run: npm run test
+      - name: JEST Coverage
+        run: npm run coverage
       - run: echo "🍏 This job's status is ${{ job.status }}."
   Lint:
     runs-on: ubuntu-latest
