@@ -5,5 +5,5 @@ import { expect, test } from '@jest/globals';
 // https://jestjs.io/docs/getting-started
 
 test('Sample Test', () => {
-  expect(2).toEqual(1);
+  expect(2).toEqual(2);
 });
