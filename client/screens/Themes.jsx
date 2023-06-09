@@ -1,6 +1,3 @@
-import * as React from 'react';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-
 const muted = {
   gold: 'f9bf23',
   red: 'd52b1e',
