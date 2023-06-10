@@ -29,6 +29,7 @@
     "express": "^4.18.2",
     "firebase": "^9.22.2",
     "morgan": "^1.10.0",
+    "native-base": "^3.4.28",
     "nodemon": "^2.0.22",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
