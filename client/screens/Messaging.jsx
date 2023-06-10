@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function MessaginScreen({ navigation }) {
+function MessagingScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text> Messaging </Text>
@@ -27,7 +27,7 @@ function MessaginScreen({ navigation }) {
   );
 }
 
-MessaginScreen.propTypes = {
+MessagingScreen.propTypes = {
   navigation: PropTypes.shape({
     dispatch: PropTypes.func.isRequired,
     goBack: PropTypes.func.isRequired,
@@ -41,4 +41,4 @@ MessaginScreen.propTypes = {
   }).isRequired,
 };
 
-export default MessaginScreen;
+export default MessagingScreen;
