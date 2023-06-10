@@ -114,4 +114,8 @@ function AdventureMapScreen() {
   }
 }
 
+AdventureMapScreen.propTypes = {
+  navigation: PropTypes.func.isRequired,
+};
+
 export default AdventureMapScreen;
