@@ -13,21 +13,21 @@ const styles = StyleSheet.create({
   },
 });
 
-function LoginScreen({ navigation }) {
+function MessaginScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text> Login </Text>
+      <Text> Messaging </Text>
       <Button
         title="Nav"
         onPress={() => {
-          navigation.navigate('Nav');
+          navigation.navigate('AdventureList');
         }}
       />
     </View>
   );
 }
 
-LoginScreen.propTypes = {
+MessaginScreen.propTypes = {
   navigation: PropTypes.shape({
     dispatch: PropTypes.func.isRequired,
     goBack: PropTypes.func.isRequired,
@@ -41,4 +41,4 @@ LoginScreen.propTypes = {
   }).isRequired,
 };
 
-export default LoginScreen;
+export default MessaginScreen;
