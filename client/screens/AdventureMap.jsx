@@ -7,7 +7,6 @@ import axios from 'axios';
 // import { config } from 'dotenv';
 
 // config();
-// import Icon from 'react-native-vector-icons/Foundation';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -15,8 +14,8 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   modal: {
     backgroundColor: 'white',
@@ -26,9 +25,10 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   icon: {
-    backgroundColor: 'white',
-    position: 'fixed',
-    zIndex: 10,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    marginRight: 30,
+    marginTop: 100,
   },
 });
 
@@ -117,14 +117,16 @@ function AdventureMapScreen() {
             </View>
           </View>
         </Modal>
-        <FontAwesome
-          name="list"
-          size={24}
-          color="black"
-          onPress={() => {
-            navigation.navigate('AdventureList');
-          }}
-        />
+        <View style={styles.icon}>
+          <FontAwesome
+            name="list"
+            size={48}
+            color="black"
+            onPress={() => {
+              navigation.navigate('AdventureList');
+            }}
+          />
+        </View>
       </View>
     );
   }

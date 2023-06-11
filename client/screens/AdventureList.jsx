@@ -9,12 +9,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    backgroundColor: 'white',
-    zIndex: 10,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    marginRight: 30,
+    marginTop: 100,
   },
 });
 
@@ -23,7 +21,7 @@ function AdventureListScreen({ navigation }) {
     <View style={styles.container}>
       <Foundation
         name="map"
-        size={24}
+        size={48}
         color="black"
         onPress={() => {
           navigation.navigate('AdventureMap');
@@ -34,7 +32,17 @@ function AdventureListScreen({ navigation }) {
 }
 
 AdventureListScreen.propTypes = {
-  navigation: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      routeName: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default AdventureListScreen;
