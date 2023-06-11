@@ -22,20 +22,16 @@ function AdventureTrackingScreen() {
   const adventureRef = collection(db, 'adventures');
 
   const getAdventures = () => {
-    const currentAdventures = [];
+    // const currentAdventures = [];
 
     getDocs(userAdventuresRef)
       .then((userEventsDocs) => {
         let promiseArr = userEventsDocs.docs.map((eventDoc) => {
-        const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
-        return getDoc(adventureDoc)
-          .then((adventureDocData) => {
-            currentAdventures.push(adventureDocData.data())
-          })
-          .catch((err) => console.log(err))
+          const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
+          return getDoc(adventureDoc).then((adventureDocData) => adventureDocData.data())
         });
-        Promise.all(promiseArr).then(() => {
-          setAdventuresList(currentAdventures)
+        Promise.all(promiseArr).then((resolvedAdventures) => {
+          setAdventuresList(resolvedAdventures);
         });
       });
     };
@@ -47,9 +43,19 @@ function AdventureTrackingScreen() {
     }
   }, [])
 
+
   return (
     <View style={styles.container}>
       <Text> AdventureTracking </Text>
+      {adventuresList.length ?
+        adventuresList.map((adventure, idx) =>
+          <View key={idx}>
+            <Text>
+            {adventure.eventName}
+            </Text>
+          </View>
+        )
+      : null}
     </View>
   );
 }
