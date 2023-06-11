@@ -5,7 +5,7 @@ import {
 } from '@jest/globals';
 import { NativeBaseProvider } from 'native-base';
 
-import Card from '../components/Card';
+import Card from '../components/card';
 
 const testEvent = {
   name: 'Testing the Test',
