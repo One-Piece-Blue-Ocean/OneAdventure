@@ -7,13 +7,15 @@ import axios from 'axios';
 // import { config } from 'dotenv';
 
 // config();
+import PropTypes from 'prop-types';
+import { FontAwesome } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   modal: {
     backgroundColor: 'white',
@@ -22,9 +24,15 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  icon: {
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    marginRight: 30,
+    marginTop: 100,
+  },
 });
 
-function AdventureMapScreen() {
+function AdventureMapScreen({ navigation }) {
   const [events, setEvents] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -78,8 +86,8 @@ function AdventureMapScreen() {
         <MapView
           style={styles.map}
           initialRegion={region}
-          // eslint-disable-next-line no-shadow
-          // onRegionChangeComplete={() => setRegion(region)}
+        // eslint-disable-next-line no-shadow
+        // onRegionChangeComplete={() => setRegion(region)}
         >
           {events.forEach((event) => {
             console.log(Object.keys(event));
@@ -109,9 +117,33 @@ function AdventureMapScreen() {
             </View>
           </View>
         </Modal>
+        <View style={styles.icon}>
+          <FontAwesome
+            name="list"
+            size={48}
+            color="black"
+            onPress={() => {
+              navigation.navigate('AdventureList');
+            }}
+          />
+        </View>
       </View>
     );
   }
 }
+
+AdventureMapScreen.propTypes = {
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      routeName: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
 export default AdventureMapScreen;
