@@ -1,9 +1,9 @@
-/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import {
+  collection, doc, getDoc, getDocs,
+} from 'firebase/firestore';
 import { db } from '../../database/db';
-
 
 const styles = StyleSheet.create({
   container: {
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
+/* eslint-disable */
 function AdventureTrackingScreen() {
   const [adventuresList, setAdventuresList] = useState([]);
 
@@ -22,20 +22,30 @@ function AdventureTrackingScreen() {
   const adventureRef = collection(db, 'adventures');
 
   const getAdventures = () => {
-    let currentAdventures = [];
+    const currentAdventures = [];
 
     getDocs(userAdventuresRef)
-    .then((docs) => docs.forEach((userDoc) => {
-      let adventureDoc = doc(adventureRef, userDoc.data().adventureId);
-
-      getDoc(adventureDoc)
-      .then((adventureDocData) => currentAdventures.push(adventureDocData.data()));
-    }));
-  };
+      .then((userEventsDocs) => {
+        let promiseArr = userEventsDocs.docs.map((eventDoc) => {
+        const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
+        return getDoc(adventureDoc)
+          .then((adventureDocData) => {
+            console.log('pushing data in getdocs')
+            currentAdventures.push(adventureDocData.data())
+          })
+          .catch((err) => console.log(err))
+        });
+        // console.log(promiseArr,' hiiiiii')
+        Promise.all(promiseArr).then(() => {
+          console.log('updating eventslist')
+          setAdventuresList(currentAdventures)
+        });
+      });
+    };
 
 
   useEffect(() => {
-    console.log(adventuresList)
+    // console.log(adventuresList)
     if (!adventuresList.length) {
       getAdventures();
     }
