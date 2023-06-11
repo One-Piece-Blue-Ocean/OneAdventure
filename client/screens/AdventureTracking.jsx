@@ -30,14 +30,11 @@ function AdventureTrackingScreen() {
         const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
         return getDoc(adventureDoc)
           .then((adventureDocData) => {
-            console.log('pushing data in getdocs')
             currentAdventures.push(adventureDocData.data())
           })
           .catch((err) => console.log(err))
         });
-        // console.log(promiseArr,' hiiiiii')
         Promise.all(promiseArr).then(() => {
-          console.log('updating eventslist')
           setAdventuresList(currentAdventures)
         });
       });
@@ -45,13 +42,11 @@ function AdventureTrackingScreen() {
 
 
   useEffect(() => {
-    // console.log(adventuresList)
     if (!adventuresList.length) {
       getAdventures();
     }
   }, [])
 
-  console.log(adventuresList)
   return (
     <View style={styles.container}>
       <Text> AdventureTracking </Text>
