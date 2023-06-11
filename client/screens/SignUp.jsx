@@ -84,6 +84,18 @@ function SignUpScreen({ navigation }) {
   };
 
   const onSignUpPress = () => {
+    if (fullName.length < 1) {
+      createOneButtonAlert('Full name is required');
+      return;
+    }
+    if (email.length < 1) {
+      createOneButtonAlert('Please enter valid email');
+      return;
+    }
+    if (zipcode.length !== 5) {
+      createOneButtonAlert('Please enter valid zipcode');
+      return;
+    }
     if (password !== confirmPassword) {
       createOneButtonAlert('Passwords do not match.');
       return;
@@ -102,10 +114,20 @@ function SignUpScreen({ navigation }) {
             navigation.navigate('Nav', { user: data });
           })
           .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('Error Creating User: ', errorCode, errorMessage);
+            console.log('Error saving user to database: ', error.code, error.message);
           });
+      })
+      .catch((error) => {
+        console.log('Error Creating User: ', error.code, error.message);
+        if (error.code === 'auth/weak-password') {
+          createOneButtonAlert('Password must be at least 6 characters');
+        } else if (error.code === 'auth/invalid-email') {
+          createOneButtonAlert('Invalid email address');
+        } else if (error.code === 'auth/email-already-exists') {
+          createOneButtonAlert('Email already exists');
+        } else {
+          createOneButtonAlert('Could not create new account');
+        }
       });
   };
 

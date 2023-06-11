@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Button,
+  StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Button, Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
@@ -71,6 +71,12 @@ function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const createOneButtonAlert = (message) => (
+    Alert.alert('Error', message, [
+      { text: 'Try again', onPress: () => console.log('Try again pressed') },
+    ])
+  );
+
   const onFooterLinkPress = () => {
     navigation.navigate('SignUp');
   };
@@ -89,7 +95,8 @@ function LoginScreen({ navigation }) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log('Sign in Error: ', errorCode, errorMessage);
+        createOneButtonAlert('Invalid login credentials');
+        console.log('Sign in error: ', errorCode, errorMessage);
       });
   };
 
