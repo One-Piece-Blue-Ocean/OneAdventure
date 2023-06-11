@@ -93,10 +93,8 @@ function LoginScreen({ navigation }) {
         navigation.navigate('Nav', { user: docSnap.data() });
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
         createOneButtonAlert('Invalid login credentials');
-        console.log('Sign in error: ', errorCode, errorMessage);
+        console.log('Sign in error: ', error.code, error.message);
       });
   };
 
