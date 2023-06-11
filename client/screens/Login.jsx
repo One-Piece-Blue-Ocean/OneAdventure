@@ -84,7 +84,6 @@ function LoginScreen({ navigation }) {
         return getDoc(docRef);
       })
       .then((docSnap) => {
-        console.log('DOCSNAP: ', docSnap.data());
         navigation.navigate('Nav', { user: docSnap.data() });
       })
       .catch((error) => {
