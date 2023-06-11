@@ -4,7 +4,11 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
+import { doc, getDoc } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import icon from '../../assets/icon.png';
+
+import { app, db } from '../../database/db';
 
 const styles = StyleSheet.create({
   container: {
@@ -72,7 +76,22 @@ function LoginScreen({ navigation }) {
   };
 
   const onLoginPress = () => {
-
+    const auth = getAuth(app);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const { user } = userCredential;
+        const docRef = doc(db, 'pirates', user.uid);
+        return getDoc(docRef);
+      })
+      .then((docSnap) => {
+        console.log('DOCSNAP: ', docSnap.data());
+        navigation.navigate('Nav', { user: docSnap.data() });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log('Sign in Error: ', errorCode, errorMessage);
+      });
   };
 
   return (

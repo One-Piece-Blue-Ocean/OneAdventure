@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import PropTypes from 'prop-types';
 
 import AdventureListScreen from './AdventureList';
 import AdventureMapScreen from './AdventureMap';
@@ -9,7 +10,9 @@ import MessagingScreen from './Messaging';
 
 const Tab = createBottomTabNavigator();
 
-function Nav() {
+function Nav({ route }) {
+  // route.params contains email and fullName of current user
+  console.log('USER OBJ: ', route.params);
   return (
     <Tab.Navigator>
       <Tab.Screen name="AdventureList" component={AdventureListScreen} />
@@ -20,5 +23,19 @@ function Nav() {
     </Tab.Navigator>
   );
 }
+
+Nav.propTypes = {
+  route: PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    params: PropTypes.shape({
+      user: PropTypes.shape({
+        email: PropTypes.string.isRequired,
+        fullName: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+    path: PropTypes.string,
+  }).isRequired,
+};
 
 export default Nav;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet, Image, Text, TextInput, TouchableOpacity, View,
+  StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
@@ -72,13 +72,20 @@ function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const createOneButtonAlert = (message) => (
+    Alert.alert('Error', message, [
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ])
+  );
+
   const onFooterLinkPress = () => {
     navigation.navigate('Login');
   };
 
   const onSignUpPress = () => {
     if (password !== confirmPassword) {
-      alert('Passwords do not match.');
+      createOneButtonAlert('Passwords do not match.');
+      return;
     }
     const auth = getAuth(app);
     createUserWithEmailAndPassword(auth, email, password)
@@ -88,13 +95,14 @@ function SignUpScreen({ navigation }) {
           email,
           fullName,
         };
-        // const usersRef = app.firestore().collection('pirates');
         setDoc(doc(db, 'pirates', uid), data)
           .then(() => {
             navigation.navigate('Nav', { user: data });
           })
           .catch((error) => {
-            console.log(error);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('Error Creating User: ', errorCode, errorMessage);
           });
       });
   };
