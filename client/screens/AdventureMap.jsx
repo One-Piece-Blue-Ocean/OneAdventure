@@ -7,6 +7,9 @@ import axios from 'axios';
 // import { config } from 'dotenv';
 
 // config();
+// import Icon from 'react-native-vector-icons/Foundation';
+import PropTypes from 'prop-types';
+import { FontAwesome } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,6 +24,11 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  icon: {
+    backgroundColor: 'white',
+    position: 'fixed',
+    zIndex: 10,
   },
 });
 
@@ -109,13 +117,31 @@ function AdventureMapScreen() {
             </View>
           </View>
         </Modal>
+        <FontAwesome
+          name="list"
+          size={24}
+          color="black"
+          onPress={() => {
+            navigation.navigate('AdventureList');
+          }}
+        />
       </View>
     );
   }
 }
 
 AdventureMapScreen.propTypes = {
-  navigation: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      routeName: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default AdventureMapScreen;
