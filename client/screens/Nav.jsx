@@ -11,8 +11,8 @@ import MessagingScreen from './Messaging';
 const Tab = createBottomTabNavigator();
 
 function Nav({ route }) {
-  // route.params contains email and fullName of current user
-  console.log('USER OBJ: ', route.params);
+  // route.params contains email, fullName, zipcode of current user
+  console.log('USER OBJ: ', route.params); // logging for visibility - remove later
   return (
     <Tab.Navigator>
       <Tab.Screen name="AdventureList" component={AdventureListScreen} />
@@ -32,6 +32,7 @@ Nav.propTypes = {
       user: PropTypes.shape({
         email: PropTypes.string.isRequired,
         fullName: PropTypes.string.isRequired,
+        zipcode: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
     path: PropTypes.string,

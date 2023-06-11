@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
 function SignUpScreen({ navigation }) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [zipcode, setZipcode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -94,6 +95,7 @@ function SignUpScreen({ navigation }) {
         const data = {
           email,
           fullName,
+          zipcode,
         };
         setDoc(doc(db, 'pirates', uid), data)
           .then(() => {
@@ -132,6 +134,15 @@ function SignUpScreen({ navigation }) {
           placeholderTextColor="#aaaaaa"
           onChangeText={(text) => setEmail(text)}
           value={email}
+          underlineColorAndroid="transparent"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Zipcode"
+          placeholderTextColor="#aaaaaa"
+          onChangeText={(text) => setZipcode(text)}
+          value={zipcode}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         />
