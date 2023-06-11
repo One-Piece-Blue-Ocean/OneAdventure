@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1.25,
   },
   friendNameText: {
-    fontSize: 18,
+    fontSize: 23,
   },
   friendBtnContainer: {
     margin: 2,

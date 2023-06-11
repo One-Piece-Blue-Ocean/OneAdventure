@@ -27,9 +27,10 @@ const styles = StyleSheet.create({
   details: {
     backgroundColor: myTheme.colors.border,
     width: '100%',
-    height: 150,
-    justifyContent: 'center',
+    height: 200,
     alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: 5,
   },
   friendsHeaderContainer: {
     width: '100%',
@@ -79,22 +80,30 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   text: {
-    fontSize: 12,
+    fontSize: 18,
+    marginRight: 6,
   },
   textWrap: {
     backgroundColor: 'white',
     width: '90%',
     padding: 2,
-    margin: 5,
     borderRadius: 3,
     overflow: 'hidden',
     flexDirection: 'row',
   },
-  option: {
+  optionEdit: {
+    flex: 0.10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: 3,
+  },
+  optionTitle: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+
   },
 });
 
@@ -135,7 +144,7 @@ const DATA = [
 function ProfileScreen() {
   const [data, setData] = useState(DATA);
   const [userName, setUserName] = useState('Buckey');
-  const [location, setLocation] = useState('lat, lon?');
+  const [location, setLocation] = useState(98765);
   const [searchRadius, setSearchRadius] = useState(50);
   const [typePreference, setTypePreference] = useState('hiking');
   const [modalVisible, setModalVisible] = useState(false);
@@ -158,44 +167,44 @@ function ProfileScreen() {
       </View>
       <View style={styles.details}>
         <View style={styles.textWrap}>
-          <View style={styles.option}>
+          <View style={styles.optionTitle}>
             <Text style={styles.text}>Email:</Text>
-          </View>
-          <View style={styles.option}>
             <Text style={styles.text}>buckey@mail.com</Text>
+          </View>
+          <View style={styles.optionEdit}>
             <AntDesign name="edit" size={20} color="black" />
           </View>
         </View>
         <View style={styles.textWrap}>
-          <View style={styles.option}>
-            <Text style={styles.text}>Default Type:</Text>
-          </View>
-          <View style={styles.option}>
+          <View style={styles.optionTitle}>
+            <Text style={styles.text}>Favorite Type:</Text>
             <Text style={styles.text}>{typePreference}</Text>
+          </View>
+          <View style={styles.optionEdit}>
             <AntDesign name="edit" size={20} color="black" />
           </View>
         </View>
         <View style={styles.textWrap}>
-          <View style={styles.option}>
-            <Text style={styles.text}>Defualt Location:</Text>
-          </View>
-          <View style={styles.option}>
+          <View style={styles.optionTitle}>
+            <Text style={styles.text}>Location:</Text>
             <Text style={styles.text}>{location}</Text>
+          </View>
+          <View style={styles.optionEdit}>
             <AntDesign name="edit" size={20} color="black" />
           </View>
         </View>
         <View style={styles.textWrap}>
-          <View style={styles.option}>
-            <Text style={styles.text}>Default Search Radius:</Text>
-          </View>
-          <View style={styles.option}>
+          <View style={styles.optionTitle}>
+            <Text style={styles.text}>Search Radius:</Text>
             <Text style={styles.text}>{searchRadius}</Text>
+          </View>
+          <View style={styles.optionEdit}>
             <AntDesign
               name="edit"
               size={20}
               color="black"
               onPress={() => {
-
+                // open an edit modal to adjust default
               }}
             />
           </View>
