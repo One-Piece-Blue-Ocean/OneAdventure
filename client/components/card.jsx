@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> e652aa6 (added card component)
 import {
   Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, Skeleton,
 } from 'native-base';
@@ -6,6 +10,21 @@ import PropTypes from 'prop-types';
 
 import { categoryTheme, myTheme } from '../screens/Themes';
 
+<<<<<<< HEAD
+=======
+// Example of Event Object to be passed into Card object
+const testEvent = {
+  name: 'Testing the Test',
+  category: 'Hiking',
+  location: 'To the unknown',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  date: '11/3/23',
+  star: true,
+  friends: [],
+  imageUrl: 'https://images.unsplash.com/photo-1682686580950-960d1d513532?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
+};
+
+>>>>>>> e652aa6 (added card component)
 // TODO: Need to implement the badge/tokens to represent friends.
 
 function Card({
@@ -17,7 +36,11 @@ function Card({
   };
 
   return (
+<<<<<<< HEAD
     <Box alignItems="center" data-testid={loaded}>
+=======
+    <Box alignItems="center">
+>>>>>>> e652aa6 (added card component)
       <Box
         maxW="80"
         width="80"
