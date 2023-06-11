@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React from 'react';
 =======
 import React, { useState } from 'react';
 >>>>>>> e652aa6 (added card component)
+=======
+import React from 'react';
+>>>>>>> 9a6d64c (adding card module)
 import {
   Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, Skeleton,
 } from 'native-base';
@@ -10,6 +14,7 @@ import PropTypes from 'prop-types';
 
 import { categoryTheme, myTheme } from '../screens/Themes';
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 // Example of Event Object to be passed into Card object
@@ -25,6 +30,8 @@ const testEvent = {
 };
 
 >>>>>>> e652aa6 (added card component)
+=======
+>>>>>>> 9a6d64c (adding card module)
 // TODO: Need to implement the badge/tokens to represent friends.
 
 function Card({
@@ -37,10 +44,14 @@ function Card({
 
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
     <Box alignItems="center" data-testid={loaded}>
 =======
     <Box alignItems="center">
 >>>>>>> e652aa6 (added card component)
+=======
+    <Box alignItems="center" data-testid={loaded}>
+>>>>>>> 9a6d64c (adding card module)
       <Box
         maxW="80"
         width="80"
