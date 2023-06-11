@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-/* eslint-disable */
+
 function AdventureTrackingScreen() {
   const [adventuresList, setAdventuresList] = useState([]);
 
@@ -22,40 +22,36 @@ function AdventureTrackingScreen() {
   const adventureRef = collection(db, 'adventures');
 
   const getAdventures = () => {
-    // const currentAdventures = [];
-
     getDocs(userAdventuresRef)
       .then((userEventsDocs) => {
-        let promiseArr = userEventsDocs.docs.map((eventDoc) => {
+        const promiseArr = userEventsDocs.docs.map((eventDoc) => {
           const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
-          return getDoc(adventureDoc).then((adventureDocData) => adventureDocData.data())
+          return getDoc(adventureDoc).then((adventureDocData) => adventureDocData.data());
         });
         Promise.all(promiseArr).then((resolvedAdventures) => {
           setAdventuresList(resolvedAdventures);
         });
       });
-    };
-
+  };
 
   useEffect(() => {
     if (!adventuresList.length) {
       getAdventures();
     }
-  }, [])
-
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text> AdventureTracking </Text>
-      {adventuresList.length ?
-        adventuresList.map((adventure, idx) =>
-          <View key={idx}>
+      {adventuresList.length
+        ? adventuresList.map((adventure) => (
+          <View key={adventure.eventName} style={styles.container}>
             <Text>
-            {adventure.eventName}
+              {adventure.eventName}
             </Text>
           </View>
-        )
-      : null}
+        ))
+        : null}
     </View>
   );
 }
