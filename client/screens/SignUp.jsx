@@ -4,6 +4,9 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
+import { app, db } from '../../database/db';
 import icon from '../../assets/icon.png';
 
 const styles = StyleSheet.create({
@@ -73,7 +76,27 @@ function SignUpScreen({ navigation }) {
     navigation.navigate('Login');
   };
 
-  const onRegisterPress = () => {
+  const onSignUpPress = () => {
+    if (password !== confirmPassword) {
+      alert('Passwords do not match.');
+    }
+    const auth = getAuth(app);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        const { uid } = response.user;
+        const data = {
+          email,
+          fullName,
+        };
+        // const usersRef = app.firestore().collection('pirates');
+        setDoc(doc(db, 'pirates', uid), data)
+          .then(() => {
+            navigation.navigate('Nav', { user: data });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
   };
 
   return (
@@ -126,14 +149,13 @@ function SignUpScreen({ navigation }) {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={() => onRegisterPress()}
+          onPress={() => onSignUpPress()}
         >
           <Text style={styles.buttonTitle}>Create Account</Text>
         </TouchableOpacity>
-
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
-            Already got an account?
+            Already have an account?
             <Text onPress={onFooterLinkPress} style={styles.footerLink}>
             &nbsp;Log in
             </Text>

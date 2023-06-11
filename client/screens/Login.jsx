@@ -82,7 +82,7 @@ function LoginScreen({ navigation }) {
         keyboardShouldPersistTaps="always"
       >
         <Image
-          sytle={styles.logo}
+          style={styles.logo}
           source={icon}
         />
         <TextInput

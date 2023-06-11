@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { initializeApp } = require('firebase/app');
+const { getFirestore } = require('firebase/firestore');
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
@@ -12,4 +13,8 @@ const firebaseConfig = {
   measurementId: 'G-8N1D89NHTG',
 };
 
-module.exports.app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+export { app, db };
