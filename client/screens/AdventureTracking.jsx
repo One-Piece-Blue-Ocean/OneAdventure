@@ -1,5 +1,9 @@
-import React from 'react';
+/* eslint-disable */
+import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { db } from '../../database/db';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +15,33 @@ const styles = StyleSheet.create({
 });
 
 function AdventureTrackingScreen() {
+  const [adventuresList, setAdventuresList] = useState([]);
+
+  const userId = useContext('userContext') || 'yBjkdAwIoXgoczmWPtiX';
+  const userAdventuresRef = collection(db, 'pirates', userId, 'events');
+  const adventureRef = collection(db, 'adventures');
+
+  const getAdventures = () => {
+    let currentAdventures = [];
+
+    getDocs(userAdventuresRef)
+    .then((docs) => docs.forEach((userDoc) => {
+      let adventureDoc = doc(adventureRef, userDoc.data().adventureId);
+
+      getDoc(adventureDoc)
+      .then((adventureDocData) => currentAdventures.push(adventureDocData.data()));
+    }));
+  };
+
+
+  useEffect(() => {
+    console.log(adventuresList)
+    if (!adventuresList.length) {
+      getAdventures();
+    }
+  }, [])
+
+  console.log(adventuresList)
   return (
     <View style={styles.container}>
       <Text> AdventureTracking </Text>
