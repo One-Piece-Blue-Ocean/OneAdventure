@@ -7,8 +7,9 @@ import axios from 'axios';
 // import { config } from 'dotenv';
 
 // config();
-import Icon from 'react-native-vector-icons/Foundation';
+// import Icon from 'react-native-vector-icons/Foundation';
 import PropTypes from 'prop-types';
+import { FontAwesome } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     backgroundColor: 'white',
+    position: 'fixed',
     zIndex: 10,
   },
 });
@@ -81,16 +83,6 @@ function AdventureMapScreen({ navigation }) {
   if (events[0]) {
     return (
       <View style={styles.container}>
-        <Icon.Button
-          name="list-bullet"
-          color="black"
-          size="32"
-          style={styles.icon}
-          title="AdventureList"
-          onPress={() => {
-            navigation.navigate('AdventureList');
-          }}
-        />
         <MapView
           style={styles.map}
           initialRegion={region}
@@ -125,13 +117,31 @@ function AdventureMapScreen({ navigation }) {
             </View>
           </View>
         </Modal>
+        <FontAwesome
+          name="list"
+          size={24}
+          color="black"
+          onPress={() => {
+            navigation.navigate('AdventureList');
+          }}
+        />
       </View>
     );
   }
 }
 
 AdventureMapScreen.propTypes = {
-  navigation: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      routeName: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default AdventureMapScreen;
