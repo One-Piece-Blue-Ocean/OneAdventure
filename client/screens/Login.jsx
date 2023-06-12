@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Button, Alert,
+  StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
