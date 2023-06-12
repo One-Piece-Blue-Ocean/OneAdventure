@@ -35,14 +35,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const tempImagePath = 'https://images.tripshock.com/activity/3434/Pirate-Ship-Adventure-at-John-s-Pass.jpg';
-
 function AdventureDetail({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Image
         source={{
-          uri: tempImagePath,
+          uri: route.params.event.imageUrl,
         }}
         style={styles.image}
       />
