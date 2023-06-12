@@ -92,7 +92,7 @@ function SignUpScreen({ navigation }) {
       createOneButtonAlert('Please enter valid email');
       return;
     }
-    if (city.length !== 5) {
+    if (city.length < 1) {
       createOneButtonAlert('Please enter a city');
       return;
     }

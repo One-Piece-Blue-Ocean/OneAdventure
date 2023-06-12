@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     color: '#1c8fd2',
     fontWeight: 'bold',
     fontSize: 16,
+    marginTop: 10,
   },
 });
 
@@ -79,6 +80,14 @@ function LoginScreen({ navigation }) {
 
   const onFooterLinkPress = () => {
     navigation.navigate('SignUp');
+  };
+
+  const onGuestLinkPress = () => {
+    navigation.navigate('Nav', {
+      user: {
+        city: 'A City', email: 'guest@mail.com', fullName: 'Guest', uid: 'someUIDstring',
+      },
+    });
   };
 
   const onLoginPress = () => {
@@ -140,6 +149,7 @@ function LoginScreen({ navigation }) {
               &nbsp;Sign up
             </Text>
           </Text>
+          <Text onPress={onGuestLinkPress} style={styles.footerLink}>Continue as guest</Text>
         </View>
       </KeyboardAwareScrollView>
     </View>
