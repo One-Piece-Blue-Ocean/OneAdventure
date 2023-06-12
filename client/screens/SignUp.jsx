@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 function SignUpScreen({ navigation }) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [zipcode, setZipcode] = useState('');
+  const [city, setCity] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -92,8 +92,8 @@ function SignUpScreen({ navigation }) {
       createOneButtonAlert('Please enter valid email');
       return;
     }
-    if (zipcode.length !== 5) {
-      createOneButtonAlert('Please enter valid zipcode');
+    if (city.length !== 5) {
+      createOneButtonAlert('Please enter a city');
       return;
     }
     if (password !== confirmPassword) {
@@ -105,9 +105,10 @@ function SignUpScreen({ navigation }) {
       .then((response) => {
         const { uid } = response.user;
         const data = {
+          uid,
           email,
           fullName,
-          zipcode,
+          city,
         };
         setDoc(doc(db, 'pirates', uid), data)
           .then(() => {
@@ -161,10 +162,10 @@ function SignUpScreen({ navigation }) {
         />
         <TextInput
           style={styles.input}
-          placeholder="Zipcode"
+          placeholder="City"
           placeholderTextColor="#aaaaaa"
-          onChangeText={(text) => setZipcode(text)}
-          value={zipcode}
+          onChangeText={(text) => setCity(text)}
+          value={city}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         />
