@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function AdventureMapScreen() {
+function AdventureMapScreen({ navigation }) {
   const [events, setEvents] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -86,8 +86,8 @@ function AdventureMapScreen() {
         <MapView
           style={styles.map}
           initialRegion={region}
-          // eslint-disable-next-line no-shadow
-          // onRegionChangeComplete={() => setRegion(region)}
+        // eslint-disable-next-line no-shadow
+        // onRegionChangeComplete={() => setRegion(region)}
         >
           {events.forEach((event) => {
             console.log(Object.keys(event));
