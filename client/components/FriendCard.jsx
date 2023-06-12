@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     height: 70,
     margin: 10,
     backgroundColor: 'white',
-    borderRadius: 4,
+    borderRadius: 6,
     flexDirection: 'row',
     flex: 1,
   },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   friendNameContainer: {
     padding: 10,
     margin: 3,
-    borderRadius: 3,
+    borderRadius: 5,
     overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'center',
@@ -89,13 +89,6 @@ const styles = StyleSheet.create({
     padding: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
   },
   profileImageWrap: {
     height: 50,
@@ -104,6 +97,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginLeft: 10,
   },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
 });
 
 function FriendCard({ friend }) {
@@ -111,15 +113,17 @@ function FriendCard({ friend }) {
   const { profilePic, userName, id } = friend;
 
   const onMessage = (friendId) => {
-    console.log('start or go to message with friend that was clicked, id:', friendId);
+    // eslint-disable-next-line no-console
+    console.log('Go to message with friend that was clicked, id:', friendId);
   };
 
   const onRemove = (friendId) => {
+    // eslint-disable-next-line no-console
     console.log('remove friend from friends list in db, id:', friendId);
   };
 
   return (
-    <View style={styles.friendCardContainer}>
+    <View style={[styles.friendCardContainer, styles.shadow]}>
       <View style={styles.friendProfileImageContainer}>
         <View style={styles.profileImageWrap}>
           <Image
@@ -148,7 +152,7 @@ function FriendCard({ friend }) {
             <FontAwesome
               name="remove"
               size={24}
-              color="red"
+              color="gray"
               onPress={() => setModalVisible(true)}
             />
           </TouchableOpacity>
@@ -160,7 +164,7 @@ function FriendCard({ friend }) {
         visible={modalVisible}
       >
         <View style={styles.centerModal}>
-          <View style={styles.modalContainer}>
+          <View style={[styles.modalContainer, styles.shadow]}>
             <Text style={styles.modalText}>Remove from friends list?</Text>
             <View style={styles.modalBtnContainer}>
               <TouchableOpacity
@@ -173,7 +177,7 @@ function FriendCard({ friend }) {
                 <Text>Remove</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.modalButton}
+                style={[styles.modalButton, styles.shadow]}
                 onPress={() => setModalVisible(false)}
               >
                 <Text>Cancel</Text>

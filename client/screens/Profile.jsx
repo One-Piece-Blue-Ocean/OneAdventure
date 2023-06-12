@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   friendsHeaderText: {
     fontSize: 24,
@@ -56,11 +57,13 @@ const styles = StyleSheet.create({
   },
   profileHeader: {
     flexDirection: 'row',
+    backgroundColor: 'white',
   },
   profileImageContainer: {
     borderRadius: 50,
     overflow: 'hidden',
     marginLeft: 10,
+    backgroundColor: 'white',
   },
   userNameContainer: {
     flex: 3,
@@ -70,14 +73,6 @@ const styles = StyleSheet.create({
   },
   userNameText: {
     fontSize: 25,
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  shadowProps: {
-    shadowOffset: { width: -2, height: 2 },
-    shadowColor: 'black',
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
   },
   text: {
     fontSize: 18,
@@ -87,9 +82,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '90%',
     padding: 2,
-    borderRadius: 3,
-    overflow: 'hidden',
+    borderRadius: 4,
     flexDirection: 'row',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 2,
   },
   optionEdit: {
     flex: 0.10,
@@ -104,6 +106,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 
@@ -149,6 +161,10 @@ function ProfileScreen() {
   const [typePreference, setTypePreference] = useState('hiking');
   const [modalVisible, setModalVisible] = useState(false);
 
+  useEffect(() => {
+    // set user info
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileHeader}>
@@ -172,7 +188,14 @@ function ProfileScreen() {
             <Text style={styles.text}>buckey@mail.com</Text>
           </View>
           <View style={styles.optionEdit}>
-            <AntDesign name="edit" size={20} color="black" />
+            <AntDesign
+              name="edit"
+              size={20}
+              color="black"
+              onPress={() => {
+                // edit modal
+              }}
+            />
           </View>
         </View>
         <View style={styles.textWrap}>
@@ -181,7 +204,14 @@ function ProfileScreen() {
             <Text style={styles.text}>{typePreference}</Text>
           </View>
           <View style={styles.optionEdit}>
-            <AntDesign name="edit" size={20} color="black" />
+            <AntDesign
+              name="edit"
+              size={20}
+              color="black"
+              onPress={() => {
+                // edit modal
+              }}
+            />
           </View>
         </View>
         <View style={styles.textWrap}>
@@ -190,7 +220,14 @@ function ProfileScreen() {
             <Text style={styles.text}>{location}</Text>
           </View>
           <View style={styles.optionEdit}>
-            <AntDesign name="edit" size={20} color="black" />
+            <AntDesign
+              name="edit"
+              size={20}
+              color="black"
+              onPress={() => {
+                // edit modal
+              }}
+            />
           </View>
         </View>
         <View style={styles.textWrap}>
