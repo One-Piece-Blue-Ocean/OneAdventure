@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
-import myTheme from '../screens/Themes';
+// import myTheme from '../screens/Themes';
 
 const styles = StyleSheet.create({
   centerModal: {
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   friendsListContainer: {
     width: '100%',
     flex: 1,
-    backgroundColor: myTheme.colors.border,
+    backgroundColor: 'gray',
     alignItems: 'center',
     marginTop: StatusBar.currentHeight || 0,
   },
