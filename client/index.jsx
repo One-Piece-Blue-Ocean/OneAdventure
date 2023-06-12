@@ -2,10 +2,14 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { decode, encode } from 'base-64';
 
 import LoginScreen from './screens/Login';
 import SignUpScreen from './screens/SignUp';
 import NavScreen from './screens/Nav';
+
+if (!global.btoa) { global.btoa = encode; }
+if (!global.atob) { global.atob = decode; }
 
 const Stack = createStackNavigator();
 
