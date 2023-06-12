@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
+
+import { setDoc, doc } from 'firebase/firestore';
+import { app, db } from '../../database/db';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,9 +23,16 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     // bottom: 50,
   },
-  image: {
+  detailImage: {
     width: '100%',
     height: '35%',
+    resizeMode: 'contain',
+    margin: 5,
+    backgroundColor: 'grey',
+  },
+  friendImage: {
+    width: '10%',
+    height: '10%',
     resizeMode: 'contain',
     margin: 5,
     backgroundColor: 'grey',
@@ -36,30 +46,46 @@ const styles = StyleSheet.create({
 });
 
 function AdventureDetail({ navigation, route }) {
+  const { event } = route.params;
+  const friends = event.friend ? event.friend : [];
+
+  // console.log('Hmm?', friends.length);
+
   return (
     <View style={styles.container}>
       <Image
         source={{
-          uri: route.params.event.imageUrl,
+          uri: event.imageUrl,
         }}
-        style={styles.image}
+        style={styles.detailImage}
       />
       <View style={styles.heading}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10 }}>
-          {route.params.event.name}
+          {event.name}
         </Text>
         <Text style={{ fontSize: 12, padding: 10 }}>
-          {route.params.event.location}
+          {event.location}
         </Text>
         <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> Full Description </Text>
         <Text style={{ padding: 10 }}>
-          {route.params.event.description}
+          {event.description}
         </Text>
       </View>
       <View>
-        <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>
-          Friends signed up for the event
-        </Text>
+        {friends.length ? friends.map((friend) => (
+          <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>
+            Friends signed up for the event
+            <View>
+              <Image
+                source={{
+                  uri: friend.imageUrl,
+                }}
+                style={styles.friendImage}
+              />
+              <Text>{friend.name}</Text>
+            </View>
+          </Text>
+        )) : null}
       </View>
       <View style={styles.icon}>
         <Ionicons
@@ -87,22 +113,27 @@ AdventureDetail.propTypes = {
       path: PropTypes.string,
     }),
   }).isRequired,
-  event: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    star: PropTypes.bool.isRequired,
-    // TODO: Update once we figure out friends object
-    friend: PropTypes.arrayOf(
-      PropTypes.shape({
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      event: PropTypes.shape({
         name: PropTypes.string.isRequired,
+        category: PropTypes.string.isRequired,
+        location: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        star: PropTypes.bool.isRequired,
+        // TODO: Update once we figure out friends object
+        friend: PropTypes.arrayOf(
+          PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            imageUrl: PropTypes.string.isRequired,
+          }),
+        ),
         imageUrl: PropTypes.string.isRequired,
-      }),
-    ),
-    imageUrl: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
   }).isRequired,
+
 };
 
 export default AdventureDetail;
