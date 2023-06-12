@@ -25,17 +25,17 @@ const styles = StyleSheet.create({
   },
   detailImage: {
     width: '100%',
-    height: '35%',
+    height: '40%',
     resizeMode: 'contain',
     margin: 5,
-    backgroundColor: 'grey',
+    // backgroundColor: 'grey',
   },
   friendImage: {
     width: '10%',
     height: '10%',
     resizeMode: 'contain',
     margin: 5,
-    backgroundColor: 'grey',
+    // backgroundColor: 'grey',
   },
   icon: {
     position: 'absolute',
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
 
 function AdventureDetail({ navigation, route }) {
   const { event } = route.params;
-  const friends = event.friend ? event.friend : [];
+  // const friends = event.friend ? event.friend : [];
+  const friends = [{ name: 'bill' }, { name: 'bob' }];
 
   // console.log('Hmm?', friends.length);
 
@@ -72,20 +73,26 @@ function AdventureDetail({ navigation, route }) {
         </Text>
       </View>
       <View>
-        {friends.length ? friends.map((friend) => (
-          <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>
-            Friends signed up for the event
-            <View>
-              <Image
-                source={{
-                  uri: friend.imageUrl,
-                }}
-                style={styles.friendImage}
-              />
-              <Text>{friend.name}</Text>
-            </View>
-          </Text>
-        )) : null}
+        {friends.length ? (
+          <View>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>
+              Friends signed up for the event
+            </Text>
+            {friends.map((friend) => (
+              <View key={friend.name}>
+                {friend.imageUrl ? (
+                  <Image
+                    source={{
+                      uri: friend.imageUrl,
+                    }}
+                    style={styles.friendImage}
+                  />
+                ) : null}
+                <Text>{friend.name}</Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
       </View>
       <View style={styles.icon}>
         <Ionicons
