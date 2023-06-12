@@ -6,6 +6,7 @@ import { FontAwesome, Entypo, FontAwesome5 } from '@expo/vector-icons';
 import AdventureToggle from './AdventureToggle';
 import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
+import UserContext from '../context';
 import MessagingScreen from './Messaging';
 
 const Tab = createBottomTabNavigator();
@@ -15,53 +16,50 @@ const messageIcon = () => <Entypo name="message" size={24} color="black" />;
 const trackerIcon = () => <FontAwesome5 name="walking" size={24} color="black" />;
 const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
 
-// const UserContext = createContext(null);
-
 function Nav({ route }) {
   // route.params contains uid, email, fullName, city of current user
   const user = route.params;
-  console.log('USER OBJ: ', user); // logging for visibility - remove later
   return (
-  // <UserContext.Provider value={user}>
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Adventures"
-        component={AdventureToggle}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: adventureIcon,
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="Messaging"
-        component={MessagingScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: messageIcon,
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="AdventureTracking"
-        component={AdventureTrackingScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: trackerIcon,
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: profileIcon,
-          headerShown: false,
-        }}
-      />
-    </Tab.Navigator>
-  // </UserContext.Provider>
+    <UserContext.Provider value={user}>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Adventures"
+          component={AdventureToggle}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: adventureIcon,
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Messaging"
+          component={MessagingScreen}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: messageIcon,
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="AdventureTracking"
+          component={AdventureTrackingScreen}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: trackerIcon,
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: profileIcon,
+            headerShown: false,
+          }}
+        />
+      </Tab.Navigator>
+    </UserContext.Provider>
   );
 }
 
