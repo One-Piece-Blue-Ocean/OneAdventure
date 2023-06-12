@@ -2,11 +2,8 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-<<<<<<< HEAD
 import { NativeBaseProvider } from 'native-base';
-=======
 import { decode, encode } from 'base-64';
->>>>>>> 6d9692648a69a2fbc3b77e4ade58e1b27186071f
 
 import LoginScreen from './screens/Login';
 import SignUpScreen from './screens/SignUp';

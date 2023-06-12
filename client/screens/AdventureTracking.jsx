@@ -1,9 +1,9 @@
-/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import {
+  collection, doc, getDoc, getDocs,
+} from 'firebase/firestore';
 import { db } from '../../database/db';
-
 
 const styles = StyleSheet.create({
   container: {
@@ -22,29 +22,36 @@ function AdventureTrackingScreen() {
   const adventureRef = collection(db, 'adventures');
 
   const getAdventures = () => {
-    let currentAdventures = [];
-
     getDocs(userAdventuresRef)
-    .then((docs) => docs.forEach((userDoc) => {
-      let adventureDoc = doc(adventureRef, userDoc.data().adventureId);
-
-      getDoc(adventureDoc)
-      .then((adventureDocData) => currentAdventures.push(adventureDocData.data()));
-    }));
+      .then((userEventsDocs) => {
+        const promiseArr = userEventsDocs.docs.map((eventDoc) => {
+          const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
+          return getDoc(adventureDoc).then((adventureDocData) => adventureDocData.data());
+        });
+        Promise.all(promiseArr).then((resolvedAdventures) => {
+          setAdventuresList(resolvedAdventures);
+        });
+      });
   };
 
-
   useEffect(() => {
-    console.log(adventuresList)
     if (!adventuresList.length) {
       getAdventures();
     }
-  }, [])
+  }, []);
 
-  console.log(adventuresList)
   return (
     <View style={styles.container}>
       <Text> AdventureTracking </Text>
+      {adventuresList.length
+        ? adventuresList.map((adventure) => (
+          <View key={adventure.eventName} style={styles.container}>
+            <Text>
+              {adventure.eventName}
+            </Text>
+          </View>
+        ))
+        : null}
     </View>
   );
 }
