@@ -17,7 +17,7 @@ const trackerIcon = () => <FontAwesome5 name="walking" size={24} color="black" /
 const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
 
 function Nav({ route }) {
-  // route.params contains uid, email, fullName, city of current user
+  // route.params contains uid, email, fullName, zipcode of current user
   const user = route.params;
   return (
     <UserContext.Provider value={user}>
@@ -72,7 +72,7 @@ Nav.propTypes = {
         uid: PropTypes.string.isRequired,
         email: PropTypes.string.isRequired,
         fullName: PropTypes.string.isRequired,
-        city: PropTypes.string.isRequired,
+        zipcode: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
     path: PropTypes.string,
