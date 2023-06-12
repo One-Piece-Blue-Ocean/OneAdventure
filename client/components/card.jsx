@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, Skeleton, IconButton
+  Box, Heading, AspectRatio, Image, Text, Center, HStack, Stack, Skeleton, IconButton,
 } from 'native-base';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import { categoryTheme, myTheme, muted } from '../screens/Themes';
 //   name: 'Testing the Test',
 //   category: 'Hiking',
 //   location: 'To the unknown',
+// eslint-disable-next-line max-len
 //   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 //   date: '11/3/23',
 //   star: true,
@@ -31,7 +32,7 @@ function Card({
 
   const handleInterested = () => {
     setStar(!star);
-    //TODO Post to database when available.
+    // TODO Post to database when available.
   };
 
   return (
