@@ -154,15 +154,25 @@ const DATA = [
 ];
 
 function ProfileScreen() {
-  const [data, setData] = useState(DATA);
+  const [friendData, setFriendData] = useState(DATA);
   const [userName, setUserName] = useState('Buckey');
   const [location, setLocation] = useState(98765);
   const [searchRadius, setSearchRadius] = useState(50);
   const [typePreference, setTypePreference] = useState('hiking');
   const [modalVisible, setModalVisible] = useState(false);
 
+  const infoSet = () => {
+    // Todo: get user info then set
+    setFriendData();
+    setUserName();
+    setLocation();
+    setSearchRadius();
+    setTypePreference();
+  };
+
   useEffect(() => {
     // set user info
+    // infoSet();
   }, []);
 
   return (
@@ -252,7 +262,7 @@ function ProfileScreen() {
       </View>
       <View style={styles.friendsListContainer}>
         <FlatList
-          data={data}
+          data={friendData}
           renderItem={({ item }) => <FriendCard friend={item} />}
           keyExtractor={(friend) => friend.id}
         />
