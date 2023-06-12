@@ -10,6 +10,17 @@ import SignUpScreen from './screens/SignUp';
 import NavScreen from './screens/Nav';
 import AdventureDetail from './screens/AdventureDetail';
 
+const testEvent = {
+  name: 'A name',
+  category: 'A category',
+  location: 'A location',
+  description: 'A description',
+  date: 'A Date',
+  star: false,
+  friend: [],
+  imageUrl: 'A url',
+};
+
 if (!global.btoa) { global.btoa = encode; }
 if (!global.atob) { global.atob = decode; }
 
@@ -20,7 +31,7 @@ export default function App() {
     <NavigationContainer>
       <NativeBaseProvider>
         <Stack.Navigator>
-          <Stack.Screen name="Detail" component={AdventureDetail} />
+          <Stack.Screen name="Detail" component={AdventureDetail} initialParams={{ event: testEvent }} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="Nav" component={NavScreen} options={{ headerShown: false }} />
