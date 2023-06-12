@@ -121,6 +121,7 @@ function LoginScreen({ navigation }) {
           style={styles.input}
           placeholder="Password"
           placeholderTextColor="#aaaaaa"
+          secureTextEntry
           onChangeText={(text) => setPassword(text)}
           value={password}
           underlineColorAndroid="transparent"
