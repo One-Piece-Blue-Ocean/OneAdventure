@@ -1,23 +1,27 @@
 const muted = {
-  gold: 'f9bf23',
-  red: 'd52b1e',
-  blue: '1c8fd2',
-  orange: 'ff7043',
-  peach: 'bc8f8f',
-  black: '33333',
-  white: 'white',
+  gold: 'rgb(249, 191, 35)',
+  red: 'rgb(213,43,30)',
+  blue: 'rgb(28,143,210)',
+  orange: 'rgb(255,112,67)',
+  peach: 'rgb(188,143,143)',
+  black: 'rgb(0,0,0)',
+  white: 'rgb(255,255,255)',
+};
+
+const categoryTheme = {
+  hiking: muted.gold,
 };
 
 const myTheme = {
   dark: false,
   colors: {
-    primary: 'rgb(255, 45, 85)',
+    primary: muted.red,
     background: muted.white,
-    card: 'rgb(255, 255, 255)',
+    card: muted.white,
     text: muted.black,
-    border: 'rgb(199, 199, 204)',
-    notification: 'rgb(255, 69, 58)',
+    border: muted.peach,
+    notification: muted.orange,
   },
 };
 
-export default myTheme;
+export { myTheme, muted, categoryTheme };
