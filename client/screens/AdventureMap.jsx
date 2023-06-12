@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, Modal, TouchableOpacity,
 } from 'react-native';
+// eslint-disable-next-line no-unused-vars
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 // import { config } from 'dotenv';
