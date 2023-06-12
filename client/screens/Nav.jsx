@@ -3,8 +3,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PropTypes from 'prop-types';
 import { FontAwesome, Entypo, FontAwesome5 } from '@expo/vector-icons';
 
-// import AdventureListScreen from './AdventureList';
-// import AdventureMapScreen from './AdventureMap';
 import AdventureToggle from './AdventureToggle';
 import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
@@ -17,15 +15,15 @@ const messageIcon = () => <Entypo name="message" size={24} color="black" />;
 const trackerIcon = () => <FontAwesome5 name="walking" size={24} color="black" />;
 const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
 
+// const UserContext = createContext(null);
 
 function Nav({ route }) {
-    // route.params contains email, fullName, zipcode of current user
-    console.log('USER OBJ: ', route.params); // logging for visibility - remove later
-
+  // route.params contains uid, email, fullName, city of current user
+  const user = route.params;
+  console.log('USER OBJ: ', user); // logging for visibility - remove later
   return (
+  // <UserContext.Provider value={user}>
     <Tab.Navigator>
-      {/* <Tab.Screen name="AdventureList" component={AdventureListScreen} /> */}
-      {/* <Tab.Screen name="AdventureMap" component={AdventureMapScreen} /> */}
       <Tab.Screen
         name="Adventures"
         component={AdventureToggle}
@@ -63,6 +61,7 @@ function Nav({ route }) {
         }}
       />
     </Tab.Navigator>
+  // </UserContext.Provider>
   );
 }
 
@@ -72,9 +71,10 @@ Nav.propTypes = {
     name: PropTypes.string.isRequired,
     params: PropTypes.shape({
       user: PropTypes.shape({
+        uid: PropTypes.string.isRequired,
         email: PropTypes.string.isRequired,
         fullName: PropTypes.string.isRequired,
-        zipcode: PropTypes.string.isRequired,
+        city: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
     path: PropTypes.string,

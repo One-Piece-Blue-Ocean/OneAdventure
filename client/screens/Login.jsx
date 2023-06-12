@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Button, Alert,
+  StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     color: '#1c8fd2',
     fontWeight: 'bold',
     fontSize: 16,
+    marginTop: 10,
   },
 });
 
@@ -79,6 +80,14 @@ function LoginScreen({ navigation }) {
 
   const onFooterLinkPress = () => {
     navigation.navigate('SignUp');
+  };
+
+  const onGuestLinkPress = () => {
+    navigation.navigate('Nav', {
+      user: {
+        city: 'A City', email: 'guest@mail.com', fullName: 'Guest', uid: 'someUIDstring',
+      },
+    });
   };
 
   const onLoginPress = () => {
@@ -121,6 +130,7 @@ function LoginScreen({ navigation }) {
           style={styles.input}
           placeholder="Password"
           placeholderTextColor="#aaaaaa"
+          secureTextEntry
           onChangeText={(text) => setPassword(text)}
           value={password}
           underlineColorAndroid="transparent"
@@ -139,6 +149,7 @@ function LoginScreen({ navigation }) {
               &nbsp;Sign up
             </Text>
           </Text>
+          <Text onPress={onGuestLinkPress} style={styles.footerLink}>Continue as guest</Text>
         </View>
       </KeyboardAwareScrollView>
     </View>
