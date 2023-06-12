@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
+  Modal,
   Image,
-  SafeAreaView,
   FlatList,
   StatusBar,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { AntDesign } from '@expo/vector-icons';
@@ -18,6 +20,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+  },
+  centerModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     flex: 1,
@@ -54,6 +61,25 @@ const styles = StyleSheet.create({
     margin: 12,
     padding: 10,
     borderWidth: 1,
+  },
+  modalBtnContainer: {
+    flexDirection: 'row',
+  },
+  modalButton: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: 'skyblue',
+    margin: 20,
+    marginBottom: 0,
+  },
+  modalContainer: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   profileHeader: {
     flexDirection: 'row',
@@ -113,8 +139,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 2,
+    shadowOpacity: 0.15,
+    shadowRadius: 1,
     elevation: 2,
   },
 });
@@ -155,19 +181,40 @@ const DATA = [
 
 function ProfileScreen() {
   const [friendData, setFriendData] = useState(DATA);
+  const [userId, setUserId] = useState('58694a0f-3da1-471f-bd96-145571e29zzz');
   const [userName, setUserName] = useState('Buckey');
+  const [profilePic, setProfilePic] = useState('https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png');
   const [location, setLocation] = useState(98765);
   const [searchRadius, setSearchRadius] = useState(50);
   const [typePreference, setTypePreference] = useState('hiking');
   const [modalVisible, setModalVisible] = useState(false);
+  const [editMode, setEditMode] = useState(0);
+  const [editNumber, setEditNumber] = useState(0);
+  const [editString, setEditString] = useState('');
 
+  // eslint-disable-next-line no-unused-vars
   const infoSet = () => {
-    // Todo: get user info then set
-    setFriendData();
+    // Todo: get user info from db or useContext, then set
+    setUserId();
     setUserName();
+    setProfilePic();
     setLocation();
+    setFriendData();
     setSearchRadius();
     setTypePreference();
+  };
+
+  const updateProfile = () => {
+    if (editMode === 1) {
+      console.log('udpate email, id:', userId);
+    } else if (editMode === 2) {
+      console.log('udpate type, id:', userId);
+    } else if (editMode === 3) {
+      console.log('udpate location, id:', userId);
+    } else if (editMode === 4) {
+      console.log('udpate radius, id:', userId);
+    }
+    // infoSet();
   };
 
   useEffect(() => {
@@ -181,7 +228,7 @@ function ProfileScreen() {
         <View style={styles.profileImageContainer}>
           <Image
             source={{
-              uri: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+              uri: profilePic,
               height: 100,
               width: 100,
             }}
@@ -204,6 +251,8 @@ function ProfileScreen() {
               color="black"
               onPress={() => {
                 // edit modal
+                setEditMode(1);
+                setModalVisible(true);
               }}
             />
           </View>
@@ -220,6 +269,8 @@ function ProfileScreen() {
               color="black"
               onPress={() => {
                 // edit modal
+                setEditMode(2);
+                setModalVisible(true);
               }}
             />
           </View>
@@ -236,6 +287,8 @@ function ProfileScreen() {
               color="black"
               onPress={() => {
                 // edit modal
+                setEditMode(3);
+                setModalVisible(true);
               }}
             />
           </View>
@@ -252,11 +305,41 @@ function ProfileScreen() {
               color="black"
               onPress={() => {
                 // open an edit modal to adjust default
+                setEditMode(4);
+                setModalVisible(true);
               }}
             />
           </View>
         </View>
       </View>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={modalVisible}
+      >
+        <View style={styles.centerModal}>
+          <View style={[styles.modalContainer, styles.shadow]}>
+            <Text style={styles.modalText}>Remove from friends list?</Text>
+            <View style={styles.modalBtnContainer}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => {
+                  updateProfile();
+                  setModalVisible(false);
+                }}
+              >
+                <Text>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.shadow]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.friendsHeaderContainer}>
         <Text style={styles.friendsHeaderText}>Friends List</Text>
       </View>
