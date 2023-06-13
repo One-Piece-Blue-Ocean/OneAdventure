@@ -1,12 +1,19 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React,
+{
+  // useContext,
+  // useState,
+  // useEffect,
+} from 'react';
 import {
-  StyleSheet, Text, View, Image,
+  StyleSheet, Text, View, Image, ScrollView, FlatList, SafeAreaView, StatusBar,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
-import { setDoc, doc } from 'firebase/firestore';
-import { app, db } from '../../database/db';
+// import { setDoc, doc } from 'firebase/firestore';
+// import { app, db } from '../../database/db';
+
+const imageTestUrl = 'https://images.unsplash.com/photo-1682686580950-960d1d513532?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,6 +22,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     backgroundColor: 'white',
     alignItems: 'center',
+    height: '100%',
+    marginTop: StatusBar.currentHeight || 0,
   },
   heading: {
     alignItems: 'center',
@@ -26,14 +35,14 @@ const styles = StyleSheet.create({
   detailImage: {
     width: '100%',
     height: '40%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     margin: 5,
     // backgroundColor: 'grey',
   },
   friendImage: {
     width: '10%',
     height: '10%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     margin: 5,
     // backgroundColor: 'grey',
   },
@@ -48,7 +57,16 @@ const styles = StyleSheet.create({
 function AdventureDetail({ navigation, route }) {
   const { event } = route.params;
   // const friends = event.friend ? event.friend : [];
-  const friends = [{ name: 'bill' }, { name: 'bob' }];
+  const friends = [
+    { name: 'bill', imageUrl: imageTestUrl },
+    { name: 'bob', imageUrl: imageTestUrl },
+    { name: 'bobb', imageUrl: imageTestUrl },
+    { name: 'bobbb', imageUrl: imageTestUrl },
+    { name: 'bobbbbb', imageUrl: imageTestUrl },
+    { name: 'bobbbbbb', imageUrl: imageTestUrl },
+    { name: 'bobbbbbbz', imageUrl: imageTestUrl },
+    { name: 'bobbbbbba', imageUrl: imageTestUrl },
+  ];
 
   // console.log('Hmm?', friends.length);
 
@@ -72,25 +90,52 @@ function AdventureDetail({ navigation, route }) {
           {event.description}
         </Text>
       </View>
-      <View>
+      <View style={{ flex: 1 }}>
         {friends.length ? (
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>
               Friends signed up for the event
             </Text>
-            {friends.map((friend) => (
-              <View key={friend.name}>
-                {friend.imageUrl ? (
-                  <Image
-                    source={{
-                      uri: friend.imageUrl,
-                    }}
-                    style={styles.friendImage}
-                  />
-                ) : null}
-                <Text>{friend.name}</Text>
-              </View>
-            ))}
+            <SafeAreaView style={{
+              flex: 1,
+            }}
+            >
+              <FlatList
+                data={friends}
+                renderItem={({ item: friend }) => (
+                  <View style={{ flex: 1 }}>
+                    {friend.imageUrl ? (
+                      <Image
+                        source={{
+                          uri: friend.imageUrl,
+                        }}
+                        style={styles.friendImage}
+                      />
+                    ) : null}
+                    <Text>
+                      what
+                      {friend.name}
+                    </Text>
+                  </View>
+                )}
+                keyExtractor={(friend) => friend.name}
+                ListFooterComponent={<View style={{ height: 20 }} />}
+              >
+                {/* {friends.map((friend) => (
+                  <View key={friend.name}>
+                    {friend.imageUrl ? (
+                      <Image
+                        source={{
+                          uri: friend.imageUrl,
+                        }}
+                        style={styles.friendImage}
+                      />
+                    ) : null}
+                    <Text>{friend.name}</Text>
+                  </View>
+                ))} */}
+              </FlatList>
+            </SafeAreaView>
           </View>
         ) : null}
       </View>
