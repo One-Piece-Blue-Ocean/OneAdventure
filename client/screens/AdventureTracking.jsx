@@ -53,7 +53,7 @@ function AdventureTrackingScreen() {
       });
   };
 
-  const handleInterested = (userEventId, field, value) => {
+  const toggleField = (userEventId, field, value) => {
     const docReference = doc(db, 'pirates', userId, 'events', userEventId);
     updateDoc(docReference, { [field]: !value[0] })
       .then(() => {
@@ -87,7 +87,7 @@ function AdventureTrackingScreen() {
               userEvent={Object.values(adventure)[0].userAdventureInfo}
               userEventId={Object.keys(adventure)[0]}
               loaded
-              handleInterested={handleInterested}
+              toggleField={toggleField}
             />
           ))
           : null}

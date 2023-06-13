@@ -17,7 +17,7 @@ function Card({
   userEvent,
   userEventId,
   loaded,
-  handleInterested,
+  toggleField,
 }) {
   return (
     <Box alignItems="center">
@@ -51,7 +51,7 @@ function Card({
                 size="lg"
                 onPress={(e) => {
                   e.preventDefault();
-                  handleInterested(userEventId, 'interested', [userEvent.interested]);
+                  toggleField(userEventId, 'interested', [userEvent.interested]);
                 }}
               />
             </Center>
@@ -119,7 +119,7 @@ Card.propTypes = {
   }).isRequired,
   userEventId: PropTypes.string.isRequired,
   loaded: PropTypes.bool,
-  handleInterested: PropTypes.func.isRequired,
+  toggleField: PropTypes.func.isRequired,
 };
 
 Card.defaultProps = {
