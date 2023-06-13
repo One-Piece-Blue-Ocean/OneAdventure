@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   Image,
-  StatusBar,
-  TouchableOpacity,
   Modal,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Entypo, FontAwesome } from '@expo/vector-icons';

@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { AntDesign } from '@expo/vector-icons';
-// import myTheme from './Themes';
 import FriendCard from '../components/FriendCard';
 
 const styles = StyleSheet.create({
