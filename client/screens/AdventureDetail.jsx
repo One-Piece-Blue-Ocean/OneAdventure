@@ -31,22 +31,25 @@ const styles = StyleSheet.create({
     height: '70%',
   },
   friends: {
-    // position: 'absolute',
-    // bottom: 50,
+    fontSize: 14,
+    fontWeight: 'bold',
+    padding: 10,
+  },
+  friendImage: {
+    // width: '10%',
+    // height: '10%',
+    resizeMode: 'cover',
+    margin: 5,
+  },
+  friendContainer: {
+    display: 'flex',
+    flex: 'flex-row',
   },
   detailImage: {
     width: '100%',
     height: '40%',
     resizeMode: 'cover',
     margin: 5,
-    // backgroundColor: 'grey',
-  },
-  friendImage: {
-    width: '10%',
-    height: '10%',
-    resizeMode: 'cover',
-    margin: 5,
-    // backgroundColor: 'grey',
   },
   icon: {
     position: 'absolute',
@@ -54,23 +57,59 @@ const styles = StyleSheet.create({
     right: 10,
     zIndex: 10,
   },
+  default: {
+    flex: 1,
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 10,
+  },
+  location: {
+    fontSize: 12,
+    padding: 10,
+  },
+  description: {
+    padding: 10,
+  },
 });
 
 function AdventureDetail({ navigation, route }) {
   const { event } = route.params;
   // const friends = event.friend ? event.friend : [];
+  // temp friend data
   const friends = [
-    { name: 'bill', imageUrl: imageTestUrl },
-    { name: 'bob', imageUrl: imageTestUrl },
-    { name: 'bobb', imageUrl: imageTestUrl },
-    { name: 'bobbb', imageUrl: imageTestUrl },
-    { name: 'bobbbbb', imageUrl: imageTestUrl },
-    { name: 'bobbbbbb', imageUrl: imageTestUrl },
-    { name: 'bobbbbbbz', imageUrl: imageTestUrl },
-    { name: 'bobbbbbba', imageUrl: imageTestUrl },
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      userName: 'Dave',
+      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+      userName: 'Steve',
+      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+    },
+    {
+      id: '58694a0f-3da1-471f-bd96-145571e29d72',
+      userName: 'Jim',
+      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+    },
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
+      userName: 'Sara',
+      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
+      userName: 'Billy',
+      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+    },
+    {
+      id: '58694a0f-3da1-471f-bd96-145571e29d7z',
+      userName: 'Chris',
+      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+    },
   ];
-
-  // console.log('Hmm?', friends.length);
 
   return (
     <View style={styles.container}>
@@ -81,65 +120,46 @@ function AdventureDetail({ navigation, route }) {
         style={styles.detailImage}
       />
       <View style={styles.heading}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10 }}>
+        <Text style={styles.name}>
           {event.name}
         </Text>
-        <Text style={{ fontSize: 12, padding: 10 }}>
+        <Text style={styles.location}>
           {event.location}
         </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> Full Description </Text>
         <ScrollView>
-          <Text style={{ padding: 10 }}>
+          <Text style={styles.description}>
             {event.description}
           </Text>
         </ScrollView>
       </View>
-      <View style={{ flex: 1 }}>
+      <View style={styles.default}>
         {friends.length ? (
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>
+          <View style={styles.default}>
+            <Text style={styles.friends}>
               Friends signed up for the event
             </Text>
-            <SafeAreaView style={{
-              flex: 1,
-            }}
-            >
-              <FlatList
-                data={friends}
-                renderItem={({ item: friend }) => (
-                  <View style={{ flex: 1 }}>
-                    {friend.imageUrl ? (
-                      <Image
-                        source={{
-                          uri: friend.imageUrl,
-                        }}
-                        style={styles.friendImage}
-                      />
-                    ) : null}
-                    <Text>
-                      what
-                      {friend.name}
-                    </Text>
-                  </View>
-                )}
-                keyExtractor={(friend) => friend.name}
-                ListFooterComponent={<View style={{ height: 20 }} />}
-              >
-                {/* {friends.map((friend) => (
-                  <View key={friend.name}>
-                    {friend.imageUrl ? (
-                      <Image
-                        source={{
-                          uri: friend.imageUrl,
-                        }}
-                        style={styles.friendImage}
-                      />
-                    ) : null}
-                    <Text>{friend.name}</Text>
-                  </View>
-                ))} */}
-              </FlatList>
-            </SafeAreaView>
+            <FlatList
+              data={friends}
+              renderItem={({ item: friend }) => (
+                <View style={styles.friendContainer}>
+                  {friend.profilePic ? (
+                    <Image
+                      source={{
+                        uri: friend.profilePic,
+                        height: 100,
+                        width: 100,
+                      }}
+                      testID="profile.pic"
+                      style={styles.friendImage}
+                    />
+                  ) : null}
+                  <Text>
+                    {friend.userName}
+                  </Text>
+                </View>
+              )}
+              keyExtractor={(friend) => friend.id}
+            />
           </View>
         ) : null}
       </View>
