@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
 
 function AdventureTrackingScreen() {
   const [adventuresList, setAdventuresList] = useState([]);
+  const [pastIndex, setPastIndex] = useState(0);
 
   const userId = useContext('userContext') || 'yBjkdAwIoXgoczmWPtiX';
   const userAdventuresRef = collection(db, 'pirates', userId, 'events');
@@ -48,7 +49,19 @@ function AdventureTrackingScreen() {
           ));
         });
         Promise.all(promiseArr).then((resolvedAdventures) => {
-          setAdventuresList(resolvedAdventures);
+          setAdventuresList(resolvedAdventures.sort((a, b) => {
+            const aDate = new Date(Object.values(a)[0].adventureInfo.date);
+            const bDate = new Date(Object.values(b)[0].adventureInfo.date);
+            return aDate < bDate ? -1 : 1;
+          }));
+        }).then(() => {
+          const copy = adventuresList.slice();
+          const idx = copy.findIndex(
+            (val) => Object.values(val)[0].adventureInfo.date < Date.now(),
+          );
+          if (idx > 0) {
+            setPastIndex(idx);
+          }
         });
       });
   };
@@ -79,16 +92,33 @@ function AdventureTrackingScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <Text> AdventureTracking </Text>
+        <Text> Upcoming Adventures </Text>
         {adventuresList.length
-          ? adventuresList.map((adventure) => (
-            <Card
-              key={Math.random()}
-              event={Object.values(adventure)[0].adventureInfo}
-              userEvent={Object.values(adventure)[0].userAdventureInfo}
-              userEventId={Object.keys(adventure)[0]}
-              loaded
-              toggleField={toggleField}
-            />
+          ? adventuresList.map((adventure, idx) => (
+            idx === pastIndex
+              ? (
+                <>
+                  <Text>Past Adventures</Text>
+                  <Card
+                    key={Math.random()}
+                    event={Object.values(adventure)[0].adventureInfo}
+                    userEvent={Object.values(adventure)[0].userAdventureInfo}
+                    userEventId={Object.keys(adventure)[0]}
+                    loaded
+                    toggleField={toggleField}
+                  />
+                </>
+              )
+              : (
+                <Card
+                  key={Math.random()}
+                  event={Object.values(adventure)[0].adventureInfo}
+                  userEvent={Object.values(adventure)[0].userAdventureInfo}
+                  userEventId={Object.keys(adventure)[0]}
+                  loaded
+                  toggleField={toggleField}
+                />
+              )
           ))
           : null}
       </ScrollView>

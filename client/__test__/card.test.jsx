@@ -45,7 +45,7 @@ describe('<Card />', () => {
           userEvent={testUserEvent}
           userEventId={testUserEventId}
           loaded
-          handleInterested={() => {}}
+          toggleField={() => {}}
         />
       </NativeBaseProvider>,
     );
