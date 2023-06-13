@@ -1,8 +1,6 @@
 import React,
 {
-  // useContext,
-  // useState,
-  // useEffect,
+
 } from 'react';
 import {
   StyleSheet, Text, View, Image, ScrollView, FlatList, StatusBar, TouchableOpacity,
