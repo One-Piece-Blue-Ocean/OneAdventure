@@ -92,6 +92,8 @@ function Card({
               <Skeleton.Text lines={1} isLoaded={loaded} _line={{ width: '50%' }}>
                 <Text color={myTheme.text} fontWeight="400">
                   { event.date }
+                </Text>
+                <Text color={myTheme.text} fontWeight="400">
                   { userEvent.attending ? ' Attending' : ' Not Attending' }
                 </Text>
               </Skeleton.Text>
