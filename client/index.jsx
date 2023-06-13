@@ -32,10 +32,10 @@ export default function App() {
     <NavigationContainer>
       <NativeBaseProvider>
         <Stack.Navigator>
-          <Stack.Screen name="Detail" component={AdventureDetail} initialParams={{ event: testEvent }} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="Nav" component={NavScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Detail" component={AdventureDetail} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NativeBaseProvider>
     </NavigationContainer>
