@@ -22,10 +22,6 @@ const testUserEvent = {
 
 const testUserEventId = 'maysdflkjw34q';
 
-const handleInterested = {
-
-};
-
 const inset = {
   frame: {
     x: 0, y: 0, width: 0, height: 0,
