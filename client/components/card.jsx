@@ -40,7 +40,7 @@ function Card({
             <Center>
               <IconButton
                 variant="ghost"
-                colorScheme={userEvent.interested ? muted.gold : muted.white}
+                colorScheme={userEvent.interested ? muted.gold : muted.grey}
                 _icon={{
                   as: FontAwesome,
                   name: 'star',

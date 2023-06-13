@@ -10,6 +10,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
+  where,
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../database/db';
@@ -26,23 +28,24 @@ const styles = StyleSheet.create({
 
 function AdventureTrackingScreen() {
   const [adventuresList, setAdventuresList] = useState([]);
-  const [pastIndex, setPastIndex] = useState(0);
+  const [pastIndex, setPastIndex] = useState(adventuresList.length);
 
   const userId = useContext('userContext') || 'yBjkdAwIoXgoczmWPtiX';
-  const userAdventuresRef = collection(db, 'pirates', userId, 'events');
+  const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
 
   const getAdventures = () => {
-    let currentUserEvent;
-    getDocs(userAdventuresRef)
-      .then((userEventsDocs) => {
-        const promiseArr = userEventsDocs.docs.map((eventDoc) => {
-          currentUserEvent = eventDoc.data();
-          const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
-          return getDoc(adventureDoc).then((adventureDocData) => (
+    let currentUserAdventure;
+    let adventureDocReference;
+    getDocs(query(userAdventuresRef, where('userId', '==', userId)))
+      .then((userAdventureDocs) => {
+        const promiseArr = userAdventureDocs.docs.map((userAdventureDoc) => {
+          currentUserAdventure = userAdventureDoc.data();
+          adventureDocReference = doc(adventureRef, currentUserAdventure.adventureId);
+          return getDoc(adventureDocReference).then((adventureDocData) => (
             {
-              [eventDoc.id]: {
-                userAdventureInfo: currentUserEvent,
+              [userAdventureDoc.id]: {
+                userAdventureInfo: currentUserAdventure,
                 adventureInfo: adventureDocData.data(),
               },
             }
@@ -86,6 +89,9 @@ function AdventureTrackingScreen() {
     if (!adventuresList.length) {
       getAdventures();
     }
+    if (adventuresList.length) {
+      setPastIndex(adventuresList.length);
+    }
   }, []);
 
   return (
@@ -95,30 +101,19 @@ function AdventureTrackingScreen() {
         <Text> Upcoming Adventures </Text>
         {adventuresList.length
           ? adventuresList.map((adventure, idx) => (
-            idx === pastIndex
-              ? (
-                <>
-                  <Text>Past Adventures</Text>
-                  <Card
-                    key={Math.random()}
-                    event={Object.values(adventure)[0].adventureInfo}
-                    userEvent={Object.values(adventure)[0].userAdventureInfo}
-                    userEventId={Object.keys(adventure)[0]}
-                    loaded
-                    toggleField={toggleField}
-                  />
-                </>
-              )
-              : (
-                <Card
-                  key={Math.random()}
-                  event={Object.values(adventure)[0].adventureInfo}
-                  userEvent={Object.values(adventure)[0].userAdventureInfo}
-                  userEventId={Object.keys(adventure)[0]}
-                  loaded
-                  toggleField={toggleField}
-                />
-              )
+            <>
+              {idx === pastIndex
+                ? (<Text>Past Adventures</Text>)
+                : null}
+              <Card
+                key={Math.random()}
+                event={Object.values(adventure)[0].adventureInfo}
+                userEvent={Object.values(adventure)[0].userAdventureInfo}
+                userEventId={Object.keys(adventure)[0]}
+                loaded
+                toggleField={toggleField}
+              />
+            </>
           ))
           : null}
       </ScrollView>
