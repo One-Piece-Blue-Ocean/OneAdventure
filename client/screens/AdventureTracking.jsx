@@ -70,10 +70,9 @@ function AdventureTrackingScreen() {
   };
 
   const toggleField = (userEventId, field, value) => {
-    const docReference = doc(db, 'pirates', userId, 'events', userEventId);
-    updateDoc(docReference, { [field]: !value[0] })
+    updateDoc(doc(userAdventuresRef, userEventId), { [field]: !value[0] })
       .then(() => {
-        getDoc(docReference)
+        getDoc(doc(userAdventuresRef, userEventId))
           .then((updatedDoc) => {
             const objIndToUpdate = adventuresList.findIndex(
               (obj) => Object.keys(obj)[0] === userEventId,
@@ -106,7 +105,6 @@ function AdventureTrackingScreen() {
                 ? (<Text>Past Adventures</Text>)
                 : null}
               <Card
-                key={Math.random()}
                 event={Object.values(adventure)[0].adventureInfo}
                 userEvent={Object.values(adventure)[0].userAdventureInfo}
                 userEventId={Object.keys(adventure)[0]}
