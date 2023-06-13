@@ -72,7 +72,7 @@ Nav.propTypes = {
         uid: PropTypes.string.isRequired,
         email: PropTypes.string.isRequired,
         fullName: PropTypes.string.isRequired,
-        zipcode: PropTypes.string.isRequired,
+        // zipcode: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
     path: PropTypes.string,
