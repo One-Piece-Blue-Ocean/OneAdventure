@@ -112,6 +112,7 @@ function SignUpScreen({ navigation }) {
           email,
           fullName,
           zipcode,
+          radius: '10',
           chatToken,
         };
         setDoc(doc(db, 'pirates', uid), data)
