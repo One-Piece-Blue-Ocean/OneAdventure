@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function FriendCard({ friend }) {
+function FriendCard({ friend, index }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { profilePic, userName, id } = friend;
 
@@ -124,6 +124,7 @@ function FriendCard({ friend }) {
 
   return (
     <View style={[styles.friendCardContainer, styles.shadow]}>
+
       <View style={styles.friendProfileImageContainer}>
         <View style={styles.profileImageWrap}>
           <Image
@@ -135,6 +136,7 @@ function FriendCard({ friend }) {
           />
         </View>
       </View>
+
       <View style={styles.friendCardDetails}>
         <View style={styles.friendNameContainer}>
           <Text style={styles.friendNameText}>{userName}</Text>
@@ -153,11 +155,13 @@ function FriendCard({ friend }) {
               name="remove"
               size={24}
               color="gray"
+              testID={`profile.removeFriend.${index}`}
               onPress={() => setModalVisible(true)}
             />
           </TouchableOpacity>
         </View>
       </View>
+
       <Modal
         animationType="fade"
         transparent
@@ -186,6 +190,7 @@ function FriendCard({ friend }) {
           </View>
         </View>
       </Modal>
+
     </View>
   );
 }
@@ -196,6 +201,7 @@ FriendCard.propTypes = {
     id: PropTypes.string.isRequired,
     profilePic: PropTypes.string.isRequired,
   }).isRequired,
+  index: PropTypes.number.isRequired,
 };
 
 export default FriendCard;

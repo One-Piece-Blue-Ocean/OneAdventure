@@ -4,7 +4,6 @@ import {
   View,
   Modal,
   Image,
-  FlatList,
   StatusBar,
   TextInput,
   StyleSheet,
@@ -27,6 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 150,
   },
   container: {
     flex: 1,
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
+    width: 250,
     margin: 12,
     padding: 10,
     borderWidth: 1,
@@ -102,10 +103,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalTextWrap: {
-    backgroundColor: 'lightgray',
     padding: 8,
     marginBottom: 10,
     borderRadius: 5,
+    alignItems: 'center',
   },
   profileHeader: {
     flexDirection: 'row',
@@ -205,52 +206,66 @@ const DATA = [
   },
 ];
 
+const tempUser = {
+  id: '58694a0f-3da1-471f-bd96-145571e29zzz',
+  name: 'Buckey',
+  email: 'buckey@mail.com',
+  profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  zip: 98765,
+  radius: 50,
+  type: 'Hiking',
+  friends: DATA,
+};
+
 function ProfileScreen() {
-  const [friendData, setFriendData] = useState(DATA);
-  const [userId, setUserId] = useState('58694a0f-3da1-471f-bd96-145571e29zzz');
-  const [userName, setUserName] = useState('Buckey');
+  const [friendData, setFriendData] = useState([]);
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [profilePic, setProfilePic] = useState('https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png');
-  const [location, setLocation] = useState(98765);
-  const [searchRadius, setSearchRadius] = useState(50);
-  const [typePreference, setTypePreference] = useState('Hiking');
+  const [location, setLocation] = useState(null);
+  const [searchRadius, setSearchRadius] = useState(0);
+  const [typePreference, setTypePreference] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(0);
-  const [input, setInput] = useState({ email: '', zip: 0 });
-  // const [editNumber, setEditNumber] = useState(0);
-  // const [editString, setEditString] = useState('');
+  const [input, setInput] = useState({ email: '', zip: '' });
 
-  const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping', 'Archery'];
+  const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
 
   // eslint-disable-next-line no-unused-vars
   const infoSet = () => {
     // Todo: get user info from db or useContext, then set
-    setUserId();
-    setUserName();
-    setProfilePic();
-    setLocation();
-    setFriendData();
-    setSearchRadius();
-    setTypePreference();
+    // using tempUser until I figure out the db
+    setUserId(tempUser.id);
+    setUserName(tempUser.name);
+    setEmail(tempUser.email);
+    setProfilePic(tempUser.profilePhoto);
+    setLocation(tempUser.zip);
+    setSearchRadius(tempUser.radius);
+    setTypePreference(tempUser.type);
+    setFriendData(tempUser.friends);
   };
 
   const updateProfile = (update) => {
     // Todo: replace console logs with four put requests to db
     if (editMode === 1) {
       console.log('udpate email, id:', userId, update.email);
+      setInput({ email: '', zip: '' });
     } else if (editMode === 2) {
       console.log('udpate type, id:', userId, update);
     } else if (editMode === 3) {
       console.log('udpate location, id:', userId, update.zip);
+      setInput({ email: '', zip: '' });
     } else if (editMode === 4) {
       console.log('udpate radius, id:', userId, update);
     }
-    // infoSet();
+    infoSet();
   };
 
   useEffect(() => {
     // set user info
-    // infoSet();
+    infoSet();
   }, []);
 
   return (
@@ -263,31 +278,34 @@ function ProfileScreen() {
               height: 100,
               width: 100,
             }}
+            testID="profile.pic"
           />
         </View>
         <View style={styles.userNameContainer}>
-          <Text style={styles.userNameText}>{userName}</Text>
+          <Text style={styles.userNameText} testID="profile.userName">{userName}</Text>
         </View>
       </View>
+
       <View style={styles.details}>
         <View style={styles.textWrap}>
           <View style={styles.optionTitle}>
             <Text style={styles.text}>Email:</Text>
-            <Text style={styles.text}>buckey@mail.com</Text>
+            <Text style={styles.text}>{email}</Text>
           </View>
           <View style={styles.optionEdit}>
             <AntDesign
+              testID="profile.editEmail"
               name="edit"
               size={20}
               color="black"
               onPress={() => {
-                // edit modal
                 setEditMode(1);
                 setModalVisible(true);
               }}
             />
           </View>
         </View>
+
         <View style={styles.textWrap}>
           <View style={styles.optionTitle}>
             <Text style={styles.text}>Favorite Type:</Text>
@@ -295,17 +313,18 @@ function ProfileScreen() {
           </View>
           <View style={styles.optionEdit}>
             <AntDesign
+              testID="profile.editType"
               name="edit"
               size={20}
               color="black"
               onPress={() => {
-                // edit modal
                 setEditMode(2);
                 setModalVisible(true);
               }}
             />
           </View>
         </View>
+
         <View style={styles.textWrap}>
           <View style={styles.optionTitle}>
             <Text style={styles.text}>Location:</Text>
@@ -313,17 +332,18 @@ function ProfileScreen() {
           </View>
           <View style={styles.optionEdit}>
             <AntDesign
+              testID="profile.editZip"
               name="edit"
               size={20}
               color="black"
               onPress={() => {
-                // edit modal
                 setEditMode(3);
                 setModalVisible(true);
               }}
             />
           </View>
         </View>
+
         <View style={styles.textWrap}>
           <View style={styles.optionTitle}>
             <Text style={styles.text}>Search Radius:</Text>
@@ -331,11 +351,11 @@ function ProfileScreen() {
           </View>
           <View style={styles.optionEdit}>
             <AntDesign
+              testID="profile.editRadius"
               name="edit"
               size={20}
               color="black"
               onPress={() => {
-                // open an edit modal to adjust default
                 setEditMode(4);
                 setModalVisible(true);
               }}
@@ -355,12 +375,15 @@ function ProfileScreen() {
               editMode === 1
                 ? (
                   <View>
-                    <Text style={styles.modalText}>Update email</Text>
+                    <View style={styles.modalTextWrap}>
+                      <Text>Update Email</Text>
+                    </View>
                     <TextInput
                       placeholder="email"
-                      value={input}
+                      value={input.email}
+                      style={styles.input}
                       onChangeText={(text) => {
-                        setInput({ email: text });
+                        setInput({ email: text, zip: 0 });
                       }}
                     />
                   </View>
@@ -371,12 +394,13 @@ function ProfileScreen() {
                 ? (
                   <View style={styles.editDropDownWrap}>
                     <View style={styles.modalTextWrap}>
-                      <Text>Update type</Text>
+                      <Text>Update Type</Text>
                     </View>
                     <ScrollView style={styles.editDropDown}>
                       {types.map((activity) => (
                         <TouchableOpacity
                           key={activity}
+                          testID={`profile.${activity}`}
                           style={[styles.editDropDownBtn, styles.shadow]}
                           onPress={() => {
                             updateProfile(activity);
@@ -394,12 +418,15 @@ function ProfileScreen() {
               editMode === 3
                 ? (
                   <View>
-                    <Text style={styles.modalText}>Update zip</Text>
+                    <View style={styles.modalTextWrap}>
+                      <Text>Update Zip</Text>
+                    </View>
                     <TextInput
                       placeholder="zip"
-                      value={input}
+                      value={input.zip.toString()}
+                      style={styles.input}
                       onChangeText={(text) => {
-                        setInput({ zip: text });
+                        setInput({ email: '', zip: text });
                       }}
                     />
                   </View>
@@ -410,12 +437,13 @@ function ProfileScreen() {
                 ? (
                   <View style={styles.editDropDownWrap}>
                     <View style={styles.modalTextWrap}>
-                      <Text>Update type</Text>
+                      <Text>Update Radius</Text>
                     </View>
                     <ScrollView style={styles.editDropDown}>
                       {radius.map((miles) => (
                         <TouchableOpacity
                           key={miles}
+                          testID={`profile.${miles}`}
                           style={[styles.editDropDownBtn, styles.shadow]}
                           onPress={() => {
                             updateProfile(miles);
@@ -456,12 +484,14 @@ function ProfileScreen() {
       <View style={styles.friendsHeaderContainer}>
         <Text style={styles.friendsHeaderText}>Friends List</Text>
       </View>
-      <View style={styles.friendsListContainer}>
-        <FlatList
-          data={friendData}
-          renderItem={({ item }) => <FriendCard friend={item} />}
-          keyExtractor={(friend) => friend.id}
-        />
+      <View style={styles.friendsListContainer} testID="profile.friendsList">
+        <ScrollView style={styles.editDropDown}>
+          {friendData.map((friend, index) => (
+            <View key={friend.id} testID={`profile.friend.${index}`}>
+              <FriendCard friend={friend} index={index} />
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
