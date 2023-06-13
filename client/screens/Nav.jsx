@@ -6,7 +6,7 @@ import { FontAwesome, Entypo, FontAwesome5 } from '@expo/vector-icons';
 import AdventureToggle from './AdventureToggle';
 import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
-import UserContext from '../context';
+import { UserContext } from '../context';
 import MessagingScreen from './Messaging';
 
 const Tab = createBottomTabNavigator();
