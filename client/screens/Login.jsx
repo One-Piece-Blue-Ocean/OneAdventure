@@ -87,7 +87,7 @@ function LoginScreen({ navigation }) {
   const onGuestLinkPress = () => {
     navigation.navigate('Nav', {
       user: {
-        zipcode: '94123', email: 'guest@mail.com', fullName: 'Guest', uid: 'yBjkdAwIoXgoczmWPtiX',
+        zipcode: '94123', email: 'guest@mail.com', fullName: 'Guest', uid: 'yBjkdAwIoXgoczmWPtiX', profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
       },
     });
   };
