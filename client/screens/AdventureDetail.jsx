@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   detailImage: {
     width: '100%',
     height: '40%',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     margin: 5,
   },
   icon: {
