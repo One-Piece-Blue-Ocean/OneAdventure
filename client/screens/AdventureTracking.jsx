@@ -1,15 +1,19 @@
-/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import {
   collection,
   doc,
   getDoc,
   getDocs,
-  updateDoc
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../database/db';
-import Card from '../components/card.jsx';
+import Card from '../components/card';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,12 +38,14 @@ function AdventureTrackingScreen() {
         const promiseArr = userEventsDocs.docs.map((eventDoc) => {
           currentUserEvent = eventDoc.data();
           const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
-          return getDoc(adventureDoc).then((adventureDocData) => {
-            return {[eventDoc.id]: {
-              userAdventureInfo: currentUserEvent,
-              adventureInfo: adventureDocData.data()}
+          return getDoc(adventureDoc).then((adventureDocData) => (
+            {
+              [eventDoc.id]: {
+                userAdventureInfo: currentUserEvent,
+                adventureInfo: adventureDocData.data(),
+              },
             }
-          });
+          ));
         });
         Promise.all(promiseArr).then((resolvedAdventures) => {
           setAdventuresList(resolvedAdventures);
@@ -48,18 +54,20 @@ function AdventureTrackingScreen() {
   };
 
   const handleInterested = (userEventId, interested) => {
-    const docReference = doc(db, 'pirates', userId, 'events', userEventId)
-    updateDoc(docReference, {'interested': !interested[0]})
-    .then(() => {
-      getDoc(docReference)
-      .then((updatedDoc) => {
-        let objIndToUpdate = adventuresList.findIndex((obj) => Object.keys(obj)[0] === userEventId);
-        let newState = [...adventuresList];
-        newState[objIndToUpdate][userEventId]['userAdventureInfo'] = updatedDoc.data();
-        setAdventuresList(newState);
-      })
-    })
-  }
+    const docReference = doc(db, 'pirates', userId, 'events', userEventId);
+    updateDoc(docReference, { interested: !interested[0] })
+      .then(() => {
+        getDoc(docReference)
+          .then((updatedDoc) => {
+            const objIndToUpdate = adventuresList.findIndex(
+              (obj) => Object.keys(obj)[0] === userEventId,
+            );
+            const newState = [...adventuresList];
+            newState[objIndToUpdate][userEventId].userAdventureInfo = updatedDoc.data();
+            setAdventuresList(newState);
+          });
+      });
+  };
 
   useEffect(() => {
     if (!adventuresList.length) {
@@ -79,7 +87,8 @@ function AdventureTrackingScreen() {
               userEvent={Object.values(adventure)[0].userAdventureInfo}
               userEventId={Object.keys(adventure)[0]}
               loaded
-              handleInterested={handleInterested} />
+              handleInterested={handleInterested}
+            />
           ))
           : null}
       </ScrollView>
