@@ -5,7 +5,7 @@ import React,
   // useEffect,
 } from 'react';
 import {
-  StyleSheet, Text, View, Image, ScrollView, FlatList, SafeAreaView, StatusBar,
+  StyleSheet, Text, View, Image, ScrollView, FlatList, StatusBar, TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 // import { setDoc, doc } from 'firebase/firestore';
 // import { app, db } from '../../database/db';
 
-const imageTestUrl = 'https://images.unsplash.com/photo-1682686580950-960d1d513532?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80';
+// const imageTestUrl = 'https://images.unsplash.com/photo-1682686580950-960d1d513532?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
   detailImage: {
     width: '100%',
     height: '40%',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     margin: 5,
   },
   icon: {
     position: 'absolute',
-    top: 10,
+    top: 40,
     right: 10,
     zIndex: 10,
   },
@@ -75,7 +75,15 @@ const styles = StyleSheet.create({
 });
 
 function AdventureDetail({ navigation, route }) {
-  const { event } = route.params;
+  const event = route.params;
+  // console.log('IN DETAIL', route.params);
+  // "address"
+  // "date"
+  // "description"
+  // "imageUrl"
+  // "link"
+  // "title"
+
   // const friends = event.friend ? event.friend : [];
   // temp friend data
   const friends = [
@@ -121,10 +129,10 @@ function AdventureDetail({ navigation, route }) {
       />
       <View style={styles.heading}>
         <Text style={styles.name}>
-          {event.name}
+          {event.title}
         </Text>
         <Text style={styles.location}>
-          {event.location}
+          {event.address}
         </Text>
         <ScrollView>
           <Text style={styles.description}>
@@ -164,14 +172,18 @@ function AdventureDetail({ navigation, route }) {
         ) : null}
       </View>
       <View style={styles.icon}>
-        <Ionicons
-          name="close-sharp"
-          size={48}
-          color="black"
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
+        <TouchableOpacity onPress={() => {
+          navigation.goBack(null);
+        }}
+        >
+          <View styles={styles.icon}>
+            <Ionicons
+              name="close-sharp"
+              size={48}
+              color="black"
+            />
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -191,22 +203,20 @@ AdventureDetail.propTypes = {
   }).isRequired,
   route: PropTypes.shape({
     params: PropTypes.shape({
-      event: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        category: PropTypes.string.isRequired,
-        location: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-        star: PropTypes.bool.isRequired,
-        // TODO: Update once we figure out friends object
-        friend: PropTypes.arrayOf(
-          PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            imageUrl: PropTypes.string.isRequired,
-          }),
-        ),
-        imageUrl: PropTypes.string.isRequired,
-      }).isRequired,
+      title: PropTypes.string.isRequired,
+      // category: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      // date: PropTypes.string.isRequired,
+      // star: PropTypes.bool.isRequired,
+      // TODO: Update once we figure out friends object
+      friend: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          imageUrl: PropTypes.string.isRequired,
+        }),
+      ),
+      imageUrl: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
 
