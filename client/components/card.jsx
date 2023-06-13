@@ -51,7 +51,7 @@ function Card({
                 size="lg"
                 onPress={(e) => {
                   e.preventDefault();
-                  handleInterested(userEventId, [userEvent.interested]);
+                  handleInterested(userEventId, 'interested', [userEvent.interested]);
                 }}
               />
             </Center>

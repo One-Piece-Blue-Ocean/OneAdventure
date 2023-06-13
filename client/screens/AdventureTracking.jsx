@@ -53,9 +53,9 @@ function AdventureTrackingScreen() {
       });
   };
 
-  const handleInterested = (userEventId, interested) => {
+  const handleInterested = (userEventId, field, value) => {
     const docReference = doc(db, 'pirates', userId, 'events', userEventId);
-    updateDoc(docReference, { interested: !interested[0] })
+    updateDoc(docReference, { [field]: !value[0] })
       .then(() => {
         getDoc(docReference)
           .then((updatedDoc) => {
