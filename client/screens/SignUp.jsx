@@ -5,6 +5,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import axios from 'axios';
 import { setDoc, doc } from 'firebase/firestore';
 import { app, db } from '../../database/db';
 import icon from '../../assets/icon.png';
@@ -102,13 +103,16 @@ function SignUpScreen({ navigation }) {
     }
     const auth = getAuth(app);
     createUserWithEmailAndPassword(auth, email, password)
-      .then((response) => {
+      .then(async (response) => {
         const { uid } = response.user;
+        const chatToken = await axios.post('http://0.0.0.0:3000/chatToken', { input: uid })
+          .then(({ data }) => data);
         const data = {
           uid,
           email,
           fullName,
           city,
+          chatToken,
         };
         setDoc(doc(db, 'pirates', uid), data)
           .then(() => {
