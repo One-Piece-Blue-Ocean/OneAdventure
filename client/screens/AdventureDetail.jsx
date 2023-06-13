@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
   },
   heading: {
     alignItems: 'center',
+    flex: 2,
+    height: '70%',
   },
   friends: {
     // position: 'absolute',
@@ -86,9 +88,11 @@ function AdventureDetail({ navigation, route }) {
           {event.location}
         </Text>
         <Text style={{ fontSize: 16, fontWeight: 'bold', padding: 10 }}> Full Description </Text>
-        <Text style={{ padding: 10 }}>
-          {event.description}
-        </Text>
+        <ScrollView>
+          <Text style={{ padding: 10 }}>
+            {event.description}
+          </Text>
+        </ScrollView>
       </View>
       <View style={{ flex: 1 }}>
         {friends.length ? (
