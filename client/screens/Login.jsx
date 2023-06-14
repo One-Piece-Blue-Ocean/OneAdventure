@@ -9,7 +9,6 @@ import {
   doc, getDoc, getAuth, signInWithEmailAndPassword,
 } from '../firebase/utils';
 // import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-
 import hatLogo from '../../assets/Hat.png';
 
 import { app, db } from '../../database/db';
@@ -26,8 +25,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 100,
     width: 300,
+    height: 100,
+    width: 300,
     alignSelf: 'center',
     margin: 30,
+    resizeMode: 'contain',
     resizeMode: 'contain',
   },
   input: {
@@ -74,8 +76,8 @@ const styles = StyleSheet.create({
 });
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('ChatBot2@gmail.com');
+  const [password, setPassword] = useState('123456');
 
   const createOneButtonAlert = (message) => (
     Alert.alert('Error', message, [
@@ -121,6 +123,7 @@ function LoginScreen({ navigation }) {
       >
         <Image
           style={styles.logo}
+          source={hatLogo}
           source={hatLogo}
         />
         <TextInput

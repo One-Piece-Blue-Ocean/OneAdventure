@@ -1,29 +1,55 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
-import {
-  StyleSheet, Text, View, Button,
-} from 'react-native';
+import { Text } from 'react-native';
 import PropTypes from 'prop-types';
+import { StreamChat } from 'stream-chat';
+import { OverlayProvider, Chat } from 'stream-chat-expo';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import useChatClient from '../hooks/useChatClient';
+import { ChatProvider } from '../chatContext';
+
+import MessagesScreen from './Messages';
+import MessageScreen from './Message';
+import CreateMessageScreen from './CreateMessage';
 
 function MessagingScreen({ navigation }) {
+  const clientIsReady = useChatClient();
+
+  const ChatStack = createStackNavigator();
+  const chatClient = StreamChat.getInstance('626qs6wjba72');
+
+  if (!clientIsReady) {
+    return <Text>Loading chat ...</Text>;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text> Messaging </Text>
-      <Button
-        title="Nav"
-        onPress={() => {
-          navigation.navigate('AdventureList');
-        }}
-      />
-    </View>
+    <ChatProvider>
+      <OverlayProvider>
+        <Chat client={chatClient}>
+          <ChatStack.Navigator>
+            <ChatStack.Screen
+              name="Messages"
+              component={MessagesScreen}
+              options={{
+                headerLeft: () => {},
+              }}
+            />
+            <ChatStack.Screen
+              name="Message"
+              component={MessageScreen}
+            />
+            <ChatStack.Screen
+              name="CreateMessage"
+              component={CreateMessageScreen}
+              options={{
+                title: 'Compose Message',
+              }}
+            />
+          </ChatStack.Navigator>
+        </Chat>
+      </OverlayProvider>
+    </ChatProvider>
   );
 }
 
