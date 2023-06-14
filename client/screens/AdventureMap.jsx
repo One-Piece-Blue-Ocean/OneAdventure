@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet, Text, View, Modal, TouchableOpacity,
 } from 'react-native';
@@ -10,13 +10,15 @@ import axios from 'axios';
 // config();
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
+import { addDoc, collection } from 'firebase/firestore';
+import { EventContext, UserContext } from '../context';
+import Card from '../components/card';
+import { db } from '../../database/db';
 
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   modal: {
     backgroundColor: 'white',
@@ -34,103 +36,170 @@ const styles = StyleSheet.create({
 });
 
 function AdventureMapScreen({ navigation }) {
-  const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [markers, setMarkers] = useState([]);
+  const [region, setRegion] = useState({
+    latitudeDelta: 0.922,
+    longitudeDelta: 0.421,
+  });
+  const { events } = useContext(EventContext);
+  const value = useContext(UserContext);
+  const { user } = value;
+  const { uid, zipcode } = user;
 
   useEffect(() => {
-    axios.get('http://api.amp.active.com/v2/search?', {
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
-        api_key: '5rbx3x7bsej2zp66p3wnwxfa',
-        near: 'San Francisco,CA,US',
-        query: 'outdoor adventure',
-        per_page: 1,
+        address: zipcode,
+        key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
       },
     })
-      .then((response) => {
-        setEvents(response.data.results);
+      .then((res) => {
+        if (res.data.results.length) {
+          const { lat, lng } = res.data.results[0].geometry.location;
+          setRegion((prevState) => ({
+            ...prevState,
+            latitude: lat,
+            longitude: lng,
+          }));
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const handleMarkerPress = () => {
-    setModalVisible(!modalVisible);
+  const handleMarkerPress = (event) => {
+    setSelectedEvent(event);
   };
 
-  const region = {
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+  useEffect(() => {
+    const fetchMarkers = async () => {
+      const markerPromises = events.map((event) => axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: {
+          address: event.address[0] + event.address[1],
+          key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
+        },
+      }));
+
+      try {
+        const markerResponses = await Promise.all(markerPromises);
+        const newMarkers = markerResponses.map((res, index) => {
+          if (res.data.results.length) {
+            console.log('works');
+            const { lat, lng } = res.data.results[0].geometry.location;
+            return (
+              <Marker
+                coordinate={{
+                  latitude: lat,
+                  longitude: lng,
+                }}
+                onPress={() => handleMarkerPress(events[index])}
+              />
+            );
+          }
+          return null;
+        });
+        setMarkers(newMarkers);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchMarkers();
+  }, [events]);
+
+  useEffect(() => {
+    if (Object.keys(selectedEvent).length) {
+      setModalVisible(true);
+    }
+  }, [selectedEvent]);
+
+  const toggleField = () => {
+    // eslint-disable-next-line camelcase
+    const pirates_adventures_collection = collection(db, 'pirates_adventures');
+    // eslint-disable-next-line camelcase
+    const adventures_collection = collection(db, 'adventures');
+    addDoc(
+      adventures_collection,
+      {
+        address: selectedEvent.address[0],
+        date: selectedEvent.date.start_date,
+        description: selectedEvent.description,
+        imageUrl: selectedEvent.image,
+        title: selectedEvent.title,
+      },
+    ).then((docRef) => {
+      addDoc(
+        pirates_adventures_collection,
+        {
+          adventureId: docRef.id,
+          attending: false,
+          interested: true,
+          userId: uid,
+        },
+      );
+    });
   };
 
-  if (events[0]) {
-    console.log(Object.keys(events[0]));
-    console.log(events[0].place.geoPoint.lat);
-  }
-  // console.log(events[0].place.geoPoint.lat);
-  // let markerRegion = {};
-  // if (events[0]) {
-  //   markerRegion = {
-  //     latitude: events[0].place.geoPoint.lat,
-  //     longitude: events[0].place.geoPoint.lon,
-  //   };
-  //   console.log(events[0].assetDescriptions[0].description);
-  // }
-  // console.log(events);
-  // console.log(events[0].place);
-
-  if (events[0]) {
-    return (
-      <View style={styles.container}>
+  return (
+    <View style={styles.container}>
+      {region.latitude && (
         <MapView
           style={styles.map}
           initialRegion={region}
-        // eslint-disable-next-line no-shadow
-        // onRegionChangeComplete={() => setRegion(region)}
         >
-          {events.forEach((event) => {
-            console.log(Object.keys(event));
-            // <Marker
-            //   coordinate={{
-            //     latitude: event.place.geoPoint.lat,
-            //     longitude: event.place.geoPoint.lon,
-            //   }}
-            //   onPress={handleMarkerPress}
-            // />;
-          })}
+          {markers}
         </MapView>
-        <Modal
-          animationType="slide"
-          transparent
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.container}>
-            <View style={styles.modal}>
-              <Text>{events[0].assetDescriptions[0].description}</Text>
-              <TouchableOpacity onPress={handleMarkerPress}>
-                <Text>Close Modal</Text>
-              </TouchableOpacity>
-            </View>
+      )}
+      <Modal
+        animationType="slide"
+        transparent
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+          setSelectedEvent({});
+        }}
+      >
+        <View style={styles.container}>
+          <View style={styles.modal}>
+            {modalVisible && (
+              <Card
+                event={{
+                  address: selectedEvent.address[0],
+                  date: selectedEvent.date.start_date,
+                  description: selectedEvent.description,
+                  imageUrl: selectedEvent.image,
+                  title: selectedEvent.title,
+                }}
+                userEvent={{
+                  interested: false,
+                  attending: false,
+                }}
+                userEventId=""
+                loaded
+                toggleField={toggleField}
+              />
+            )}
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Text>Close Modal</Text>
+            </TouchableOpacity>
           </View>
-        </Modal>
-        <View style={styles.icon}>
-          <FontAwesome
-            name="list"
-            size={48}
-            color="black"
-            onPress={() => {
-              navigation.navigate('AdventureList');
-            }}
-          />
         </View>
+      </Modal>
+      <View style={styles.icon}>
+        <FontAwesome
+          name="list"
+          size={48}
+          color="black"
+          onPress={() => {
+            navigation.navigate('AdventureList');
+          }}
+        />
       </View>
-    );
-  }
+    </View>
+  );
 }
 
 AdventureMapScreen.propTypes = {
