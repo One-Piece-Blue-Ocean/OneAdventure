@@ -1,9 +1,23 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import {
-  collection, doc, getDoc, getDocs,
+  StyleSheet,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  updateDoc,
 } from 'firebase/firestore';
+import PropTypes from 'prop-types';
 import { db } from '../../database/db';
+import Card from '../components/card';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,23 +28,61 @@ const styles = StyleSheet.create({
   },
 });
 
-function AdventureTrackingScreen() {
+function AdventureTrackingScreen({ navigation }) {
   const [adventuresList, setAdventuresList] = useState([]);
+  const [pastIndex, setPastIndex] = useState(adventuresList.length);
 
   const userId = useContext('userContext') || 'yBjkdAwIoXgoczmWPtiX';
-  const userAdventuresRef = collection(db, 'pirates', userId, 'events');
+  const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
 
   const getAdventures = () => {
-    getDocs(userAdventuresRef)
-      .then((userEventsDocs) => {
-        const promiseArr = userEventsDocs.docs.map((eventDoc) => {
-          const adventureDoc = doc(adventureRef, eventDoc.data().adventureId);
-          return getDoc(adventureDoc).then((adventureDocData) => adventureDocData.data());
+    let currentUserAdventure;
+    let adventureDocReference;
+    getDocs(query(userAdventuresRef, where('userId', '==', userId)))
+      .then((userAdventureDocs) => {
+        const promiseArr = userAdventureDocs.docs.map((userAdventureDoc) => {
+          currentUserAdventure = userAdventureDoc.data();
+          adventureDocReference = doc(adventureRef, currentUserAdventure.adventureId);
+          return getDoc(adventureDocReference).then((adventureDocData) => (
+            {
+              [userAdventureDoc.id]: {
+                userAdventureInfo: currentUserAdventure,
+                adventureInfo: adventureDocData.data(),
+              },
+            }
+          ));
         });
         Promise.all(promiseArr).then((resolvedAdventures) => {
-          setAdventuresList(resolvedAdventures);
+          setAdventuresList(resolvedAdventures.sort((a, b) => {
+            const aDate = new Date(Object.values(a)[0].adventureInfo.date);
+            const bDate = new Date(Object.values(b)[0].adventureInfo.date);
+            return aDate < bDate ? -1 : 1;
+          }));
+        }).then(() => {
+          const copy = adventuresList.slice();
+          const idx = copy.findIndex(
+            (val) => Object.values(val)[0].adventureInfo.date < Date.now(),
+          );
+          if (idx > 0) {
+            setPastIndex(idx);
+          }
         });
+      });
+  };
+
+  const toggleField = (userEventId, field, value) => {
+    updateDoc(doc(userAdventuresRef, userEventId), { [field]: !value[0] })
+      .then(() => {
+        getDoc(doc(userAdventuresRef, userEventId))
+          .then((updatedDoc) => {
+            const objIndToUpdate = adventuresList.findIndex(
+              (obj) => Object.keys(obj)[0] === userEventId,
+            );
+            const newState = [...adventuresList];
+            newState[objIndToUpdate][userEventId].userAdventureInfo = updatedDoc.data();
+            setAdventuresList(newState);
+          });
       });
   };
 
@@ -38,22 +90,55 @@ function AdventureTrackingScreen() {
     if (!adventuresList.length) {
       getAdventures();
     }
+    if (adventuresList.length) {
+      setPastIndex(adventuresList.length);
+    }
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text> AdventureTracking </Text>
-      {adventuresList.length
-        ? adventuresList.map((adventure) => (
-          <View key={adventure.eventName} style={styles.container}>
-            <Text>
-              {adventure.eventName}
-            </Text>
-          </View>
-        ))
-        : null}
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <Text> AdventureTracking </Text>
+        <Text> Upcoming Adventures </Text>
+        {adventuresList.length
+          ? adventuresList.map((adventure, idx) => (
+            <>
+              {idx === pastIndex
+                ? (<Text>Past Adventures</Text>)
+                : null}
+              <TouchableOpacity onPress={() => {
+                // console.log('Pressed', Object.values(adventure)[0].adventureInfo);
+                navigation.navigate('Detail', Object.values(adventure)[0].adventureInfo);
+              }}
+              >
+                <Card
+                  event={Object.values(adventure)[0].adventureInfo}
+                  userEvent={Object.values(adventure)[0].userAdventureInfo}
+                  userEventId={Object.keys(adventure)[0]}
+                  loaded
+                  toggleField={toggleField}
+                />
+              </TouchableOpacity>
+            </>
+          ))
+          : null}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+AdventureTrackingScreen.propTypes = {
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      routeName: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
 export default AdventureTrackingScreen;

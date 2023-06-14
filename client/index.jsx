@@ -8,6 +8,7 @@ import { decode, encode } from 'base-64';
 import LoginScreen from './screens/Login';
 import SignUpScreen from './screens/SignUp';
 import NavScreen from './screens/Nav';
+import AdventureDetail from './screens/AdventureDetail';
 
 if (!global.btoa) { global.btoa = encode; }
 if (!global.atob) { global.atob = decode; }
@@ -22,6 +23,7 @@ export default function App() {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="Nav" component={NavScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Detail" component={AdventureDetail} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NativeBaseProvider>
     </NavigationContainer>
