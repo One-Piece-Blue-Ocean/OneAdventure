@@ -6,7 +6,7 @@ import { FontAwesome, Entypo, FontAwesome5 } from '@expo/vector-icons';
 import AdventureToggle from './AdventureToggle';
 import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
-import UserContext from '../context';
+import { UserContext } from '../context';
 import MessagingScreen from './Messaging';
 
 const Tab = createBottomTabNavigator();
@@ -19,7 +19,7 @@ const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
 function Nav({ route }) {
   const [user, setUser] = useState(route.params);
 
-  console.log(user);
+  // console.log(user);
 
   const updateUserContext = (key, value) => {
     user.user[key] = value;
@@ -27,7 +27,7 @@ function Nav({ route }) {
   };
 
   const contextObj = useMemo(() => ({ user, updateUserContext }), [user]);
-  console.log(contextObj);
+  // console.log(contextObj);
 
   return (
     <UserContext.Provider value={contextObj}>

@@ -36,10 +36,10 @@ function AdventureListScreen({ navigation }) {
   const { user, updateUserContext } = useContext(UserContext);
   // const [category, setCategory] = useState('');
 
-  console.log('USER: ', user);
-  console.log('update context: ', updateUserContext);
+  // console.log('USER: ', user);
+  // console.log('update context: ', updateUserContext);
   // updateUserContext('category', 'Hiking');
-  console.log('context after update', user);
+  // console.log('context after update', user);
   // const handleUpdateClick = (key, value) => {
   //   updateUserContext(key, value);
   // };

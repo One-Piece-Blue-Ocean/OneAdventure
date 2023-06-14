@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { StreamChat } from 'stream-chat';
@@ -38,13 +38,13 @@ function MessagingScreen({ navigation }) {
               name="Message"
               component={MessageScreen}
             />
-            {/* <ChatStack.Screen
-              name="Message"
+            <ChatStack.Screen
+              name="CreateMessage"
               component={CreateMessageScreen}
               options={{
                 title: 'Compose Message',
               }}
-            /> */}
+            />
           </ChatStack.Navigator>
         </Chat>
       </OverlayProvider>

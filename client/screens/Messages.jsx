@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { IconButton } from 'native-base';
 import PropTypes from 'prop-types';
@@ -49,6 +49,10 @@ function MessagesScreen(props) {
           name: 'add-circle',
         }}
         style={buttonStyles}
+        onPress={() => {
+          const { navigation } = props;
+          navigation.navigate('CreateMessage');
+        }}
       />
     </>
   );
