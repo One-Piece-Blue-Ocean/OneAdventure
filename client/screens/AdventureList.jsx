@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-import { UserContext } from '../context';
+import { collection, getDocs } from '../firebase/utils';
+import { db } from '../../database/db';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,17 +34,17 @@ const styles = StyleSheet.create({
 });
 
 function AdventureListScreen({ navigation }) {
-  const { user, updateUserContext } = useContext(UserContext);
-  // const [category, setCategory] = useState('');
-
-  console.log('USER: ', user);
-  console.log('update context: ', updateUserContext);
-  // updateUserContext('category', 'Hiking');
-  console.log('context after update', user);
-  // const handleUpdateClick = (key, value) => {
-  //   updateUserContext(key, value);
-  // };
-
+  useEffect(() => {
+    getDocs(collection(db, 'adventures'))
+      .then((adventures) => {
+        adventures.forEach((adventure) => {
+          console.log(adventure.id, ' => ', adventure.data());
+        });
+      })
+      .catch((error) => {
+        console.log('Error retrieving adventures from db ', error.code, error.message);
+      });
+  }, []);
   return (
     <View style={styles.container}>
       <Foundation
@@ -56,7 +57,6 @@ function AdventureListScreen({ navigation }) {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => updateUserContext('radius', '20')}
       >
         <Text style={styles.buttonTitle}>Update</Text>
       </TouchableOpacity>
