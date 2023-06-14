@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Text,
   View,
@@ -13,7 +13,18 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { AntDesign } from '@expo/vector-icons';
+import {
+  updateDoc,
+  collection,
+  doc,
+  getDocs,
+  getDoc,
+} from 'firebase/firestore';
+import * as ImagePicker from 'expo-image-picker';
+import { db } from '../../database/db';
+import UserContext from '../context';
 import FriendCard from '../components/FriendCard';
+import FriendSearchModal from '../components/FriendSearchModal';
 
 const styles = StyleSheet.create({
   button: {
@@ -58,12 +69,19 @@ const styles = StyleSheet.create({
     width: 200,
     alignItems: 'center',
   },
+  editPhoto: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
+  },
   friendsHeaderContainer: {
     width: '100%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+    flexDirection: 'row',
+    position: 'relative',
   },
   friendsHeaderText: {
     fontSize: 24,
@@ -116,6 +134,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginLeft: 10,
     backgroundColor: 'white',
+    position: 'relative',
   },
   userNameContainer: {
     flex: 3,
@@ -159,65 +178,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
   },
+  searchIcon: {
+    position: 'absolute',
+    marginRight: 30,
+    right: 0,
+  },
   shadow: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 1,
+    shadowOpacity: 0.35,
+    shadowRadius: 3,
     elevation: 2,
   },
 });
 
-// temp friend data
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    userName: 'Dave',
-    profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    userName: 'Steve',
-    profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    userName: 'Jim',
-    profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
-    userName: 'Sara',
-    profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
-    userName: 'Billy',
-    profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7z',
-    userName: 'Chris',
-    profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  },
-];
-
-const tempUser = {
-  id: '58694a0f-3da1-471f-bd96-145571e29zzz',
-  name: 'Buckey',
-  email: 'buckey@mail.com',
-  profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  zip: 98765,
-  radius: 50,
-  type: 'Hiking',
-  friends: DATA,
-};
+// const tempUser = {
+//   uid: '58694a0f-3da1-471f-bd96-145571e29zzz',
+//   fullName: 'Buckey',
+//   email: 'buckey@mail.com',
+//   profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+//   zipcode: 98765,
+//   radius: 50,
+//   category: 'Hiking',
+// };
 
 function ProfileScreen() {
   const [friendData, setFriendData] = useState([]);
+  const [friendSearchModal, setFriendSearchModal] = useState(false);
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
@@ -228,44 +218,112 @@ function ProfileScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(0);
   const [input, setInput] = useState({ email: '', zip: '' });
+  const [uploadPhoto, setUploadPhoto] = useState(false);
+  const [image, setImage] = useState(null);
+
+  const pirateCollection = collection(db, 'pirates');
+  const value = useContext(UserContext);
+  const { user } = value;
+  // console.log(value);
 
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
 
-  // eslint-disable-next-line no-unused-vars
+  const getFriends = () => {
+    // console.log('getFriends userid------->', userId);
+    getDocs(collection(db, 'pirates', userId, 'friends'))
+      .then((friendsDocs) => {
+        const promiseArr = friendsDocs.docs.map((singleFriendsDoc) => {
+          const currentFriend = singleFriendsDoc.data().friendId;
+          // console.log(singleFriendsDoc.data(), 'MY CURRENT FRIEND~~~!!!', currentFriend);
+          return getDoc(doc(db, 'pirates', currentFriend))
+            .then((friendDoc) => friendDoc.data());
+        });
+        Promise.all(promiseArr).then((friendDocs) => setFriendData(friendDocs));
+      });
+  };
+
   const infoSet = () => {
-    // Todo: get user info from db or useContext, then set
-    // using tempUser until I figure out the db
-    setUserId(tempUser.id);
-    setUserName(tempUser.name);
-    setEmail(tempUser.email);
-    setProfilePic(tempUser.profilePhoto);
-    setLocation(tempUser.zip);
-    setSearchRadius(tempUser.radius);
-    setTypePreference(tempUser.type);
-    setFriendData(tempUser.friends);
+    if (value !== undefined) {
+      setUserId(user.uid);
+      setEmail(user.email);
+      setLocation(user.zipcode);
+      setUserName(user.fullName);
+      setProfilePic(user.profilePhoto);
+      setSearchRadius(user.radius || 10);
+      setTypePreference(user.category || 'Sailing');
+    }
   };
 
   const updateProfile = (update) => {
-    // Todo: replace console logs with four put requests to db
     if (editMode === 1) {
-      console.log('udpate email, id:', userId, update.email);
+      const updatedEmail = input.email;
+      updateDoc(doc(pirateCollection, userId), { email: updatedEmail })
+        .then(() => {
+          setEmail(updatedEmail);
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('profile update err', err.message);
+        });
       setInput({ email: '', zip: '' });
     } else if (editMode === 2) {
-      console.log('udpate type, id:', userId, update);
+      updateDoc(doc(pirateCollection, userId), { category: update })
+        .then(() => {
+          setTypePreference(update);
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('profile update err', err.message);
+        });
     } else if (editMode === 3) {
-      console.log('udpate location, id:', userId, update.zip);
+      const updatedLocation = input.zip;
+      updateDoc(doc(pirateCollection, userId), { zipcode: updatedLocation })
+        .then(() => {
+          setLocation(updatedLocation);
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('profile update err', err.message);
+        });
       setInput({ email: '', zip: '' });
     } else if (editMode === 4) {
-      console.log('udpate radius, id:', userId, update);
+      const newRadius = update.zip;
+      updateDoc(doc(pirateCollection, userId), { radius: newRadius })
+        .then(() => {
+          setSearchRadius(newRadius);
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.log('profile update err', err.message);
+        });
     }
-    infoSet();
+    // call function to update userContext
+  };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
   };
 
   useEffect(() => {
     // set user info
     infoSet();
-  }, []);
+    if (userId) {
+      getFriends();
+    }
+  }, [userId]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -279,11 +337,54 @@ function ProfileScreen() {
             }}
             testID="profile.pic"
           />
+          <AntDesign
+            testID="profile.editEmail"
+            name="edit"
+            size={28}
+            color="black"
+            style={styles.editPhoto}
+            onPress={() => {
+              // open edit photo modal
+              setUploadPhoto(true);
+            }}
+          />
         </View>
         <View style={styles.userNameContainer}>
           <Text style={styles.userNameText} testID="profile.userName">{userName}</Text>
         </View>
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent
+        visible={uploadPhoto}
+      >
+        <View style={styles.centerModal}>
+          <View style={[styles.modalContainer, styles.shadow]}>
+
+            <View style={styles.modalBtnContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.shadow]}
+                onPress={pickImage}
+              >
+                <Text>Upload Photo</Text>
+              </TouchableOpacity>
+            </View>
+
+            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+
+            <View style={styles.modalBtnContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.shadow]}
+                onPress={() => setUploadPhoto(false)}
+              >
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+      </Modal>
 
       <View style={styles.details}>
         <View style={styles.textWrap}>
@@ -480,13 +581,28 @@ function ProfileScreen() {
         </View>
       </Modal>
 
+      <FriendSearchModal
+        friendSearchModal={friendSearchModal}
+        setFriendSearchModal={setFriendSearchModal}
+        userId={userId}
+      />
+
       <View style={styles.friendsHeaderContainer}>
         <Text style={styles.friendsHeaderText}>Friends List</Text>
+        <AntDesign
+          name="search1"
+          size={24}
+          color="black"
+          style={styles.searchIcon}
+          onPress={() => {
+            setFriendSearchModal(true);
+          }}
+        />
       </View>
       <View style={styles.friendsListContainer} testID="profile.friendsList">
         <ScrollView style={styles.editDropDown}>
           {friendData.map((friend, index) => (
-            <View key={friend.id} testID={`profile.friend.${index}`}>
+            <View key={friend.uid} testID={`profile.friend.${index}`}>
               <FriendCard friend={friend} index={index} />
             </View>
           ))}
