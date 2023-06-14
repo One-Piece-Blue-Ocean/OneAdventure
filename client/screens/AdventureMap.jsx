@@ -13,7 +13,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { addDoc, collection } from 'firebase/firestore';
 import { EventContext, UserContext } from '../context';
 import Card from '../components/card';
-import { db } from '../../database/db.js';
+import { db } from '../../database/db';
 
 const styles = StyleSheet.create({
   container: {
@@ -90,7 +90,6 @@ function AdventureMapScreen({ navigation }) {
             const { lat, lng } = res.data.results[0].geometry.location;
             return (
               <Marker
-                key={index}
                 coordinate={{
                   latitude: lat,
                   longitude: lng,
