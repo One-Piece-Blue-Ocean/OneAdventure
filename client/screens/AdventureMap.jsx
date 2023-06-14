@@ -10,14 +10,15 @@ import axios from 'axios';
 // config();
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { EventContext } from '../context';
+import { addDoc, collection } from 'firebase/firestore';
+import { EventContext, UserContext } from '../context';
+import Card from '../components/card';
+import { db } from '../../database/db.js';
 
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   modal: {
     backgroundColor: 'white',
@@ -42,15 +43,15 @@ function AdventureMapScreen({ navigation }) {
     latitudeDelta: 0.922,
     longitudeDelta: 0.421,
   });
-  const value = useContext(EventContext);
-  // const { events } = route.params;
-  // const {zip} = useContext('userContext');
-  const zip = 'San Francisco';
+  const { events } = useContext(EventContext);
+  const value = useContext(UserContext);
+  const { user } = value;
+  const { uid, zipcode } = user;
 
   useEffect(() => {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
-        address: zip,
+        address: zipcode,
         key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
       },
     })
@@ -71,12 +72,11 @@ function AdventureMapScreen({ navigation }) {
 
   const handleMarkerPress = (event) => {
     setSelectedEvent(event);
-    setModalVisible(true);
   };
 
   useEffect(() => {
     const fetchMarkers = async () => {
-      const markerPromises = value.map((event) => axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+      const markerPromises = events.map((event) => axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
         params: {
           address: event.address[0] + event.address[1],
           key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
@@ -95,7 +95,7 @@ function AdventureMapScreen({ navigation }) {
                   latitude: lat,
                   longitude: lng,
                 }}
-                onPress={() => handleMarkerPress(value[index])}
+                onPress={() => handleMarkerPress(events[index])}
               />
             );
           }
@@ -108,7 +108,40 @@ function AdventureMapScreen({ navigation }) {
     };
 
     fetchMarkers();
-  }, [value]);
+  }, [events]);
+
+  useEffect(() => {
+    if (Object.keys(selectedEvent).length) {
+      setModalVisible(true);
+    }
+  }, [selectedEvent]);
+
+  const toggleField = () => {
+    // eslint-disable-next-line camelcase
+    const pirates_adventures_collection = collection(db, 'pirates_adventures');
+    // eslint-disable-next-line camelcase
+    const adventures_collection = collection(db, 'adventures');
+    addDoc(
+      adventures_collection,
+      {
+        address: selectedEvent.address[0],
+        date: selectedEvent.date.start_date,
+        description: selectedEvent.description,
+        imageUrl: selectedEvent.image,
+        title: selectedEvent.title,
+      },
+    ).then((docRef) => {
+      addDoc(
+        pirates_adventures_collection,
+        {
+          adventureId: docRef.id,
+          attending: false,
+          interested: true,
+          userId: uid,
+        },
+      );
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -126,12 +159,28 @@ function AdventureMapScreen({ navigation }) {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(false);
+          setSelectedEvent({});
         }}
       >
         <View style={styles.container}>
           <View style={styles.modal}>
-            {selectedEvent && (
-            <Text>{selectedEvent.description}</Text>
+            {modalVisible && (
+              <Card
+                event={{
+                  address: selectedEvent.address[0],
+                  date: selectedEvent.date.start_date,
+                  description: selectedEvent.description,
+                  imageUrl: selectedEvent.image,
+                  title: selectedEvent.title,
+                }}
+                userEvent={{
+                  interested: false,
+                  attending: false,
+                }}
+                userEventId=""
+                loaded
+                toggleField={toggleField}
+              />
             )}
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text>Close Modal</Text>
