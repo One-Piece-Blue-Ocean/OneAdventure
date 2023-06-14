@@ -2,11 +2,13 @@ const { StreamChat } = require('stream-chat');
 
 module.exports = {
   chatToken: (req, res) => {
-    const client = new StreamChat(process.env.CHAT_KEY, process.env.CHAT_SECRET, { timeout: 6000 });
+    // console.log(process.env.CHAT_KEY);
+    const client = new StreamChat(process.env.CHAT_KEY, process.env.CHAT_SECRET);
     const { input } = req.body;
-    console.log(input);
+
     if (input) {
       const token = client.createToken(input);
+      // console.log(input, token);
       return res.json(token);
     }
 
