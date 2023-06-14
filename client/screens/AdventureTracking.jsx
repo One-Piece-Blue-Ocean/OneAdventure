@@ -33,9 +33,15 @@ const styles = StyleSheet.create({
 function AdventureTrackingScreen({ navigation }) {
   const [adventuresList, setAdventuresList] = useState([]);
   const [pastIndex, setPastIndex] = useState(adventuresList.length);
+<<<<<<< HEAD
   const value = useContext(UserContext).user;
   const { user } = value;
   const userId = user.uid || 'yBjkdAwIoXgoczmWPtiX';
+=======
+  const value = useContext(UserContext);
+  const { user } = value.user;
+  const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
+>>>>>>> 2c5d24a7de65f9d0500c26c33d87b602028290d1
   const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
 
@@ -88,6 +94,7 @@ function AdventureTrackingScreen({ navigation }) {
           });
       });
   };
+
 
   useEffect(() => {
     if (!adventuresList.length) {

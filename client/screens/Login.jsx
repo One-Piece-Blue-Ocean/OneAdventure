@@ -9,7 +9,11 @@ import {
   doc, getDoc, getAuth, signInWithEmailAndPassword,
 } from '../firebase/utils';
 // import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+<<<<<<< HEAD
 import icon from '../../assets/icon.png';
+=======
+import hatLogo from '../../assets/Hat.png';
+>>>>>>> 2c5d24a7de65f9d0500c26c33d87b602028290d1
 
 import { app, db } from '../../database/db';
 
@@ -23,10 +27,21 @@ const styles = StyleSheet.create({
   },
   logo: {
     flex: 1,
+<<<<<<< HEAD
     height: 120,
     width: 90,
     alignSelf: 'center',
     margin: 30,
+=======
+    height: 100,
+    width: 300,
+    height: 100,
+    width: 300,
+    alignSelf: 'center',
+    margin: 30,
+    resizeMode: 'contain',
+    resizeMode: 'contain',
+>>>>>>> 2c5d24a7de65f9d0500c26c33d87b602028290d1
   },
   input: {
     height: 48,
@@ -119,7 +134,8 @@ function LoginScreen({ navigation }) {
       >
         <Image
           style={styles.logo}
-          source={icon}
+          source={hatLogo}
+          source={hatLogo}
         />
         <TextInput
           style={styles.input}
