@@ -1,7 +1,6 @@
-/* eslint-disable */
-import React, {
-  useEffect,
-  useState,
+import React,
+{
+
 } from 'react';
 import {
   StyleSheet, Text, View, Image, ScrollView, FlatList, StatusBar, TouchableOpacity,
@@ -151,6 +150,11 @@ function AdventureDetail({ navigation, route }) {
       getThisAdventuresFriends()
     }
   }, [])
+
+  const onMessage = (friendId) => {
+    // eslint-disable-next-line no-console
+    console.log('Go to message with friend that was clicked, id:', friendId);
+  };
 
   return (
     <View style={styles.container}>
