@@ -5,7 +5,7 @@ import React,
 import {
   StyleSheet, Text, View, Image, ScrollView, FlatList, StatusBar, TouchableOpacity,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 // import { setDoc, doc } from 'firebase/firestore';
@@ -34,18 +34,23 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   friendImage: {
-    // width: '10%',
-    // height: '10%',
-    resizeMode: 'cover',
+    // width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
     margin: 5,
   },
   friendContainer: {
     display: 'flex',
-    flex: 'flex-row',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 5,
+  },
+  friendItem: {
   },
   detailImage: {
     width: '100%',
-    height: '40%',
+    height: '50%',
     resizeMode: 'contain',
     margin: 5,
   },
@@ -73,7 +78,7 @@ const styles = StyleSheet.create({
 });
 
 function AdventureDetail({ navigation, route }) {
-  const event = route.params;
+  const event = route.params.adventureInfo;
   // console.log('IN DETAIL', route.params);
   // "address"
   // "date"
@@ -116,6 +121,11 @@ function AdventureDetail({ navigation, route }) {
       profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
     },
   ];
+
+  const onMessage = (friendId) => {
+    // eslint-disable-next-line no-console
+    console.log('Go to message with friend that was clicked, id:', friendId);
+  };
 
   return (
     <View style={styles.container}>
@@ -162,9 +172,18 @@ function AdventureDetail({ navigation, route }) {
                   <Text>
                     {friend.userName}
                   </Text>
+                  <TouchableOpacity>
+                    <Entypo
+                      name="message"
+                      size={24}
+                      color="black"
+                      onPress={() => onMessage(friend.id)}
+                    />
+                  </TouchableOpacity>
                 </View>
               )}
               keyExtractor={(friend) => friend.id}
+              showsVerticalScrollIndicator={false}
             />
           </View>
         ) : null}
@@ -200,22 +219,27 @@ AdventureDetail.propTypes = {
     }),
   }).isRequired,
   route: PropTypes.shape({
-    params: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      // category: PropTypes.string.isRequired,
-      address: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      // date: PropTypes.string.isRequired,
-      // star: PropTypes.bool.isRequired,
-      // TODO: Update once we figure out friends object
-      friend: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
+    params: PropTypes.shape(
+      {
+        adventureInfo: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+          // category: PropTypes.string.isRequired,
+          address: PropTypes.string.isRequired,
+          description: PropTypes.string.isRequired,
+          // date: PropTypes.string.isRequired,
+          // star: PropTypes.bool.isRequired,
+          // TODO: Update once we figure out friends object
+          friend: PropTypes.arrayOf(
+            PropTypes.shape({
+              id: PropTypes.string.isRequired,
+              name: PropTypes.string.isRequired,
+              imageUrl: PropTypes.string.isRequired,
+            }),
+          ),
           imageUrl: PropTypes.string.isRequired,
         }),
-      ),
-      imageUrl: PropTypes.string.isRequired,
-    }).isRequired,
+      },
+    ).isRequired,
   }).isRequired,
 
 };
