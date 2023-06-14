@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, Text, View, Modal, TouchableOpacity,
+  StyleSheet, Text, View, Modal, TouchableOpacity, TextInput, Button,
 } from 'react-native';
-// eslint-disable-next-line no-unused-vars
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
-// import { config } from 'dotenv';
 
-// config();
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { addDoc, collection } from 'firebase/firestore';
@@ -33,25 +30,90 @@ const styles = StyleSheet.create({
     marginRight: 30,
     marginTop: 100,
   },
+  searchContainer: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    right: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 8,
+  },
+  button: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    backgroundColor: '#2e86c1',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
-function AdventureMapScreen({ navigation }) {
+function AdventureMapScreen({ navigation, search, setSearch }) {
   const [selectedEvent, setSelectedEvent] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [markers, setMarkers] = useState([]);
   const [region, setRegion] = useState({
-    latitudeDelta: 0.922,
-    longitudeDelta: 0.421,
+    latitudeDelta: 0.1194,
+    longitudeDelta: 0.0821,
   });
+  const [searchText, setSearchText] = useState('');
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
+  const [currentLatLng, setCurrentLatLng] = useState('');
   const { events } = useContext(EventContext);
   const value = useContext(UserContext);
   const { user } = value;
   const { uid, zipcode } = user;
 
-  useEffect(() => {
+  const handleSearchArea = () => {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
-        address: zipcode,
+        latlng: currentLatLng,
+        key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
+      },
+    })
+      .then((res) => {
+        if (res.data.results.length) {
+          let city = '';
+          let state = '';
+          const addressComponent = res.data.results[0].address_components;
+          for (let i = 0; i < addressComponent.length; i += 1) {
+            if (addressComponent[i].types[0] === 'locality') {
+              city = addressComponent[i].short_name;
+            }
+            if (addressComponent[i].types[0] === 'administrative_area_level_1') {
+              state = addressComponent[i].short_name;
+            }
+          }
+          console.log('handlesearcharea', city, state);
+          const address = `${city}, ${state}`;
+          setSearch(address);
+        }
+      })
+      .catch((err) => {
+        console.log(searchText);
+        console.log(err);
+      });
+  };
+
+  const handleSearchSubmit = () => {
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+      params: {
+        address: searchText,
         key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
       },
     })
@@ -68,6 +130,54 @@ function AdventureMapScreen({ navigation }) {
       .catch((err) => {
         console.log(err);
       });
+    setSearchText('');
+    setSearch(searchText);
+  };
+
+  const handleRegionChange = (theRegion) => {
+    const {
+      latitude, longitude,
+    } = theRegion;
+
+    const latlng = `${latitude},${longitude}`;
+
+    const latDelta = Math.abs(latitude - region.latitude);
+    const lngDelta = Math.abs(longitude - region.longitude);
+
+    // Set a threshold for how far the user needs to scroll
+    const threshold = 0.1; // Adjust this value according to your needs
+
+    // Check if the user has scrolled beyond the threshold
+    if (latDelta > threshold || lngDelta > threshold) {
+      setShowSearchPopup(true);
+      setCurrentLatLng(latlng);
+    } else {
+      setShowSearchPopup(false);
+    }
+  };
+
+  useEffect(() => {
+    if (search === '') {
+      axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: {
+          address: zipcode,
+          key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
+        },
+      })
+        .then((res) => {
+          if (res.data.results.length) {
+            const { lat, lng } = res.data.results[0].geometry.location;
+            setRegion((prevState) => ({
+              ...prevState,
+              latitude: lat,
+              longitude: lng,
+            }));
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   const handleMarkerPress = (event) => {
@@ -87,7 +197,6 @@ function AdventureMapScreen({ navigation }) {
         const markerResponses = await Promise.all(markerPromises);
         const newMarkers = markerResponses.map((res, index) => {
           if (res.data.results.length) {
-            console.log('works');
             const { lat, lng } = res.data.results[0].geometry.location;
             return (
               <Marker
@@ -148,10 +257,26 @@ function AdventureMapScreen({ navigation }) {
       {region.latitude && (
         <MapView
           style={styles.map}
-          initialRegion={region}
+          region={region}
+          onRegionChangeComplete={handleRegionChange}
         >
           {markers}
         </MapView>
+      )}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="search"
+          value={searchText}
+          onChangeText={setSearchText}
+          onSubmitEditing={handleSearchSubmit}
+        />
+        <Button title="Search" onPress={handleSearchSubmit} />
+      </View>
+      {showSearchPopup && (
+        <TouchableOpacity onPress={handleSearchArea} style={styles.button}>
+          <Text style={styles.buttonText}>Search This Area</Text>
+        </TouchableOpacity>
       )}
       <Modal
         animationType="slide"
@@ -214,6 +339,8 @@ AdventureMapScreen.propTypes = {
       path: PropTypes.string,
     }),
   }).isRequired,
+  search: PropTypes.string.isRequired,
+  setSearch: PropTypes.func.isRequired,
 };
 
 export default AdventureMapScreen;
