@@ -5,8 +5,10 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
-import { doc, getDoc } from 'firebase/firestore';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  doc, getDoc, getAuth, signInWithEmailAndPassword,
+} from '../firebase/utils';
+// import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import icon from '../../assets/icon.png';
 
 import { app, db } from '../../database/db';
@@ -86,7 +88,7 @@ function LoginScreen({ navigation }) {
   const onGuestLinkPress = () => {
     navigation.navigate('Nav', {
       user: {
-        city: 'A City', email: 'guest@mail.com', fullName: 'Guest', uid: 'someUIDstring',
+        uid: 'yBjkdAwIoXgoczmWPtiX', fullName: 'Guest', email: 'guest@mail.com', zipcode: '94123', category: 'Sailing', radius: '10', profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
       },
     });
   };
