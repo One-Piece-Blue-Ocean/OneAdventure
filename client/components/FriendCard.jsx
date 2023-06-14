@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'skyblue',
+    backgroundColor: 'lightgray',
     margin: 20,
     marginBottom: 0,
   },
@@ -103,14 +103,14 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowOpacity: 0.35,
+    shadowRadius: 3,
   },
 });
 
 function FriendCard({ friend, index }) {
   const [modalVisible, setModalVisible] = useState(false);
-  const { profilePic, userName, id } = friend;
+  const { profilePhoto, fullName, uid } = friend;
 
   const onMessage = (friendId) => {
     // eslint-disable-next-line no-console
@@ -129,7 +129,7 @@ function FriendCard({ friend, index }) {
         <View style={styles.profileImageWrap}>
           <Image
             source={{
-              uri: profilePic,
+              uri: profilePhoto,
               height: 50,
               width: 50,
             }}
@@ -139,7 +139,7 @@ function FriendCard({ friend, index }) {
 
       <View style={styles.friendCardDetails}>
         <View style={styles.friendNameContainer}>
-          <Text style={styles.friendNameText}>{userName}</Text>
+          <Text style={styles.friendNameText}>{fullName}</Text>
         </View>
         <View style={styles.friendBtnContainer}>
           <TouchableOpacity>
@@ -147,7 +147,7 @@ function FriendCard({ friend, index }) {
               name="message"
               size={24}
               color="black"
-              onPress={() => onMessage(id)}
+              onPress={() => onMessage(uid)}
             />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -174,7 +174,7 @@ function FriendCard({ friend, index }) {
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => {
-                  onRemove(id);
+                  onRemove(uid);
                   setModalVisible(false);
                 }}
               >
@@ -197,9 +197,9 @@ function FriendCard({ friend, index }) {
 
 FriendCard.propTypes = {
   friend: PropTypes.shape({
-    userName: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    profilePic: PropTypes.string.isRequired,
+    fullName: PropTypes.string.isRequired,
+    uid: PropTypes.string.isRequired,
+    profilePhoto: PropTypes.string.isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,
 };
