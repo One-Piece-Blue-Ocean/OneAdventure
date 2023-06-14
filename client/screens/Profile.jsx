@@ -20,6 +20,13 @@ import {
   getDocs,
   getDoc,
 } from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
+// import { v4 } from 'uuid';
 import * as ImagePicker from 'expo-image-picker';
 import { db } from '../../database/db';
 import { UserContext } from '../context';
@@ -224,18 +231,17 @@ function ProfileScreen() {
   const pirateCollection = collection(db, 'pirates');
   const value = useContext(UserContext);
   const { user } = value;
-  console.log(value);
+  // console.log('---->', value);
 
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
 
-  const getFriends = () => (
-    // console.log('getFriends userid------->', userId);
-    getDocs(collection(db, 'pirates', userId, 'friends'))
+  const getFriends = () => {
+    console.log('user id', userId);
+    return getDocs(collection(db, 'pirates', userId, 'friends'))
       .then((friendsDocs) => {
         const promiseArr = friendsDocs.docs.map((singleFriendsDoc) => {
           const currentFriend = singleFriendsDoc.data().friendId;
-          // console.log(singleFriendsDoc.data(), 'MY CURRENT FRIEND~~~!!!', currentFriend);
           return getDoc(doc(db, 'pirates', currentFriend))
             .then((friendDoc) => friendDoc.data());
         });
@@ -243,8 +249,8 @@ function ProfileScreen() {
           setFriendData(friendDocs);
           return friendDocs;
         });
-      })
-  );
+      });
+  };
 
   const infoSet = () => {
     if (value !== undefined) {
@@ -256,6 +262,7 @@ function ProfileScreen() {
       setSearchRadius(user.user.radius || 10);
       setTypePreference(user.user.category || 'Sailing');
     }
+    setUploadPhoto(false);
   };
 
   const updateProfile = (update) => {
@@ -313,7 +320,7 @@ function ProfileScreen() {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -322,7 +329,49 @@ function ProfileScreen() {
 
   const saveNewPhotoToDb = () => {
     // save photo to db
-    setUploadPhoto(false);
+    // setUploadPhoto(false);
+    const imageFileName = `${userId}-${Math.random() * 10000000000}`;
+    const fileRef = ref(getStorage(), `profilePhotos/${imageFileName}`);
+    // eslint-disable-next-line
+    const blobify = () => {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          // console.log('WE RESOLVED!');
+          resolve(xhr.response);
+        };
+        xhr.onerror = (e) => {
+          // eslint-disable-next-line no-console
+          console.log(e);
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', image, true);
+        xhr.send(null);
+      });
+    };
+    blobify()
+      .then((blob) => {
+        // console.log('hi our blob is ', blob);
+        uploadBytes(fileRef, blob)
+          .then(() => {
+            blob.close();
+            getDownloadURL(fileRef)
+              .then((url) => {
+                updateDoc(doc(pirateCollection, userId), { profilePhoto: url })
+                  .then(() => {
+                    // setProfilePic(url);
+                    user.user.profilePhoto = url;
+                    infoSet();
+                  })
+                  .catch((err) => {
+                    // eslint-disable-next-line no-console
+                    console.log('profile update err', err.message);
+                  });
+              });
+          });
+      });
   };
 
   useEffect(() => {
@@ -332,6 +381,10 @@ function ProfileScreen() {
       getFriends();
     }
   }, [userId]);
+
+  useEffect(() => {
+
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -394,7 +447,7 @@ function ProfileScreen() {
                 style={[styles.modalButton, styles.shadow]}
                 onPress={() => setUploadPhoto(false)}
               >
-                <Text>Cancel</Text>
+                <Text>Done</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -408,7 +461,7 @@ function ProfileScreen() {
             <Text style={styles.text}>Email:</Text>
             <Text style={styles.text}>{email}</Text>
           </View>
-          <View style={styles.optionEdit}>
+          {/* <View style={styles.optionEdit}>
             <AntDesign
               testID="profile.editEmail"
               name="edit"
@@ -419,7 +472,7 @@ function ProfileScreen() {
                 setModalVisible(true);
               }}
             />
-          </View>
+          </View> */}
         </View>
 
         <View style={styles.textWrap}>
