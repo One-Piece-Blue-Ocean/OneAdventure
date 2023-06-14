@@ -112,6 +112,7 @@ function SignUpScreen({ navigation }) {
           email,
           fullName,
           zipcode,
+          category: 'Sailing',
           radius: '10',
           profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
           chatToken,
