@@ -1,16 +1,17 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Input, Heading, IconButton } from 'native-base';
 import { StreamChat } from 'stream-chat';
-import { useChatContext } from '../chatContext';
 import { Ionicons } from '@expo/vector-icons';
-
+import { useChatContext } from '../chatContext';
 
 function CreateMessage({ navigation }) {
   const chatClient = useChatContext();
-  const [ chatName, setChatName] = useState('');
-  const [ members, setMembers ] = useState([]);
-  const [ chatTokens, setChatTokens ] = useState([]);
+  const [chatName, setChatName] = useState('');
+  const [members, setMembers] = useState([]);
+  const [chatTokens, setChatTokens] = useState([]);
 
   // const channel = chatClient.channel('messaging', {
   //   image: 'dave.png',
@@ -32,12 +33,12 @@ function CreateMessage({ navigation }) {
           variant="outline"
           _icon={{
             as: Ionicons,
-            name: "person-add-sharp"
+            name: 'person-add-sharp',
           }}
         />
       </View>
     </View>
   );
-};
+}
 
 export default CreateMessage;
