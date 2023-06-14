@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default */
 import React, { useState, useMemo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PropTypes from 'prop-types';
@@ -19,12 +20,15 @@ const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
 function Nav({ route }) {
   const [user, setUser] = useState(route.params);
 
+  // console.log(user);
+
   const updateUserContext = (key, value) => {
     user.user[key] = value;
     setUser({ ...user });
   };
 
   const contextObj = useMemo(() => ({ user, updateUserContext }), [user]);
+  // console.log(contextObj);
 
   return (
     <UserContext.Provider value={contextObj}>

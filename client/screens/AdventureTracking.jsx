@@ -35,7 +35,7 @@ function AdventureTrackingScreen({ navigation }) {
   const [pastIndex, setPastIndex] = useState(adventuresList.length);
   const value = useContext(UserContext);
   const { user } = value.user;
-  const userId = user.uid || 'yBjkdAwIoXgoczmWPtiX';
+  const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
   const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
 
@@ -89,6 +89,7 @@ function AdventureTrackingScreen({ navigation }) {
       });
   };
 
+
   useEffect(() => {
     if (!adventuresList.length) {
       getAdventures();
@@ -110,7 +111,7 @@ function AdventureTrackingScreen({ navigation }) {
                 ? (<Text>Past Adventures</Text>)
                 : null}
               <TouchableOpacity onPress={() => {
-                // console.log('Pressed', Object.values(adventure)[0].adventureInfo);
+                console.log('Pressed from Tracking', Object.values(adventure)[0].adventureInfo);
                 navigation.navigate('Detail', Object.values(adventure)[0].adventureInfo);
               }}
               >

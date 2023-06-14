@@ -34,17 +34,17 @@ const styles = StyleSheet.create({
 });
 
 function AdventureListScreen({ navigation }) {
-  useEffect(() => {
-    getDocs(collection(db, 'adventures'))
-      .then((adventures) => {
-        adventures.forEach((adventure) => {
-          console.log(adventure.id, ' => ', adventure.data());
-        });
-      })
-      .catch((error) => {
-        console.log('Error retrieving adventures from db ', error.code, error.message);
-      });
-  }, []);
+  const { user, updateUserContext } = useContext(UserContext);
+  // const [category, setCategory] = useState('');
+
+  // console.log('USER: ', user);
+  // console.log('update context: ', updateUserContext);
+  // updateUserContext('category', 'Hiking');
+  // console.log('context after update', user);
+  // const handleUpdateClick = (key, value) => {
+  //   updateUserContext(key, value);
+  // };
+
   return (
     <View style={styles.container}>
       <Foundation
