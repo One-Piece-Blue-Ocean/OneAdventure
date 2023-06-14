@@ -230,23 +230,24 @@ AdventureDetail.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape(
       {
-        adventureInfo: PropTypes.shape({
-          title: PropTypes.string.isRequired,
-          // category: PropTypes.string.isRequired,
-          address: PropTypes.string.isRequired,
-          description: PropTypes.string.isRequired,
-          // date: PropTypes.string.isRequired,
-          // star: PropTypes.bool.isRequired,
-          // TODO: Update once we figure out friends object
-          friend: PropTypes.arrayOf(
-            PropTypes.shape({
-              id: PropTypes.string.isRequired,
-              name: PropTypes.string.isRequired,
-              imageUrl: PropTypes.string.isRequired,
-            }),
-          ),
-          imageUrl: PropTypes.string.isRequired,
-        }),
+        // adventureInfo: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        // category: PropTypes.string.isRequired,
+        address: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        // date: PropTypes.string.isRequired,
+        // star: PropTypes.bool.isRequired,
+        // TODO: Update once we figure out friends object
+        friend: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            imageUrl: PropTypes.string.isRequired,
+          }),
+        ),
+        image: PropTypes.string,
+        imageUrl: PropTypes.string,
+        // }),
       },
     ).isRequired,
   }).isRequired,

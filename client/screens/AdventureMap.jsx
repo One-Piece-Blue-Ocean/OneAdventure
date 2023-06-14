@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
 //     address: 'Indian Prairie Public Library, 401 Plainfield Rd', date: 'Jul 13', description: 'Find your inner artist at our outdoor art party. Get creative and messy as you and your family enjoy crafts and more. Program is canceled in case of weather issues', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrNbwEruG7FwzAxO8eUaIsxxgAlqBD91F9wJRxNRZ9qg&s=10', link: 'https://www.shawlocal.com/my-suburban-life/local-events/#!/details/Family-Night-Outdoor-Art-Party/11874352/2023-07-13T18', title: 'Family Night: Outdoor Art Party',
 //   },
 //   userAdventureInfo: {
-//     adventureId: '9SLEExkm96uVPyfGOURf', attending: true, interested: false, userId: '8eSNW7SqbpVpe1NzD9XR3f4yclg1',
+//     adventureId: '9SLEExkm96uVPyfGOURf', attending: true,
+//           interested: false, userId: '8eSNW7SqbpVpe1NzD9XR3f4yclg1',
 //   },
 // };
 
