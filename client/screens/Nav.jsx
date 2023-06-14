@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PropTypes from 'prop-types';
 import { FontAwesome, Entypo, FontAwesome5 } from '@expo/vector-icons';
@@ -17,10 +17,17 @@ const trackerIcon = () => <FontAwesome5 name="walking" size={24} color="black" /
 const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
 
 function Nav({ route }) {
-  // route.params contains uid, email, fullName, zipcode of current user
-  const user = route.params;
+  const [user, setUser] = useState(route.params);
+
+  const updateUserContext = (key, value) => {
+    user.user[key] = value;
+    setUser({ ...user });
+  };
+
+  const contextObj = useMemo(() => ({ user, updateUserContext }), [user]);
+
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={contextObj}>
       <Tab.Navigator>
         <Tab.Screen
           name="Adventures"

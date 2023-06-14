@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
-  StyleSheet, View,
+  StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
+import { UserContext } from '../context';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,9 +15,35 @@ const styles = StyleSheet.create({
     marginRight: 30,
     marginTop: 100,
   },
+  button: {
+    backgroundColor: '#1c8fd2',
+    marginLeft: 30,
+    marginRight: 30,
+    marginTop: 20,
+    height: 48,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 function AdventureListScreen({ navigation }) {
+  const { user, updateUserContext } = useContext(UserContext);
+  // const [category, setCategory] = useState('');
+
+  console.log('USER: ', user);
+  console.log('update context: ', updateUserContext);
+  // updateUserContext('category', 'Hiking');
+  console.log('context after update', user);
+  // const handleUpdateClick = (key, value) => {
+  //   updateUserContext(key, value);
+  // };
+
   return (
     <View style={styles.container}>
       <Foundation
@@ -27,6 +54,12 @@ function AdventureListScreen({ navigation }) {
           navigation.navigate('AdventureMap');
         }}
       />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => updateUserContext('radius', '20')}
+      >
+        <Text style={styles.buttonTitle}>Update</Text>
+      </TouchableOpacity>
     </View>
   );
 }

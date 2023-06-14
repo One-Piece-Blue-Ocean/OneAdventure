@@ -1,9 +1,11 @@
+/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   ScrollView,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import {
   collection,
@@ -14,7 +16,9 @@ import {
   where,
   updateDoc,
 } from 'firebase/firestore';
+import PropTypes from 'prop-types';
 import { db } from '../../database/db';
+import { UserContext } from '../context';
 import Card from '../components/card';
 
 const styles = StyleSheet.create({
@@ -26,11 +30,12 @@ const styles = StyleSheet.create({
   },
 });
 
-function AdventureTrackingScreen() {
+function AdventureTrackingScreen({ navigation }) {
   const [adventuresList, setAdventuresList] = useState([]);
   const [pastIndex, setPastIndex] = useState(adventuresList.length);
-
-  const userId = useContext('userContext') || 'yBjkdAwIoXgoczmWPtiX';
+  const value = useContext(UserContext);
+  const { user } = value.user;
+  const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
   const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
 
@@ -69,8 +74,8 @@ function AdventureTrackingScreen() {
       });
   };
 
-  const toggleField = (userEventId, field, value) => {
-    updateDoc(doc(userAdventuresRef, userEventId), { [field]: !value[0] })
+  const toggleField = (userEventId, field, dbValue) => {
+    updateDoc(doc(userAdventuresRef, userEventId), { [field]: !dbValue[0] })
       .then(() => {
         getDoc(doc(userAdventuresRef, userEventId))
           .then((updatedDoc) => {
@@ -84,6 +89,7 @@ function AdventureTrackingScreen() {
       });
   };
 
+
   useEffect(() => {
     if (!adventuresList.length) {
       getAdventures();
@@ -91,7 +97,7 @@ function AdventureTrackingScreen() {
     if (adventuresList.length) {
       setPastIndex(adventuresList.length);
     }
-  }, []);
+  }, [adventuresList]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,13 +110,19 @@ function AdventureTrackingScreen() {
               {idx === pastIndex
                 ? (<Text>Past Adventures</Text>)
                 : null}
-              <Card
-                event={Object.values(adventure)[0].adventureInfo}
-                userEvent={Object.values(adventure)[0].userAdventureInfo}
-                userEventId={Object.keys(adventure)[0]}
-                loaded
-                toggleField={toggleField}
-              />
+              <TouchableOpacity onPress={() => {
+                // console.log('Pressed', Object.values(adventure)[0].adventureInfo);
+                navigation.navigate('Detail', Object.values(adventure)[0].adventureInfo);
+              }}
+              >
+                <Card
+                  event={Object.values(adventure)[0].adventureInfo}
+                  userEvent={Object.values(adventure)[0].userAdventureInfo}
+                  userEventId={Object.keys(adventure)[0]}
+                  loaded
+                  toggleField={toggleField}
+                />
+              </TouchableOpacity>
             </>
           ))
           : null}
@@ -118,5 +130,19 @@ function AdventureTrackingScreen() {
     </SafeAreaView>
   );
 }
+
+AdventureTrackingScreen.propTypes = {
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+    setParams: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      routeName: PropTypes.string.isRequired,
+      path: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
 export default AdventureTrackingScreen;
