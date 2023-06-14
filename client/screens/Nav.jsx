@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default */
 import React, { useState, useMemo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PropTypes from 'prop-types';
