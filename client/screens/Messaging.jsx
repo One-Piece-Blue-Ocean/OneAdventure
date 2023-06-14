@@ -10,6 +10,7 @@ import { ChatProvider } from '../chatContext';
 
 import MessagesScreen from './Messages';
 import MessageScreen from './Message';
+import CreateMessageScreen from './CreateMessage';
 
 function MessagingScreen({ navigation }) {
   const clientIsReady = useChatClient();
@@ -36,6 +37,13 @@ function MessagingScreen({ navigation }) {
             <ChatStack.Screen
               name="Message"
               component={MessageScreen}
+            />
+            <ChatStack.Screen
+              name="Message"
+              component={CreateMessageScreen}
+              options={{
+                title: 'Compose Message',
+              }}
             />
           </ChatStack.Navigator>
         </Chat>

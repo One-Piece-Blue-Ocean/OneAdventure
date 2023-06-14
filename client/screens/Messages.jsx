@@ -1,12 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { IconButton } from 'native-base';
 import PropTypes from 'prop-types';
 import { ChannelList } from 'stream-chat-expo';
+import { Ionicons } from '@expo/vector-icons';
 
 import UserContext from '../context';
 import { useChatContext } from '../chatContext';
+import { myTheme } from './Themes';
+
+const buttonStyles = StyleSheet.create({
+  position: 'absolute',
+  bottom: 10,
+  right: 10,
+});
 
 function MessagesScreen(props) {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext).user;
   const { setChannel } = useChatContext();
 
   const filters = {
@@ -20,15 +30,27 @@ function MessagesScreen(props) {
   };
 
   return (
-    <ChannelList
-      filters={filters}
-      sort={sort}
-      onSelect={(channel) => {
-        const { navigation } = props;
-        setChannel(channel);
-        navigation.navigate('Message', { chatName: channel.data.name });
-      }}
-    />
+    <>
+      <ChannelList
+        filters={filters}
+        sort={sort}
+        onSelect={(channel) => {
+          const { navigation } = props;
+          setChannel(channel);
+          navigation.navigate('Message', { chatName: channel.data.name });
+        }}
+      />
+      <IconButton
+        colorScheme={myTheme.notification}
+        size="lg"
+        variant="solid"
+        _icon={{
+          as: Ionicons,
+          name: 'add-circle',
+        }}
+        style={buttonStyles}
+      />
+    </>
   );
 }
 

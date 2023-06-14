@@ -6,17 +6,17 @@ import UserContext from '../context';
 const chatClient = StreamChat.getInstance('626qs6wjba72');
 
 const useChatClient = () => {
+  const { user } = useContext(UserContext).user;
   const [clientIsReady, setClientIsReady] = useState(false);
-  const { user } = useContext(UserContext);
-
-  const chatUser = {
-    id: 'PrqZQOYfytRcWh3iLxgpusex3Qo1',
-    name: user.fullName,
-  };
 
   useEffect(() => {
     const setupClient = async () => {
       try {
+        const chatUser = {
+          id: user.uid,
+          name: user.fullName,
+          image: user.profilePhoto,
+        };
         chatClient.connectUser(chatUser, user.chatToken);
         setClientIsReady(true);
 
@@ -30,6 +30,7 @@ const useChatClient = () => {
         // BUT ITS NECESSARY TO CALL connectUser FIRST IN ANY CASE.
       } catch (error) {
         if (error instanceof Error) {
+          console.log('Error at useChatClient');
           console.error(`An error occurred while connecting the user: ${error.message}`);
         }
       }
