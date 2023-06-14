@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
-  StyleSheet, View, TouchableOpacity, Text,
+  StyleSheet, Text, SafeAreaView, ScrollView,
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { collection, getDocs } from '../firebase/utils';
 import { db } from '../../database/db';
+import Card from '../components/card';
+
+import { EventContext, UserContext } from '../context';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,54 +16,41 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
-    marginRight: 30,
-    marginTop: 100,
-  },
-  button: {
-    backgroundColor: '#1c8fd2',
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-    height: 48,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonTitle: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
 function AdventureListScreen({ navigation }) {
-  const { user, updateUserContext } = useContext(UserContext);
-  // const [category, setCategory] = useState('');
+  const { events } = useContext(EventContext);
+  const value = useContext(UserContext);
+  const { user } = value;
+  const { uid, zipcode } = user.user;
 
-  // console.log('USER: ', user);
-  // console.log('update context: ', updateUserContext);
-  // updateUserContext('category', 'Hiking');
-  // console.log('context after update', user);
-  // const handleUpdateClick = (key, value) => {
-  //   updateUserContext(key, value);
-  // };
+  useEffect(() => {
+    console.log('events--', events);
+    console.log('user--', uid, zipcode);
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Foundation
-        name="map"
-        size={48}
-        color="black"
-        onPress={() => {
-          navigation.navigate('AdventureMap');
-        }}
-      />
-      <TouchableOpacity
-        style={styles.button}
-      >
-        <Text style={styles.buttonTitle}>Update</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <Foundation
+          style={styles.map}
+          name="map"
+          size={48}
+          color="black"
+          onPress={() => {
+            navigation.navigate('AdventureMap');
+          }}
+        />
+        <Text style={styles.title}> Adventures </Text>
+        {/* <>
+          {events.map((event) => (
+            <TouchableOpacity>
+            </TouchableOpacity>
+          ))}
+        </> */}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

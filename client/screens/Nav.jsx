@@ -23,8 +23,10 @@ function Nav({ route }) {
   // console.log(user);
 
   const updateUserContext = (key, value) => {
-    user.user[key] = value;
-    setUser({ ...user });
+    if (user.user[key]) {
+      user.user[key] = value;
+      setUser({ ...user });
+    }
   };
 
   const contextObj = useMemo(() => ({ user, updateUserContext }), [user]);
