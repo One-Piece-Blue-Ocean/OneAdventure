@@ -229,7 +229,7 @@ function ProfileScreen() {
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
 
-  const getFriends = () => {
+  const getFriends = () => (
     // console.log('getFriends userid------->', userId);
     getDocs(collection(db, 'pirates', userId, 'friends'))
       .then((friendsDocs) => {
@@ -239,9 +239,12 @@ function ProfileScreen() {
           return getDoc(doc(db, 'pirates', currentFriend))
             .then((friendDoc) => friendDoc.data());
         });
-        Promise.all(promiseArr).then((friendDocs) => setFriendData(friendDocs));
-      });
-  };
+        return Promise.all(promiseArr).then((friendDocs) => {
+          setFriendData(friendDocs);
+          return friendDocs;
+        });
+      })
+  );
 
   const infoSet = () => {
     if (value !== undefined) {
@@ -317,6 +320,11 @@ function ProfileScreen() {
     }
   };
 
+  const saveNewPhotoToDb = () => {
+    // save photo to db
+    setUploadPhoto(false);
+  };
+
   useEffect(() => {
     // set user info
     infoSet();
@@ -367,13 +375,21 @@ function ProfileScreen() {
                 style={[styles.modalButton, styles.shadow]}
                 onPress={pickImage}
               >
-                <Text>Upload Photo</Text>
+                <Text>Choose Photo</Text>
               </TouchableOpacity>
             </View>
 
             {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
             <View style={styles.modalBtnContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.shadow]}
+                onPress={() => {
+                  saveNewPhotoToDb();
+                }}
+              >
+                <Text>Upload</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.shadow]}
                 onPress={() => setUploadPhoto(false)}
@@ -585,6 +601,7 @@ function ProfileScreen() {
         friendSearchModal={friendSearchModal}
         setFriendSearchModal={setFriendSearchModal}
         userId={userId}
+        getFriends={getFriends}
       />
 
       <View style={styles.friendsHeaderContainer}>
@@ -603,7 +620,13 @@ function ProfileScreen() {
         <ScrollView style={styles.editDropDown}>
           {friendData.map((friend, index) => (
             <View key={friend.uid} testID={`profile.friend.${index}`}>
-              <FriendCard friend={friend} index={index} />
+              <FriendCard
+                friend={friend}
+                index={index}
+                userId={userId}
+                getFriends={getFriends}
+                friendData={friendData}
+              />
             </View>
           ))}
         </ScrollView>

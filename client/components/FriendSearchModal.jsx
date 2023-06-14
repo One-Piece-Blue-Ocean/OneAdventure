@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import {
   Text,
@@ -129,6 +130,7 @@ function FriendSearchModal({
   friendSearchModal,
   setFriendSearchModal,
   userId,
+  getFriends,
 }) {
   const [pirates, setPirates] = useState([]);
   // const pirateCollection = collection(db, 'pirates');
@@ -151,14 +153,26 @@ function FriendSearchModal({
   };
 
   const addFriend = (friend) => {
-    console.log('trying to add this friend', friend, 'to this user id', userId);
-    addDoc(collection(db, 'pirates', userId, 'friends'), { friendId: friend.uid })
-      .then(() => {
-        console.log('sucess')
-        // getPirates(); get new friend list
-      })
-      .catch((err) => console.log(err.message))
-  };
+    console.log('trying to add this friend', friend, 'to this user id', userId, 'friendData');
+    getFriends()
+      .then((friendData) => {
+        console.log('my friends!!!!!!!!', friendData);
+        const allCurrentPiratesIds = friendData.map((singleFriend) => singleFriend.uid)
+        if (!allCurrentPiratesIds.includes(friend.uid)) {
+          addDoc(collection(db, 'pirates', userId, 'friends'), { friendId: friend.uid })
+            .then(() => {
+              console.log('sucess');
+              getFriends();
+              // getPirates(); get new friend list
+            })
+            .catch((err) => console.log(err.message));
+        }
+        else {
+          console.log("CANT DOUBLE ADD A FRINED!!!!!!!")
+        }
+      });
+  }
+
 
   useEffect(() => {
     getAllPirates();
