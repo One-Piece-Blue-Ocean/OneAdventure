@@ -1,15 +1,16 @@
-import React,
-{
-
+/* eslint-disable */
+import React, {
+  useEffect,
+  useState,
 } from 'react';
 import {
   StyleSheet, Text, View, Image, ScrollView, FlatList, StatusBar, TouchableOpacity,
 } from 'react-native';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-
-// import { setDoc, doc } from 'firebase/firestore';
-// import { app, db } from '../../database/db';
+import { UserContext } from '../context';
+import { getDoc, getDocs, collection, doc, query, where } from 'firebase/firestore';
+import { app, db } from '../../database/db';
 
 // const imageTestUrl = 'https://images.unsplash.com/photo-1682686580950-960d1d513532?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80';
 
@@ -81,6 +82,12 @@ function AdventureDetail({ navigation, route }) {
   // const event = route.params.adventureInfo;
   const event = route.params;
   console.log('IN DETAIL', event);
+<<<<<<< HEAD
+=======
+  const value = useContext(UserContext);
+  const { user } = value.user;
+  const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
+>>>>>>> 387f97e (data call)
   // const event = {
   //   address: route.params[0],
   //   date: route.params[1],
@@ -98,38 +105,55 @@ function AdventureDetail({ navigation, route }) {
 
   // const friends = event.friend ? event.friend : [];
   // temp friend data
-  const friends = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      userName: 'Dave',
-      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      userName: 'Steve',
-      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      userName: 'Jim',
-      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-    },
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
-      userName: 'Sara',
-      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
-      userName: 'Billy',
-      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d7z',
-      userName: 'Chris',
-      profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-    },
-  ];
+  // const friends = [
+  //   {
+  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+  //     userName: 'Dave',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+  //     userName: 'Steve',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '58694a0f-3da1-471f-bd96-145571e29d72',
+  //     userName: 'Jim',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
+  //     userName: 'Sara',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
+  //     userName: 'Billy',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '58694a0f-3da1-471f-bd96-145571e29d7z',
+  //     userName: 'Chris',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  // ];
+  const [friends, setFriends] = useState([]);
+
+  const onMessage = (friendId) => {
+    // eslint-disable-next-line no-console
+    console.log('Go to message with friend that was clicked, id:', friendId);
+  };
+
+  const getThisAdventuresFriends = () => {
+    console.log(event)
+    // getDocs(query(collection(db, 'adventures_pirates'), where('adventureId', '==', event.id)))
+  }
+
+  useEffect(() => {
+    if (!friends.length) {
+      getThisAdventuresFriends()
+    }
+  }, [])
 
   const onMessage = (friendId) => {
     // eslint-disable-next-line no-console
