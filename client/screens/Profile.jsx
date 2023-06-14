@@ -22,7 +22,7 @@ import {
 } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import { db } from '../../database/db';
-import UserContext from '../context';
+import { UserContext } from '../context';
 import FriendCard from '../components/FriendCard';
 import FriendSearchModal from '../components/FriendSearchModal';
 
@@ -224,7 +224,7 @@ function ProfileScreen() {
   const pirateCollection = collection(db, 'pirates');
   const value = useContext(UserContext);
   const { user } = value;
-  // console.log(value);
+  console.log(value);
 
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
@@ -248,13 +248,13 @@ function ProfileScreen() {
 
   const infoSet = () => {
     if (value !== undefined) {
-      setUserId(user.uid);
-      setEmail(user.email);
-      setLocation(user.zipcode);
-      setUserName(user.fullName);
-      setProfilePic(user.profilePhoto);
-      setSearchRadius(user.radius || 10);
-      setTypePreference(user.category || 'Sailing');
+      setUserId(user.user.uid);
+      setEmail(user.user.email);
+      setLocation(user.user.zipcode);
+      setUserName(user.user.fullName);
+      setProfilePic(user.user.profilePhoto);
+      setSearchRadius(user.user.radius || 10);
+      setTypePreference(user.user.category || 'Sailing');
     }
   };
 
