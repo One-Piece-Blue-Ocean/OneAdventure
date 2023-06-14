@@ -292,22 +292,29 @@ function AdventureMapScreen({ navigation, setSearch }) {
         <View style={styles.container}>
           <View style={styles.modal}>
             {modalVisible && (
-              <Card
-                event={{
-                  address: selectedEvent.address[0],
-                  date: selectedEvent.date.start_date,
-                  description: selectedEvent.description,
-                  imageUrl: selectedEvent.image,
-                  title: selectedEvent.title,
-                }}
-                userEvent={{
-                  interested: false,
-                  attending: false,
-                }}
-                userEventId=""
-                loaded
-                toggleField={toggleField}
-              />
+              <TouchableOpacity onPress={() => {
+                setModalVisible(false);
+                console.log('Pressed from Map', selectedEvent);
+                navigation.navigate('Detail', selectedEvent);
+              }}
+              >
+                <Card
+                  event={{
+                    address: selectedEvent.address[0],
+                    date: selectedEvent.date.start_date,
+                    description: selectedEvent.description,
+                    imageUrl: selectedEvent.image,
+                    title: selectedEvent.title,
+                  }}
+                  userEvent={{
+                    interested: false,
+                    attending: false,
+                  }}
+                  userEventId=""
+                  loaded
+                  toggleField={toggleField}
+                />
+              </TouchableOpacity>
             )}
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text>Close Modal</Text>
