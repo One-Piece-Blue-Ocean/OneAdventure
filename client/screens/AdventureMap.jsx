@@ -77,7 +77,7 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
   const { events } = useContext(EventContext);
   const value = useContext(UserContext);
   const { user } = value;
-  const { uid, zipcode } = user;
+  const { uid, zipcode } = user.user;
 
   const handleSearchArea = () => {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
@@ -157,27 +157,29 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
   };
 
   useEffect(() => {
-    if (search === '') {
-      axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-        params: {
-          address: zipcode,
-          key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
-        },
+    // if (search === '') {
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+      params: {
+        address: zipcode,
+        key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
+      },
+    })
+      .then((res) => {
+        if (res.data.results.length) {
+          const { lat, lng } = res.data.results[0].geometry.location;
+          setRegion((prevState) => ({
+            ...prevState,
+            latitude: lat,
+            longitude: lng,
+          }));
+        }
       })
-        .then((res) => {
-          if (res.data.results.length) {
-            const { lat, lng } = res.data.results[0].geometry.location;
-            setRegion((prevState) => ({
-              ...prevState,
-              latitude: lat,
-              longitude: lng,
-            }));
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+      .catch((err) => {
+        console.log('asdfasdf');
+        console.log(err);
+      });
+    setSearch(zipcode);
+    // }
   }, []);
 
   const handleMarkerPress = (event) => {
