@@ -18,7 +18,7 @@ import {
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import { db } from '../../database/db';
-import UserContext from '../context';
+import { UserContext } from '../context';
 import Card from '../components/card';
 
 const styles = StyleSheet.create({

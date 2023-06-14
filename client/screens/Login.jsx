@@ -25,8 +25,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 100,
     width: 300,
+    height: 100,
+    width: 300,
     alignSelf: 'center',
     margin: 30,
+    resizeMode: 'contain',
     resizeMode: 'contain',
   },
   input: {
@@ -120,6 +123,7 @@ function LoginScreen({ navigation }) {
       >
         <Image
           style={styles.logo}
+          source={hatLogo}
           source={hatLogo}
         />
         <TextInput

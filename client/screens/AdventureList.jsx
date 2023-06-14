@@ -4,7 +4,11 @@ import {
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import UserContext from '../context';
+=======
+import { UserContext } from '../context';
+>>>>>>> main
 
 const styles = StyleSheet.create({
   container: {
