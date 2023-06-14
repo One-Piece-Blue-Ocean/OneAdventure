@@ -101,6 +101,7 @@ function SignUpScreen({ navigation }) {
       createOneButtonAlert('Passwords do not match.');
       return;
     }
+
     const auth = getAuth(app);
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (response) => {
