@@ -89,11 +89,6 @@ function AdventureTrackingScreen({ navigation }) {
       });
   };
 
-  const addFriend = (friend) => {
-    console.log('trying to add this friend', friend, 'to this user id', userId);
-    // add friend to db
-
-  };
 
   useEffect(() => {
     if (!adventuresList.length) {
