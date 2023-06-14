@@ -35,8 +35,21 @@ const styles = StyleSheet.create({
   },
 });
 
+// plopped in here to force render the modal
+// const testAdventure = {
+//   adventureInfo: {
+//     address: 'Indian Prairie Public Library, 401 Plainfield Rd', date: 'Jul 13', description: 'Find your inner artist at our outdoor art party. Get creative and messy as you and your family enjoy crafts and more. Program is canceled in case of weather issues', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrNbwEruG7FwzAxO8eUaIsxxgAlqBD91F9wJRxNRZ9qg&s=10', link: 'https://www.shawlocal.com/my-suburban-life/local-events/#!/details/Family-Night-Outdoor-Art-Party/11874352/2023-07-13T18', title: 'Family Night: Outdoor Art Party',
+//   },
+//   userAdventureInfo: {
+//     adventureId: '9SLEExkm96uVPyfGOURf', attending: true,
+//           interested: false, userId: '8eSNW7SqbpVpe1NzD9XR3f4yclg1',
+//   },
+// };
+
 function AdventureMapScreen({ navigation }) {
+  // set this default back to an empty object
   const [selectedEvent, setSelectedEvent] = useState({});
+  // const [selectedEvent, setSelectedEvent] = useState(testAdventure.adventureInfo);
   const [modalVisible, setModalVisible] = useState(false);
   const [markers, setMarkers] = useState([]);
   const [region, setRegion] = useState({
@@ -165,22 +178,29 @@ function AdventureMapScreen({ navigation }) {
         <View style={styles.container}>
           <View style={styles.modal}>
             {modalVisible && (
-              <Card
-                event={{
-                  address: selectedEvent.address[0],
-                  date: selectedEvent.date.start_date,
-                  description: selectedEvent.description,
-                  imageUrl: selectedEvent.image,
-                  title: selectedEvent.title,
-                }}
-                userEvent={{
-                  interested: false,
-                  attending: false,
-                }}
-                userEventId=""
-                loaded
-                toggleField={toggleField}
-              />
+              <TouchableOpacity onPress={() => {
+                setModalVisible(false);
+                console.log('Pressed from Map', selectedEvent);
+                navigation.navigate('Detail', selectedEvent);
+              }}
+              >
+                <Card
+                  event={{
+                    address: selectedEvent.address[0],
+                    date: selectedEvent.date.start_date,
+                    description: selectedEvent.description,
+                    imageUrl: selectedEvent.image,
+                    title: selectedEvent.title,
+                  }}
+                  userEvent={{
+                    interested: false,
+                    attending: false,
+                  }}
+                  userEventId=""
+                  loaded
+                  toggleField={toggleField}
+                />
+              </TouchableOpacity>
             )}
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text>Close Modal</Text>
