@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-// import { collection, getDocs, db } from '../firebase/utils';
-// import UserContext from '../context';
-// import Card from '../components/card';
+import UserContext from '../context';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,24 +33,16 @@ const styles = StyleSheet.create({
 });
 
 function AdventureListScreen({ navigation }) {
-  // const { user, updateUserContext } = useContext(UserContext);
-  // console.log('context after update', user);
+  const { user, updateUserContext } = useContext(UserContext);
+  // const [category, setCategory] = useState('');
 
-  // // import card component
-  // useEffect(() => {
-  //   getDocs(collection(db, 'adventures'))
-  //     .then((adventures) => {
-  //       adventures.forEach((adventure) => {
-  //         console.log(adventure.id, ' => ', adventure.data());
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log('Error retrieving adventures from db', error.code, error.message);
-  //     });
-  // });
-  // get all events from database within radius (get radius from user context)
-  // dynamically render card components using event information
-  // display the card components in a scrollable list
+  console.log('USER: ', user);
+  console.log('update context: ', updateUserContext);
+  // updateUserContext('category', 'Hiking');
+  console.log('context after update', user);
+  // const handleUpdateClick = (key, value) => {
+  //   updateUserContext(key, value);
+  // };
 
   return (
     <View style={styles.container}>
@@ -66,7 +56,7 @@ function AdventureListScreen({ navigation }) {
       />
       <TouchableOpacity
         style={styles.button}
-        // onPress={() => updateUserContext('radius', '20')}
+        onPress={() => updateUserContext('radius', '20')}
       >
         <Text style={styles.buttonTitle}>Update</Text>
       </TouchableOpacity>
