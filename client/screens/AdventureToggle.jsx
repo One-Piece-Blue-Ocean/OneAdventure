@@ -12,7 +12,7 @@ function AdventureToggleScreen() {
   const { user } = value;
   const { zipcode } = user;
   const [events, setEvents] = useState([]);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
 
   const AdventureStack = createStackNavigator();
 
@@ -33,7 +33,10 @@ function AdventureToggleScreen() {
   //       link: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x808f86b516428677:0x91da17540e2f2ff3?sa=X&hl=en',
   //       serpapi_link: 'https://serpapi.com/search.json?data=%214m2%213m1%211s0x808f86b516428677%3A0x91da17540e2f2ff3&engine=google_maps&google_domain=google.com&hl=en&q=outdoor+activities+in+san+francisco&type=place',
   //     },
-  //     description: 'Bay Nature connects the people of the San Francisco Bay Area to our natural world and motivates people to solve problems with nature in mind. Header illustrations by Jane Kim, InkDwell',
+  //     description: 'Bay Nature connects the people of the
+  //     San Francisco Bay Area to our natural world and motivates people
+  //      to solve problems with nature in mind.
+  //     Header illustrations by Jane Kim, InkDwell',
   //     ticket_info: [
   //       {
   //         source: 'Bay Nature',
