@@ -110,8 +110,8 @@ function AdventureTrackingScreen({ navigation }) {
                 ? (<Text>Past Adventures</Text>)
                 : null}
               <TouchableOpacity onPress={() => {
-                // console.log('Pressed', Object.values(adventure)[0].adventureInfo);
-                navigation.navigate('Detail', Object.values(adventure)[0]);
+                console.log('Pressed from Tracking', Object.values(adventure)[0].adventureInfo);
+                navigation.navigate('Detail', Object.values(adventure)[0].adventureInfo);
               }}
               >
                 <Card

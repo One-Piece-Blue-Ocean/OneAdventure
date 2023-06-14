@@ -78,8 +78,17 @@ const styles = StyleSheet.create({
 });
 
 function AdventureDetail({ navigation, route }) {
-  const event = route.params.adventureInfo;
-  // console.log('IN DETAIL', route.params);
+  // const event = route.params.adventureInfo;
+  const event = route.params;
+  console.log('IN DETAIL', event);
+  // const event = {
+  //   address: route.params[0],
+  //   date: route.params[1],
+  //   description: route.params[2],
+  //   imageUrl: route.params[3],
+  //   link: route.params[4],
+  //   title: route.params[5],
+  // };
   // "address"
   // "date"
   // "description"
@@ -131,7 +140,7 @@ function AdventureDetail({ navigation, route }) {
     <View style={styles.container}>
       <Image
         source={{
-          uri: event.imageUrl,
+          uri: event.imageUrl ? event.imageUrl : event.image,
         }}
         style={styles.detailImage}
       />
