@@ -14,11 +14,11 @@ import {
   getDocs,
   collection,
   query,
-  where
+  where,
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
-import { db } from '../../database/db.js';
+import { db } from '../../database/db';
 // import myTheme from '../screens/Themes';
 
 const styles = StyleSheet.create({
@@ -117,7 +117,12 @@ const styles = StyleSheet.create({
   },
 });
 
-function FriendCard({ friend, index, userId, getFriends }) {
+function FriendCard({
+  friend,
+  index,
+  userId,
+  getFriends,
+}) {
   const [modalVisible, setModalVisible] = useState(false);
   const { profilePhoto, fullName, uid } = friend;
 
@@ -129,19 +134,18 @@ function FriendCard({ friend, index, userId, getFriends }) {
   const onRemove = (friendId) => {
     // eslint-disable-next-line no-console
     console.log('remove friend from friends list in db, remove this id:', ` here you go${friendId}`, 'from this id', ` here you go${userId}`);
-    friendId = friendId.trim();
-    userId = userId.trim();
-    getDocs(query(collection(db, 'pirates', userId, 'friends'), where('friendId', '==', friendId)))
+    const trimmedFriendId = friendId.trim();
+    const trimmedUserId = userId.trim();
+    getDocs(query(collection(db, 'pirates', trimmedUserId, 'friends'), where('friendId', '==', trimmedFriendId)))
       .then((friendDocs) => {
-        console.log('--------->>>>>', friendDocs, friendDocs.docs, friendDocs.docs[0], friendDocs.docs[0])
-        deleteDoc(doc(db, "pirates", userId, "friends", friendDocs.docs[0].id))
+        // console.log('-->>', friendDocs, friendDocs.docs, friendDocs.docs[0], friendDocs.docs[0]);
+        deleteDoc(doc(db, 'pirates', trimmedUserId, 'friends', friendDocs.docs[0].id))
           .then(() => {
             getFriends();
-            console.log('sucess');
+            // console.log('sucess');
           })
           .catch((err) => console.log(err.message));
       });
-    // on success
   };
 
   return (
