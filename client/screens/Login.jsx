@@ -9,7 +9,7 @@ import {
   doc, getDoc, getAuth, signInWithEmailAndPassword,
 } from '../firebase/utils';
 // import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import icon from '../../assets/icon.png';
+import hatLogo from '../../assets/Hat.png';
 
 import { app, db } from '../../database/db';
 
@@ -23,10 +23,11 @@ const styles = StyleSheet.create({
   },
   logo: {
     flex: 1,
-    height: 120,
-    width: 90,
+    height: 100,
+    width: 300,
     alignSelf: 'center',
     margin: 30,
+    resizeMode: 'contain',
   },
   input: {
     height: 48,
@@ -119,7 +120,7 @@ function LoginScreen({ navigation }) {
       >
         <Image
           style={styles.logo}
-          source={icon}
+          source={hatLogo}
         />
         <TextInput
           style={styles.input}
