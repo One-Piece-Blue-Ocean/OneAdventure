@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function AdventureMapScreen({ navigation, search, setSearch }) {
+function AdventureMapScreen({ navigation, setSearch }) {
   const [selectedEvent, setSelectedEvent] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [markers, setMarkers] = useState([]);
@@ -341,7 +341,6 @@ AdventureMapScreen.propTypes = {
       path: PropTypes.string,
     }),
   }).isRequired,
-  search: PropTypes.string.isRequired,
   setSearch: PropTypes.func.isRequired,
 };
 

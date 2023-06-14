@@ -69,7 +69,6 @@ function AdventureToggleScreen() {
             <AdventureMapScreen
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...props}
-              search={search}
               setSearch={setSearch}
             />
           )}
