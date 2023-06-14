@@ -38,13 +38,13 @@ function MessagingScreen({ navigation }) {
               name="Message"
               component={MessageScreen}
             />
-            <ChatStack.Screen
+            {/* <ChatStack.Screen
               name="Message"
               component={CreateMessageScreen}
               options={{
                 title: 'Compose Message',
               }}
-            />
+            /> */}
           </ChatStack.Navigator>
         </Chat>
       </OverlayProvider>

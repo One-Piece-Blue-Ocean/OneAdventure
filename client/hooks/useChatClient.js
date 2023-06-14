@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { StreamChat } from 'stream-chat';
 
-import UserContext from '../context';
+import { UserContext } from '../context';
 
 const chatClient = StreamChat.getInstance('626qs6wjba72');
 
@@ -30,7 +30,7 @@ const useChatClient = () => {
         // BUT ITS NECESSARY TO CALL connectUser FIRST IN ANY CASE.
       } catch (error) {
         if (error instanceof Error) {
-          console.log('Error at useChatClient');
+          // console.log('Error at useChatClient');
           console.error(`An error occurred while connecting the user: ${error.message}`);
         }
       }

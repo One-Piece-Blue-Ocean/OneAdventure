@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ChannelList } from 'stream-chat-expo';
 import { Ionicons } from '@expo/vector-icons';
 
-import UserContext from '../context';
+import { UserContext } from '../context';
 import { useChatContext } from '../chatContext';
 import { myTheme } from './Themes';
 
