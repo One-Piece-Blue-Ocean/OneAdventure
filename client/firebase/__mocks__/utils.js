@@ -3,11 +3,15 @@ const { jest } = require('@jest/globals');
 // const firestore = jest.createMockFromModule('firebase/firestore');
 // const auth = jest.createMockFromModule('firebase/auth');
 
+const collection = jest.fn();
 const doc = jest.fn();
 const getDoc = jest.fn();
+const getDocs = jest.fn();
+const query = jest.fn();
+const where = jest.fn();
 const getAuth = jest.fn();
 const signInWithEmailAndPassword = jest.fn();
 
 module.exports = {
-  doc, getDoc, getAuth, signInWithEmailAndPassword,
+  collection, doc, getDoc, getDocs, query, where, getAuth, signInWithEmailAndPassword,
 };

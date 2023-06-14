@@ -1,6 +1,8 @@
-import { doc, getDoc } from 'firebase/firestore';
+import {
+  collection, doc, getDoc, getDocs, query, where,
+} from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export {
-  doc, getDoc, getAuth, signInWithEmailAndPassword,
+  collection, doc, getDoc, getDocs, query, where, getAuth, signInWithEmailAndPassword,
 };
