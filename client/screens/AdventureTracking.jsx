@@ -34,8 +34,8 @@ function AdventureTrackingScreen({ navigation }) {
   const [adventuresList, setAdventuresList] = useState([]);
   const [pastIndex, setPastIndex] = useState(adventuresList.length);
   const value = useContext(UserContext);
-  const { user } = value;
-  const userId = user.uid || 'yBjkdAwIoXgoczmWPtiX';
+  const { user } = value.user;
+  const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
   const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
 
@@ -87,6 +87,12 @@ function AdventureTrackingScreen({ navigation }) {
             setAdventuresList(newState);
           });
       });
+  };
+
+  const addFriend = (friend) => {
+    console.log('trying to add this friend', friend, 'to this user id', userId);
+    // add friend to db
+
   };
 
   useEffect(() => {
