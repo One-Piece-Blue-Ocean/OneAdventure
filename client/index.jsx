@@ -20,6 +20,7 @@ export default function App() {
     <NavigationContainer>
       <NativeBaseProvider>
         <Stack.Navigator>
+          <Stack.Screen name="Detail" component={AdventureDetail} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
           <Stack.Screen name="Nav" component={NavScreen} options={{ headerShown: false }} />
