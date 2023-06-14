@@ -12,8 +12,60 @@ function AdventureToggleScreen() {
   const { user } = value;
   const { zipcode } = user;
   const [events, setEvents] = useState([]);
+  const [search, setSearch] = useState('');
 
   const AdventureStack = createStackNavigator();
+
+  // useEffect(() => {
+  //   setEvents({
+  //     title: 'Family Nature Fun Hour: Fish Fun',
+  //     date: {
+  //       start_date: 'Jun 17',
+  //       when: 'Sat, Jun 17, 1:30 – 2:30 PM PDT',
+  //     },
+  //     address: [
+  //       'Robert W. Crown Memorial State Beach, 8th Street, Otis Dr',
+  //       'Alameda, CA',
+  //     ],
+  //     link: 'https://baynature.org/event/family-nature-fun-hour-fish-fun/',
+  //     event_location_map: {
+  //       image: 'https://www.google.com/maps/vt/data=3phttjgbcPijIRDFCCFNDaxMHgkWrICC6DM7p4R7n0h4Gq7cqil-1L5krYgZTiGO0Rg5_xU4QCg_mdk4yVhCXv4jsbxXNibf2fZrtsANk4rrc-Bmcyw',
+  //       link: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x808f86b516428677:0x91da17540e2f2ff3?sa=X&hl=en',
+  //       serpapi_link: 'https://serpapi.com/search.json?data=%214m2%213m1%211s0x808f86b516428677%3A0x91da17540e2f2ff3&engine=google_maps&google_domain=google.com&hl=en&q=outdoor+activities+in+san+francisco&type=place',
+  //     },
+  //     description: 'Bay Nature connects the people of the San Francisco Bay Area to our natural world and motivates people to solve problems with nature in mind. Header illustrations by Jane Kim, InkDwell',
+  //     ticket_info: [
+  //       {
+  //         source: 'Bay Nature',
+  //         link: 'https://baynature.org/event/family-nature-fun-hour-fish-fun/',
+  //         link_type: 'more info',
+  //       },
+  //     ],
+  //     venue: {
+  //       name: 'Robert W. Crown Memorial State Beach',
+  //       rating: 4.5,
+  //       reviews: 4105,
+  //       link: 'https://www.google.com/search?hl=en&q=Robert+W.+Crown+Memorial+State+Beach&ludocid=10509738330205138931&ibp=gwp%3B0,7',
+  //     },
+  //     thumbnail: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlsD6R1G5lK946_xymWqWd2VroLd----vbrfy34kwxYiC-xm37d57zgBU&s',
+  //     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd-kECS7HJf0NWvDv2W3eq8ZffI8gTckwfogTsQjkJPw&s=10',
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   axios.get('https://serpapi.com/search?engine=google_events', {
+  //     params: {
+  //       api_key: keys[Math.round(Math.random() * 5)],
+  //       q: `outdoor activities in ${search}`,
+  //     },
+  //   })
+  //     .then((response) => {
+  //       setEvents(response.data.events_results);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [search]);
 
   useEffect(() => {
     axios.get('https://serpapi.com/search?engine=google_events', {
@@ -28,7 +80,6 @@ function AdventureToggleScreen() {
       .catch((err) => {
         console.log(err);
       });
-    // }
   }, []);
 
   return (

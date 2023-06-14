@@ -87,6 +87,7 @@ function AdventureMapScreen({ navigation }) {
         const markerResponses = await Promise.all(markerPromises);
         const newMarkers = markerResponses.map((res, index) => {
           if (res.data.results.length) {
+            console.log('works');
             const { lat, lng } = res.data.results[0].geometry.location;
             return (
               <Marker
