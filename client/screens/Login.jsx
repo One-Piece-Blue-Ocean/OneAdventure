@@ -8,9 +8,7 @@ import PropTypes from 'prop-types';
 import {
   doc, getDoc, getAuth, signInWithEmailAndPassword,
 } from '../firebase/utils';
-// import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import hatLogo from '../../assets/Hat.png';
-
 import { app, db } from '../../database/db';
 
 const styles = StyleSheet.create({
