@@ -94,6 +94,7 @@ function LoginScreen({ navigation }) {
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        console.log(userCredential)
         const { user } = userCredential;
         const docRef = doc(db, 'pirates', user.uid);
         return getDoc(docRef);

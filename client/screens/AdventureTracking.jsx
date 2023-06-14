@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -15,6 +16,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../database/db';
+import UserContext from '../context';
 import Card from '../components/card';
 
 const styles = StyleSheet.create({
@@ -29,8 +31,9 @@ const styles = StyleSheet.create({
 function AdventureTrackingScreen() {
   const [adventuresList, setAdventuresList] = useState([]);
   const [pastIndex, setPastIndex] = useState(adventuresList.length);
-
-  const userId = useContext('userContext') || 'yBjkdAwIoXgoczmWPtiX';
+  const value = useContext(UserContext);
+  const { user } = value;
+  const userId = user.uid || 'yBjkdAwIoXgoczmWPtiX';
   const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
 
@@ -69,8 +72,8 @@ function AdventureTrackingScreen() {
       });
   };
 
-  const toggleField = (userEventId, field, value) => {
-    updateDoc(doc(userAdventuresRef, userEventId), { [field]: !value[0] })
+  const toggleField = (userEventId, field, dbValue) => {
+    updateDoc(doc(userAdventuresRef, userEventId), { [field]: !dbValue[0] })
       .then(() => {
         getDoc(doc(userAdventuresRef, userEventId))
           .then((updatedDoc) => {
@@ -91,7 +94,7 @@ function AdventureTrackingScreen() {
     if (adventuresList.length) {
       setPastIndex(adventuresList.length);
     }
-  }, []);
+  }, [adventuresList]);
 
   return (
     <SafeAreaView style={styles.container}>
