@@ -32,6 +32,7 @@ function AdventureToggleScreen() {
   }, []);
 
   return (
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
     <EventContext.Provider value={{ events }}>
       <AdventureStack.Navigator>
         <AdventureStack.Screen
