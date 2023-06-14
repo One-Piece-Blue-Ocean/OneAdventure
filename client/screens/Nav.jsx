@@ -18,6 +18,7 @@ const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
 
 function Nav({ route }) {
   const [user, setUser] = useState(route.params);
+  console.log(UserContext);
 
   const updateUserContext = (key, value) => {
     user.user[key] = value;
