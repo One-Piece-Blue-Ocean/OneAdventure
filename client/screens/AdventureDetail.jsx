@@ -1,13 +1,13 @@
-import React,
-{
-
+/* eslint-disable */
+import React, {
+  useEffect,
+  useState,
 } from 'react';
 import {
   StyleSheet, Text, View, Image, ScrollView, FlatList, StatusBar, TouchableOpacity,
 } from 'react-native';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-import { UserContext } from '../context';
 import { getDoc, getDocs, collection, doc, query, where } from 'firebase/firestore';
 import { app, db } from '../../database/db';
 
@@ -78,62 +78,17 @@ const styles = StyleSheet.create({
 });
 
 function AdventureDetail({ navigation, route }) {
-  // const event = route.params.adventureInfo;
-  const event = route.params;
-  console.log('IN DETAIL', event);
-  const value = useContext(UserContext);
-  const { user } = value.user;
-  const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
-  // const event = {
-  //   address: route.params[0],
-  //   date: route.params[1],
-  //   description: route.params[2],
-  //   imageUrl: route.params[3],
-  //   link: route.params[4],
-  //   title: route.params[5],
-  // };
-  // "address"
-  // "date"
-  // "description"
-  // "imageUrl"
-  // "link"
-  // "title"
-
-  // const friends = event.friend ? event.friend : [];
-  // temp friend data
-  // const friends = [
-  //   {
-  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-  //     userName: 'Dave',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-  //     userName: 'Steve',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-  //     userName: 'Jim',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
-  //     userName: 'Sara',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
-  //     userName: 'Billy',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '58694a0f-3da1-471f-bd96-145571e29d7z',
-  //     userName: 'Chris',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  // ];
+  const { selectedEvent, uid: userId} = route.params;
   const [friends, setFriends] = useState([]);
+
+  const event = {
+    imageUrl: selectedEvent.image,
+    title: selectedEvent.title,
+    address: selectedEvent.address[0],
+    description: selectedEvent.description,
+    date: selectedEvent.date.start_date,
+    link: selectedEvent.link,
+  }
 
   const onMessage = (friendId) => {
     // eslint-disable-next-line no-console
@@ -141,8 +96,37 @@ function AdventureDetail({ navigation, route }) {
   };
 
   const getThisAdventuresFriends = () => {
-    console.log(event)
-    // getDocs(query(collection(db, 'adventures_pirates'), where('adventureId', '==', event.id)))
+    let friendsIds = [];
+    // get the list of this pirate's friends
+    getDocs(collection(db, 'pirates', userId, 'friends'))
+      .then((allFriendsDocs) => {
+        // put all the friend ids into an array
+        friendsIds = allFriendsDocs.docs.map((friendDoc) => friendDoc.data().friendId)
+        // get the adventure from the database (if it exists in the db)
+        getDocs(query(collection(db, 'adventures'), where('description', '==', event.description), where('date', '==', event.date)))
+        .then((adventureDoc) => {
+          // if we have this event in the database, then there must be people listed as attending this event
+          if (adventureDoc.docs.length) {
+            const adventureId = adventureDoc.docs[0].id;
+            // get all people who are attending this event
+            getDocs(query(collection(db, 'adventures_pirates'), where('adventureId', '==', adventureId)))
+              .then((piratesAdventuresDocs) => {
+                const allPiratesAttending = piratesAdventuresDocs.docs.map((paDoc) => paDoc.data().userId);
+                // now we can find the intersect of people attending this event and this user's friends
+                const friendsAttendingAdventureIds = friendsIds.filter((id) => allPiratesAttending.includes(id));
+                // once we have the user's friends who are also attending this event, get their names, id, imageurls
+                const promiseArr = friendsAttendingAdventureIds.map((idFriendAttending) =>
+                  getDoc(doc(db, 'pirates', idFriendAttending)).then((friendDocData) => {
+                    const friendData = friendDocData.data();
+                    return {id: friendData.id, name: friendData.fullName, imageUrl: friendData.imageUrl}
+                  })
+                )
+                // finally set the friends who are attending this events' information to the friends state
+                Promise.all(promiseArr).then((friendsDataArr) => setFriends(friendsDataArr))
+              })
+          }
+        })
+      })
   }
 
   useEffect(() => {
@@ -150,11 +134,6 @@ function AdventureDetail({ navigation, route }) {
       getThisAdventuresFriends()
     }
   }, [])
-
-  const onMessage = (friendId) => {
-    // eslint-disable-next-line no-console
-    console.log('Go to message with friend that was clicked, id:', friendId);
-  };
 
   return (
     <View style={styles.container}>
@@ -248,30 +227,82 @@ AdventureDetail.propTypes = {
     }),
   }).isRequired,
   route: PropTypes.shape({
-    params: PropTypes.shape(
-      {
-        // adventureInfo: PropTypes.shape({
+    params: PropTypes.shape({
+      selectedEvent: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        // category: PropTypes.string.isRequired,
-        address: PropTypes.string.isRequired,
+        address: PropTypes.shape([]).isRequired,
         description: PropTypes.string.isRequired,
-        // date: PropTypes.string.isRequired,
-        // star: PropTypes.bool.isRequired,
-        // TODO: Update once we figure out friends object
-        friend: PropTypes.arrayOf(
-          PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            imageUrl: PropTypes.string.isRequired,
-          }),
-        ),
         image: PropTypes.string,
-        imageUrl: PropTypes.string,
-        // }),
+      }),
+      uid: PropTypes.string.isRequired,
       },
     ).isRequired,
   }).isRequired,
-
 };
+  // date: PropTypes.string.isRequired,
+  // star: PropTypes.bool.isRequired,
+  // TODO: Update once we figure out friends object
+  // friend: PropTypes.arrayOf(
+  //   PropTypes.shape({
+  //     id: PropTypes.string.isRequired,
+  //     name: PropTypes.string.isRequired,
+  //     imageUrl: PropTypes.string.isRequired,
+  //   }),
+  // ),
+  // imageUrl: PropTypes.string,
+  // }),
+
+   // "address"
+  // "date"
+  // "description"
+  // "imageUrl"
+  // "link"
+  // "title"
+  // const event = {
+  //   address: route.params[0],
+  //   date: route.params[1],
+  //   description: route.params[2],
+  //   imageUrl: route.params[3],
+  //   link: route.params[4],
+  //   title: route.params[5],
+  // };
+
+  // const event = route.params.adventureInfo;
+  // console.log(route.params)
+
+  // const friends = event.friend ? event.friend : [];
+  // temp friend data
+  // const friends = [
+  //   {
+  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+  //     userName: 'Dave',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+  //     userName: 'Steve',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '58694a0f-3da1-471f-bd96-145571e29d72',
+  //     userName: 'Jim',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
+  //     userName: 'Sara',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
+  //     userName: 'Billy',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  //   {
+  //     id: '58694a0f-3da1-471f-bd96-145571e29d7z',
+  //     userName: 'Chris',
+  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+  //   },
+  // ];
 
 export default AdventureDetail;
