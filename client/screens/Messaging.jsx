@@ -27,7 +27,7 @@ function MessagingScreen({ navigation }) {
     <ChatProvider>
       <OverlayProvider>
         <Chat client={chatClient}>
-          <ChatStack.Navigator>
+          <ChatStack.Navigator initialRouteName="Messages">
             <ChatStack.Screen
               name="Messages"
               component={MessagesScreen}
