@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet, Text, View, Modal, TouchableOpacity, TextInput, Button,
@@ -7,7 +8,7 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { EventContext, UserContext } from '../context';
 import Card from '../components/card';
 import { db } from '../../database/db';
@@ -20,6 +21,8 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: 'white',
     padding: 20,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -60,6 +63,23 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  closeButton: {
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    top: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
@@ -175,6 +195,8 @@ function AdventureMapScreen({ navigation, setSearch }) {
         }
       })
       .catch((err) => {
+        console.log('jio');
+        console.log(zipcode);
         console.log('asdfasdf');
         console.log(err);
       });
@@ -228,30 +250,47 @@ function AdventureMapScreen({ navigation, setSearch }) {
   }, [selectedEvent]);
 
   const toggleField = () => {
+    //userEventId, 'interested', [userEvent.interested]
     // eslint-disable-next-line camelcase
     const pirates_adventures_collection = collection(db, 'pirates_adventures');
     // eslint-disable-next-line camelcase
     const adventures_collection = collection(db, 'adventures');
-    addDoc(
-      adventures_collection,
-      {
-        address: selectedEvent.address[0],
-        date: selectedEvent.date.start_date,
-        description: selectedEvent.description,
-        imageUrl: selectedEvent.image,
-        title: selectedEvent.title,
-      },
-    ).then((docRef) => {
-      addDoc(
-        pirates_adventures_collection,
-        {
-          adventureId: docRef.id,
-          attending: false,
-          interested: true,
-          userId: uid,
-        },
-      );
-    });
+    getDocs(query(adventures_collection, where('description', '==', selectedEvent.description)), where('date', '==', selectedEvent.date.start_date))
+      .then((possibleAdventureDoc) => {
+        if (!possibleAdventureDoc.docs.length) {
+          addDoc(
+            adventures_collection,
+            {
+              address: selectedEvent.address[0],
+              date: selectedEvent.date.start_date,
+              description: selectedEvent.description,
+              imageUrl: selectedEvent.image,
+              title: selectedEvent.title,
+            },
+          ).then((docRef) => {
+            addDoc(
+              pirates_adventures_collection,
+              {
+                adventureId: docRef.id,
+                attending: false,
+                interested: true,
+                userId: uid,
+              },
+            );
+          });
+        } else {
+          const docId = possibleAdventureDoc.docs[0].id;
+          addDoc(
+            pirates_adventures_collection,
+            {
+              adventureId: docId,
+              attending: false,
+              interested: true,
+              userId: uid,
+            },
+          );
+        }
+      });
   };
 
   return (
@@ -289,13 +328,13 @@ function AdventureMapScreen({ navigation, setSearch }) {
           setSelectedEvent({});
         }}
       >
-        <View style={styles.container}>
+        <View style={styles.modalContainer}>
           <View style={styles.modal}>
             {modalVisible && (
               <TouchableOpacity onPress={() => {
                 setModalVisible(false);
                 console.log('Pressed from Map', selectedEvent);
-                navigation.navigate('Detail', selectedEvent);
+                navigation.navigate('Detail', { selectedEvent, uid });
               }}
               >
                 <Card
@@ -316,8 +355,8 @@ function AdventureMapScreen({ navigation, setSearch }) {
                 />
               </TouchableOpacity>
             )}
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text>Close Modal</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close Modal</Text>
             </TouchableOpacity>
           </View>
         </View>
