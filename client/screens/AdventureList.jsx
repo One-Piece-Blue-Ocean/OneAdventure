@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 5,
     right: 20,
-    backgroundColor: 'white',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
   },
