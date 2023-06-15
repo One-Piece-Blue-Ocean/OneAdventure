@@ -25,30 +25,30 @@ function MessagingScreen({ navigation }) {
 
   return (
 
-      <OverlayProvider>
-        <Chat client={chatClient}>
-          <ChatStack.Navigator initialRouteName="Messages">
-            <ChatStack.Screen
-              name="Messages"
-              component={MessagesScreen}
-              options={{
-                headerLeft: () => {},
-              }}
-            />
-            <ChatStack.Screen
-              name="Message"
-              component={MessageScreen}
-            />
-            <ChatStack.Screen
-              name="CreateMessage"
-              component={CreateMessageScreen}
-              options={{
-                title: 'Compose Message',
-              }}
-            />
-          </ChatStack.Navigator>
-        </Chat>
-      </OverlayProvider>
+    <OverlayProvider>
+      <Chat client={chatClient}>
+        <ChatStack.Navigator initialRouteName="Messages">
+          <ChatStack.Screen
+            name="Messages"
+            component={MessagesScreen}
+            options={{
+              headerLeft: () => {},
+            }}
+          />
+          <ChatStack.Screen
+            name="Message"
+            component={MessageScreen}
+          />
+          <ChatStack.Screen
+            name="CreateMessage"
+            component={CreateMessageScreen}
+            options={{
+              title: 'Compose Message',
+            }}
+          />
+        </ChatStack.Navigator>
+      </Chat>
+    </OverlayProvider>
 
   );
 }

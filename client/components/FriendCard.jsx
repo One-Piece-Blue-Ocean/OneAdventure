@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -17,19 +17,14 @@ import {
   where,
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
-import { StreamChat } from 'stream-chat';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { db } from '../../database/db';
-<<<<<<< HEAD
 import { useChatContext } from '../chatContext';
 import createChat from '../utilities/createChat';
-import { UserContext } from '../context';
 import useChatClient from '../hooks/useChatClient';
 // import myTheme from '../screens/Themes';
-=======
 import { muted } from '../screens/Themes';
->>>>>>> ebd584808507f7bdc9a73825677f500a1415c970
 
 const styles = StyleSheet.create({
   centerModal: {
@@ -143,8 +138,8 @@ function FriendCard({
   const [modalVisible, setModalVisible] = useState(false);
   const { profilePhoto, fullName, uid } = friend;
   const navigation = useNavigation();
-  const { setChannel, channel } = useChatContext();
-  const { user } = useContext(UserContext).user;
+  const { setChannel } = useChatContext();
+  // const { user } = useContext(UserContext).user;
   const clientIsReady = useChatClient();
 
   const onMessage = () => {
@@ -157,7 +152,6 @@ function FriendCard({
 
   const onRemove = (friendId) => {
     // eslint-disable-next-line no-console
-    // console.log('remove friend from friends list in db, remove this id:', ` here you go${friendId}`, 'from this id', ` here you go${userId}`);
     const trimmedFriendId = friendId.trim();
     const trimmedUserId = userId.trim();
     getDocs(query(collection(db, 'pirates', trimmedUserId, 'friends'), where('friendId', '==', trimmedFriendId)))
@@ -168,7 +162,7 @@ function FriendCard({
             getFriends();
             // console.log('sucess');
           })
-          .catch((err) => {});
+          .catch(() => {});
       });
   };
 
