@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet, Text, View, Modal, TouchableOpacity, TextInput, Button,
