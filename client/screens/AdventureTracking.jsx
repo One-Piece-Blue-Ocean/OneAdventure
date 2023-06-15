@@ -112,7 +112,14 @@ function AdventureTrackingScreen({ navigation }) {
                 : null}
               <TouchableOpacity onPress={() => {
                 console.log('Pressed from Tracking', Object.values(adventure)[0].adventureInfo);
-                navigation.navigate('Detail', Object.values(adventure)[0].adventureInfo);
+                navigation.navigate('Detail', {selectedEvent: {
+                  image: Object.values(adventure)[0].adventureInfo.imageUrl,
+                  title: Object.values(adventure)[0].adventureInfo.title,
+                  address: Object.values(adventure)[0].adventureInfo.address,
+                  description: Object.values(adventure)[0].adventureInfo.description,
+                  date: {start_date: Object.values(adventure)[0].adventureInfo.date},
+                  link: Object.values(adventure)[0].adventureInfo.link,
+                }, uid: userId});
               }}
               >
                 <Card
