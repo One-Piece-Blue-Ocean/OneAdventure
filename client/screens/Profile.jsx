@@ -26,6 +26,7 @@ import {
   uploadBytes,
   getDownloadURL,
 } from 'firebase/storage';
+import { getAuth, signOut } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
 import { db } from '../../database/db';
 import { UserContext } from '../context';
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   },
   profileHeader: {
     flexDirection: 'row',
-    backgroundColor: 'lightgray',
+    backgroundColor: 'white',
     position: 'relative',
   },
   profileImageContainer: {
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 5,
     left: 4,
-    backgroundColor: 'white',
+    backgroundColor: 'lightgray',
     width: 40,
     height: 40,
     justifyContent: 'center',
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'lightgray',
+    backgroundColor: 'white',
   },
   userNameText: {
     fontSize: 25,
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function ProfileScreen() {
+function ProfileScreen({ navigation }) {
   const [friendData, setFriendData] = useState([]);
   const [friendSearchModal, setFriendSearchModal] = useState(false);
   const [userId, setUserId] = useState('');
@@ -374,7 +375,14 @@ function ProfileScreen() {
       });
   };
 
-  const signOut = () => {
+  const signOutNow = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigation.navigate('Login');
+    }).catch((error) => {
+      // An error happened.
+      console.log('sign out err', error.message);
+    });
     console.log('sign out');
   };
 
@@ -423,7 +431,7 @@ function ProfileScreen() {
           <Text style={styles.userNameText} testID="profile.userName">{userName}</Text>
           <TouchableOpacity
             style={styles.signOutBtn}
-            onPress={signOut}
+            onPress={signOutNow}
           >
             <Text style={styles.signOutText}>Sign Out</Text>
           </TouchableOpacity>
@@ -468,7 +476,7 @@ function ProfileScreen() {
                 style={[styles.modalButton, styles.shadow]}
                 onPress={() => setUploadPhoto(false)}
               >
-                <Text>Done</Text>
+                <Text>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
