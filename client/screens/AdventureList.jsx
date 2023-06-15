@@ -4,8 +4,8 @@ import {
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-// import { collection, addDoc } from '../firebase/utils';
-// import { db } from '../../database/db';
+import { updateDoc } from '../firebase/utils';
+import { db } from '../../database/db';
 import Card from '../components/card';
 
 import { EventContext, UserContext } from '../context';
@@ -40,7 +40,6 @@ function AdventureListScreen({ navigation }) {
   const { uid, zipcode } = user.user;
 
   const toggleField = () => {
-
   };
 
   console.log('outisde ue', events);
