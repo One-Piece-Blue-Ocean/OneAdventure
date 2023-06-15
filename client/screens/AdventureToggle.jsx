@@ -44,7 +44,6 @@ function AdventureToggleScreen() {
         },
       })
         .then((response) => {
-          console.log('--', response.data.events_results);
           setEvents(response.data.events_results);
         })
         .catch((err) => {
@@ -52,7 +51,6 @@ function AdventureToggleScreen() {
         });
     }
   }, []);
-  console.log('EVENTS: ', events);
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <EventContext.Provider value={{ events }}>

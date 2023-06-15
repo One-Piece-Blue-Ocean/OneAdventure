@@ -113,7 +113,7 @@ Card.propTypes = {
     address: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string,
   }).isRequired,
   userEvent: PropTypes.shape({
     interested: PropTypes.bool.isRequired,
