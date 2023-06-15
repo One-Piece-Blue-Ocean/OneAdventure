@@ -21,6 +21,8 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: 'white',
     padding: 20,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -61,6 +63,23 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  closeButton: {
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    top: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
@@ -176,6 +195,8 @@ function AdventureMapScreen({ navigation, setSearch }) {
         }
       })
       .catch((err) => {
+        console.log('jio');
+        console.log(zipcode);
         console.log('asdfasdf');
         console.log(err);
       });
@@ -307,7 +328,7 @@ function AdventureMapScreen({ navigation, setSearch }) {
           setSelectedEvent({});
         }}
       >
-        <View style={styles.container}>
+        <View style={styles.modalContainer}>
           <View style={styles.modal}>
             {modalVisible && (
               <TouchableOpacity onPress={() => {
@@ -334,8 +355,8 @@ function AdventureMapScreen({ navigation, setSearch }) {
                 />
               </TouchableOpacity>
             )}
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text>Close Modal</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close Modal</Text>
             </TouchableOpacity>
           </View>
         </View>
