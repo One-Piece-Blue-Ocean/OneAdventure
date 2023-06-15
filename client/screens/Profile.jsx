@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
   },
   modalBtnContainer: {
     flexDirection: 'row',
+    margin: 10,
   },
   modalButton: {
     borderRadius: 5,
@@ -111,21 +112,22 @@ const styles = StyleSheet.create({
     elevation: 2,
     backgroundColor: muted.red,
     margin: 20,
-    marginBottom: 0,
+
   },
   modalContainer: {
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 40,
+    paddingHorizontal: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   modalTextWrap: {
     padding: 8,
-    marginBottom: 10,
+    margin: 20,
     borderRadius: 5,
     alignItems: 'center',
+    backgroundColor: 'lightgray',
   },
   profileHeader: {
     flexDirection: 'row',
@@ -240,7 +242,7 @@ function ProfileScreen() {
   const pirateCollection = collection(db, 'pirates');
   const value = useContext(UserContext);
   const { user, updateUserContext } = value;
-  // console.log('---->', value, '\n\nscreen rerender ^^^');
+  console.log('---->', value, '\n\nscreen rerender ^^^');
 
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
@@ -309,7 +311,6 @@ function ProfileScreen() {
           console.log('profile update err', err.message);
         });
     }
-    infoSet();
   };
 
   const pickImage = async () => {
@@ -362,7 +363,7 @@ function ProfileScreen() {
                   .then(() => {
                     updateUserContext('profilePhoto', url);
                     // user.user.profilePhoto = url;
-                    infoSet();
+                    // infoSet();
                   })
                   .catch((err) => {
                     // eslint-disable-next-line no-console
@@ -390,8 +391,8 @@ function ProfileScreen() {
   }, [userId]);
 
   useEffect(() => {
-
-  }, []);
+    infoSet();
+  }, [user.user.category, user.user.zipcode, user.user.radius, user.user.profilePhoto]);
 
   return (
     <SafeAreaView style={styles.container}>

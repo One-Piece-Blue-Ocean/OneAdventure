@@ -91,6 +91,13 @@ const styles = StyleSheet.create({
     margin: 20,
     marginBottom: 0,
   },
+  modalText: {
+    padding: 10,
+  },
+  modalTextWrap: {
+    borderRadius: 5,
+    backgroundColor: 'lightgray',
+  },
   modalContainer: {
     margin: 20,
     backgroundColor: 'white',
@@ -195,7 +202,9 @@ function FriendCard({
       >
         <View style={styles.centerModal}>
           <View style={[styles.modalContainer, styles.shadow]}>
-            <Text style={styles.modalText}>Remove from friends list?</Text>
+            <View style={styles.modalTextWrap}>
+              <Text style={styles.modalText}>Remove from friends list?</Text>
+            </View>
             <View style={styles.modalBtnContainer}>
               <TouchableOpacity
                 style={styles.modalButton}
