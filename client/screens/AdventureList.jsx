@@ -145,8 +145,9 @@ function AdventureListScreen({ navigation, setSearch }) {
       <ScrollView style={styles.scrollContainer}>
         {events.map((event) => (
           <TouchableOpacity
+            key={event.image + event.date.when}
             style={styles.cardContainer}
-            onPress={() => navigation.navigate('Detail', event)}
+            onPress={() => navigation.navigate('Detail', { selectedEvent: event, uid })}
           >
             <Card
               event={{
@@ -164,7 +165,6 @@ function AdventureListScreen({ navigation, setSearch }) {
               loaded
               toggleField={toggleField}
               onStarPress={handleStarPress}
-              key={event.image + event.date.when}
             />
           </TouchableOpacity>
         ))}
