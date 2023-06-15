@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: 'bold',
-    padding: 10,
   },
   location: {
     fontSize: 12,
