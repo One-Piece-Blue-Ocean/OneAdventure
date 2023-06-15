@@ -51,6 +51,9 @@ const styles = StyleSheet.create({
   searchButton: {
     color: '#2e86c1',
   },
+  cardContainer: {
+    marginBottom: 20,
+  },
 });
 
 function AdventureListScreen({ navigation, setSearch }) {
@@ -59,13 +62,11 @@ function AdventureListScreen({ navigation, setSearch }) {
   const { user } = value;
   const { uid } = user.user;
   const [searchText, setSearchText] = useState('');
-  console.log('user context', user);
   const handleStarPress = (event) => {
     // eslint-disable-next-line camelcase
     const pirates_adventures_collection = collection(db, 'pirates_adventures');
     // eslint-disable-next-line camelcase
     const adventures_collection = collection(db, 'adventures');
-    console.log('star event --- ', event);
     getDocs(query(adventures_collection, where('description', '==', event.description)), where('date', '==', event.date))
       .then((possibleAdventureDoc) => {
         if (!possibleAdventureDoc.docs.length) {
@@ -144,6 +145,7 @@ function AdventureListScreen({ navigation, setSearch }) {
       <ScrollView style={styles.scrollContainer}>
         {events.map((event) => (
           <TouchableOpacity
+            style={styles.cardContainer}
             onPress={() => navigation.navigate('Detail', event)}
           >
             <Card

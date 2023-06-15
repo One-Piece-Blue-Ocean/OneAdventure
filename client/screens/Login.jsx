@@ -112,7 +112,6 @@ function LoginScreen({ navigation }) {
       })
       .then((docSnap) => {
         userInfo = docSnap.data();
-        // navigation.navigate('Nav', { user: docSnap.data() });
       })
       .then(() => {
         const interested = query(collection(db, 'pirates_adventures'), where('userId', '==', uid));
@@ -123,7 +122,6 @@ function LoginScreen({ navigation }) {
           const adventure = doc.data();
           interestedEvents.push(adventure.adventureId)
         })
-        console.log('interestedEvents: ', interestedEvents);
         navigation.navigate('Nav', { user: userInfo, interested: interestedEvents });
       })
       .catch((error) => {
