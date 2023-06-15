@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
-  StyleSheet, Text, SafeAreaView, View, ScrollView, TouchableOpacity,
+  StyleSheet, Text, SafeAreaView, View, ScrollView, TouchableOpacity, TextInput, Button,
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -26,20 +26,39 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    marginTop: 25,
+    marginTop: 75,
   },
   title: {
     alignSelf: 'center',
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 25,
+  },
+  searchContainer: {
+    position: 'absolute',
+    top: 105,
+    left: 35,
+    right: 35,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 8,
+  },
+  searchButton: {
+    color: '#2e86c1',
   },
 });
 
-function AdventureListScreen({ navigation }) {
+function AdventureListScreen({ navigation, setSearch }) {
   const { events } = useContext(EventContext);
   const value = useContext(UserContext);
   const { user } = value;
   const { uid } = user.user;
+  const [searchText, setSearchText] = useState('');
 
   const handleStarPress = (event) => {
     // eslint-disable-next-line camelcase
@@ -94,6 +113,11 @@ function AdventureListScreen({ navigation }) {
 
   };
 
+  const handleSearchSubmit = () => {
+    setSearchText('');
+    setSearch(searchText);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -107,6 +131,15 @@ function AdventureListScreen({ navigation }) {
           }}
         />
         <Text style={styles.title}> Adventures </Text>
+      </View>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          value={searchText}
+          onChangeText={setSearchText}
+        />
+        <Button style={styles.searchButton} title="Search" onPress={handleSearchSubmit} />
       </View>
       <ScrollView style={styles.scrollContainer}>
         {events.map((event) => (
@@ -150,6 +183,7 @@ AdventureListScreen.propTypes = {
       path: PropTypes.string,
     }),
   }).isRequired,
+  setSearch: PropTypes.func.isRequired,
 };
 
 export default AdventureListScreen;
