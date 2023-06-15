@@ -4,7 +4,9 @@ import {
 } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-import { updateDoc } from '../firebase/utils';
+import {
+  collection, where, query, getDocs, addDoc,
+} from '../firebase/utils';
 import { db } from '../../database/db';
 import Card from '../components/card';
 
@@ -37,12 +39,61 @@ function AdventureListScreen({ navigation }) {
   const { events } = useContext(EventContext);
   const value = useContext(UserContext);
   const { user } = value;
-  const { uid, zipcode } = user.user;
+  const { uid } = user.user;
 
-  const toggleField = () => {
+  const handleStarPress = (event) => {
+    // eslint-disable-next-line camelcase
+    const pirates_adventures_collection = collection(db, 'pirates_adventures');
+    // eslint-disable-next-line camelcase
+    const adventures_collection = collection(db, 'adventures');
+    console.log('star event --- ', event);
+    getDocs(query(adventures_collection, where('description', '==', event.description)), where('date', '==', event.date))
+      .then((possibleAdventureDoc) => {
+        if (!possibleAdventureDoc.docs.length) {
+          addDoc(
+            adventures_collection,
+            {
+              address: event.address,
+              date: event.date,
+              description: event.description,
+              imageUrl: event.imageUrl,
+              title: event.title,
+            },
+          ).then((docRef) => {
+            addDoc(
+              pirates_adventures_collection,
+              {
+                adventureId: docRef.id,
+                attending: false,
+                interested: true,
+                userId: uid,
+              },
+            );
+          }).catch((error) => {
+            console.log('Error updating event as interested', error.code, error.message);
+          });
+        } else {
+          const docId = possibleAdventureDoc.docs[0].id;
+          addDoc(
+            pirates_adventures_collection,
+            {
+              adventureId: docId,
+              attending: false,
+              interested: true,
+              userId: uid,
+            },
+          );
+        }
+      })
+      .catch((error) => {
+        console.log('Error querying db for adventure doc: ', error.code, error.message);
+      });
   };
 
-  console.log('outisde ue', events);
+  const toggleField = () => {
+
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -58,32 +109,30 @@ function AdventureListScreen({ navigation }) {
         <Text style={styles.title}> Adventures </Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
-        {events.map((event) => {
-          console.log('This Event', event);
-          return (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Detail', event)}
-            >
-              <Card
-                event={{
-                  address: event.address[0],
-                  date: event.date.start_date,
-                  description: event.description,
-                  imageUrl: event.image,
-                  title: event.title,
-                }}
-                userEvent={{
-                  interested: false,
-                  attending: false,
-                }}
-                userEventId=""
-                loaded
-                toggleField={toggleField}
-                key={event.image + event.date.start_date}
-              />
-            </TouchableOpacity>
-          );
-        })}
+        {events.map((event) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Detail', event)}
+          >
+            <Card
+              event={{
+                address: event.address[0],
+                date: event.date.start_date,
+                description: event.description,
+                imageUrl: event.image,
+                title: event.title,
+              }}
+              userEvent={{
+                interested: false,
+                attending: false,
+              }}
+              userEventId=""
+              loaded
+              toggleField={toggleField}
+              onStarPress={handleStarPress}
+              key={event.image + event.date.when}
+            />
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

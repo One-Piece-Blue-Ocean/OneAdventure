@@ -18,6 +18,7 @@ function Card({
   userEventId,
   loaded,
   toggleField,
+  onStarPress,
 }) {
   return (
     <Box alignItems="center">
@@ -52,6 +53,7 @@ function Card({
                 onPress={(e) => {
                   e.preventDefault();
                   toggleField(userEventId, 'interested', [userEvent.interested]);
+                  onStarPress(event);
                 }}
               />
             </Center>
@@ -120,10 +122,12 @@ Card.propTypes = {
   userEventId: PropTypes.string.isRequired,
   loaded: PropTypes.bool,
   toggleField: PropTypes.func.isRequired,
+  onStarPress: PropTypes.func,
 };
 
 Card.defaultProps = {
   loaded: false,
+  onStarPress: () => {},
 };
 
 export default Card;
