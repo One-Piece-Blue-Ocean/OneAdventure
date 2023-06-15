@@ -13,9 +13,24 @@ import { EventContext, UserContext } from '../context';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  logo: {
+    flex: 1,
+    position: 'absolute',
+    top: 5,
+    right: 20,
     backgroundColor: 'white',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
+  },
+  scrollContainer: {
+    flex: 1,
+    marginTop: 25,
+  },
+  title: {
+    alignSelf: 'center',
+    marginTop: 20,
+    fontSize: 25,
   },
 });
 
@@ -33,7 +48,7 @@ function AdventureListScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View>
         <Foundation
-          style={styles.map}
+          style={styles.logo}
           name="map"
           size={48}
           color="black"
@@ -43,7 +58,7 @@ function AdventureListScreen({ navigation }) {
         />
         <Text style={styles.title}> Adventures </Text>
       </View>
-      <ScrollView>
+      <ScrollView style={styles.scrollContainer}>
         {events.map((event) => {
           console.log('This Event', event);
           return (
