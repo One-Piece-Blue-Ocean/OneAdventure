@@ -7,7 +7,7 @@ import { OverlayProvider, Chat } from 'stream-chat-expo';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import useChatClient from '../hooks/useChatClient';
-import { ChatProvider } from '../chatContext';
+// import { ChatProvider } from '../chatContext';
 
 import MessagesScreen from './Messages';
 import MessageScreen from './Message';
@@ -24,32 +24,32 @@ function MessagingScreen({ navigation }) {
   }
 
   return (
-    <ChatProvider>
-      <OverlayProvider>
-        <Chat client={chatClient}>
-          <ChatStack.Navigator>
-            <ChatStack.Screen
-              name="Messages"
-              component={MessagesScreen}
-              options={{
-                headerLeft: () => {},
-              }}
-            />
-            <ChatStack.Screen
-              name="Message"
-              component={MessageScreen}
-            />
-            <ChatStack.Screen
-              name="CreateMessage"
-              component={CreateMessageScreen}
-              options={{
-                title: 'Compose Message',
-              }}
-            />
-          </ChatStack.Navigator>
-        </Chat>
-      </OverlayProvider>
-    </ChatProvider>
+
+    <OverlayProvider>
+      <Chat client={chatClient}>
+        <ChatStack.Navigator initialRouteName="Messages">
+          <ChatStack.Screen
+            name="Messages"
+            component={MessagesScreen}
+            options={{
+              headerLeft: () => {},
+            }}
+          />
+          <ChatStack.Screen
+            name="Message"
+            component={MessageScreen}
+          />
+          <ChatStack.Screen
+            name="CreateMessage"
+            component={CreateMessageScreen}
+            options={{
+              title: 'Compose Message',
+            }}
+          />
+        </ChatStack.Navigator>
+      </Chat>
+    </OverlayProvider>
+
   );
 }
 

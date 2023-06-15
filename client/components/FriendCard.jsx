@@ -18,7 +18,12 @@ import {
 } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { db } from '../../database/db';
+import { useChatContext } from '../chatContext';
+import createChat from '../utilities/createChat';
+import useChatClient from '../hooks/useChatClient';
+// import myTheme from '../screens/Themes';
 import { muted } from '../screens/Themes';
 
 const styles = StyleSheet.create({
@@ -132,15 +137,21 @@ function FriendCard({
 }) {
   const [modalVisible, setModalVisible] = useState(false);
   const { profilePhoto, fullName, uid } = friend;
+  const navigation = useNavigation();
+  const { setChannel } = useChatContext();
+  // const { user } = useContext(UserContext).user;
+  const clientIsReady = useChatClient();
 
-  const onMessage = (friendId) => {
-    // eslint-disable-next-line no-console
-    console.log('Go to message with friend that was clicked, id:', friendId);
+  const onMessage = () => {
+    console.log('onMessage is being called');
+
+    if (clientIsReady) {
+      createChat([friend], setChannel, navigation, userId);
+    }
   };
 
   const onRemove = (friendId) => {
     // eslint-disable-next-line no-console
-    console.log('remove friend from friends list in db, remove this id:', ` here you go${friendId}`, 'from this id', ` here you go${userId}`);
     const trimmedFriendId = friendId.trim();
     const trimmedUserId = userId.trim();
     getDocs(query(collection(db, 'pirates', trimmedUserId, 'friends'), where('friendId', '==', trimmedFriendId)))
@@ -151,7 +162,7 @@ function FriendCard({
             getFriends();
             // console.log('sucess');
           })
-          .catch((err) => console.log(err.message));
+          .catch(() => {});
       });
   };
 
@@ -180,7 +191,7 @@ function FriendCard({
               name="message"
               size={24}
               color="black"
-              onPress={() => onMessage(uid)}
+              onPress={() => onMessage()}
             />
           </TouchableOpacity>
           <TouchableOpacity>
