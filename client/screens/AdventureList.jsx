@@ -62,6 +62,7 @@ function AdventureListScreen({ navigation, setSearch }) {
   const { user } = value;
   const { uid } = user.user;
   const [searchText, setSearchText] = useState('');
+
   const handleStarPress = (event) => {
     // eslint-disable-next-line camelcase
     const pirates_adventures_collection = collection(db, 'pirates_adventures');

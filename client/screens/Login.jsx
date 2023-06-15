@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import {
   StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Alert,
@@ -8,7 +7,6 @@ import PropTypes from 'prop-types';
 import {
   doc, getDoc, query, where, collection, getDocs, getAuth, signInWithEmailAndPassword,
 } from '../firebase/utils';
-// import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import hatLogo from '../../assets/Hat.png';
 import LogoText from '../../assets/LogoText.png';
 
@@ -104,11 +102,12 @@ function LoginScreen({ navigation }) {
   const onLoginPress = () => {
     const auth = getAuth(app);
     let userInfo;
-    let interestedEvents = [];
+    const piratesAdventures = [];
+    const interestedAdventures = [];
     let uid;
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential)
+        console.log(userCredential);
         const { user } = userCredential;
         uid = user.uid;
         const docRef = doc(db, 'pirates', uid);
@@ -118,15 +117,26 @@ function LoginScreen({ navigation }) {
         userInfo = docSnap.data();
       })
       .then(() => {
-        const interested = query(collection(db, 'pirates_adventures'), where('userId', '==', uid));
-        return getDocs(interested)
+        // pa = pirates_adventures collection
+        const paRef = query(collection(db, 'pirates_adventures'), where('userId', '==', uid));
+        return getDocs(paRef);
       })
       .then((querySnapshot) => {
-        querySnapshot.docs.forEach((doc) => {
-          const adventure = doc.data();
-          interestedEvents.push(adventure.adventureId)
-        })
-        navigation.navigate('Nav', { user: userInfo, interested: interestedEvents });
+        querySnapshot.docs.forEach((document) => {
+          const adventure = document.data();
+          piratesAdventures.push(adventure.adventureId);
+        });
+      })
+      .then(() => {
+        const interestedRef = query(collection(db, 'pirates_adventures'), where('userId', '==', uid), where('interested', '==', true));
+        return getDocs(interestedRef);
+      })
+      .then((querySnapshot) => {
+        querySnapshot.forEach((document) => {
+          const interestedAdventure = document.data();
+          interestedAdventures.push(interestedAdventure.adventureId);
+        });
+        navigation.navigate('Nav', { user: userInfo, pirates_adventures: piratesAdventures, interested: interestedAdventures });
       })
       .catch((error) => {
         createOneButtonAlert('Invalid login credentials');
