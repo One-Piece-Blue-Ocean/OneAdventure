@@ -108,14 +108,12 @@ function AdventureDetail({ navigation, route }) {
           // if we have this event in the database, then there must be people listed as attending this event
           if (adventureDoc.docs.length) {
             const adventureId = adventureDoc.docs[0].id.trim();
-            console.log(`\nAdventureId is${adventureDoc.docs[0].id}`, adventureId, adventureDoc.docs[0].id, adventureDoc.docs[0].id.trim())
             // get all people who are attending this event
             getDocs(query(collection(db, 'pirates_adventures'), where('adventureId', '==', adventureId)))
               .then((piratesAdventuresDocs) => {
                 const allPiratesAttending = piratesAdventuresDocs.docs.map((paDoc) => paDoc.data().userId);
                 // now we can find the intersect of people attending this event and this user's friends
                 const friendsAttendingAdventureIds = friendsIds.filter((id) => allPiratesAttending.includes(id));
-                console.log('\nallPiratesAttending\n', allPiratesAttending, '\nfriendsIds\n', friendsIds)
                 // once we have the user's friends who are also attending this event, get their names, id, imageurls
                 const promiseArr = friendsAttendingAdventureIds.map((idFriendAttending) =>
                   getDoc(doc(db, 'pirates', idFriendAttending)).then((friendDocData) => {
@@ -130,7 +128,6 @@ function AdventureDetail({ navigation, route }) {
         })
       })
   }
-  console.log(friends);
   useEffect(() => {
     if (!friends.length) {
       getThisAdventuresFriends()
