@@ -59,9 +59,10 @@ const styles = StyleSheet.create({
 function AdventureListScreen({ navigation, setSearch }) {
   const { events } = useContext(EventContext);
   const value = useContext(UserContext);
-  const { user } = value;
+  const { user, setInterestedContext } = value;
   const { uid } = user.user;
   const [searchText, setSearchText] = useState('');
+  let adventureId;
 
   const handleStarPress = (event) => {
     // eslint-disable-next-line camelcase
@@ -81,6 +82,9 @@ function AdventureListScreen({ navigation, setSearch }) {
               title: event.title,
             },
           ).then((docRef) => {
+            adventureId = docRef.id;
+            setInterestedContext(adventureId, false);
+            console.log('after update: ', user);
             addDoc(
               pirates_adventures_collection,
               {
@@ -104,6 +108,8 @@ function AdventureListScreen({ navigation, setSearch }) {
               userId: uid,
             },
           );
+          // setInterestedContext(docId, false);
+          // console.log('after update: ', user);
         }
       })
       .catch((error) => {
@@ -119,7 +125,7 @@ function AdventureListScreen({ navigation, setSearch }) {
     setSearchText('');
     setSearch(searchText);
   };
-
+  console.log('before update: ', user);
   return (
     <SafeAreaView style={styles.container}>
       <View>
