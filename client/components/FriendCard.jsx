@@ -19,7 +19,7 @@ import {
 import PropTypes from 'prop-types';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { db } from '../../database/db';
-// import myTheme from '../screens/Themes';
+import { muted } from '../screens/Themes';
 
 const styles = StyleSheet.create({
   centerModal: {
@@ -87,9 +87,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'lightgray',
+    backgroundColor: muted.red,
     margin: 20,
     marginBottom: 0,
+  },
+  modalText: {
+    padding: 10,
+  },
+  modalTextWrap: {
+    borderRadius: 5,
+    backgroundColor: 'lightgray',
   },
   modalContainer: {
     margin: 20,
@@ -195,7 +202,9 @@ function FriendCard({
       >
         <View style={styles.centerModal}>
           <View style={[styles.modalContainer, styles.shadow]}>
-            <Text style={styles.modalText}>Remove from friends list?</Text>
+            <View style={styles.modalTextWrap}>
+              <Text style={styles.modalText}>Remove from friends list?</Text>
+            </View>
             <View style={styles.modalBtnContainer}>
               <TouchableOpacity
                 style={styles.modalButton}
