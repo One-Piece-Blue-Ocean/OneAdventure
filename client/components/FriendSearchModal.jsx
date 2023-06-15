@@ -20,6 +20,7 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { db } from '../../database/db';
+import { muted } from '../screens/Themes';
 
 // temp friend data
 const DATA = [
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'lightgray',
+    backgroundColor: muted.red,
     margin: 20,
     marginBottom: 0,
   },
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scroll: {
-    backgroundColor: 'lightgray',
+    backgroundColor: muted.blue,
     width: 300,
     borderRadius: 10,
   },
@@ -190,7 +191,7 @@ function FriendSearchModal({
 
             <View style={styles.scrollContainer}>
               <View>
-                <Text style={styles.headerText}>Add Friends</Text>
+                <Text style={styles.headerText}>Follow Friend</Text>
               </View>
               <ScrollView style={styles.scroll}>
                 <View style={styles.pirateScrollWrap}>

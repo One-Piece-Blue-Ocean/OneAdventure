@@ -19,7 +19,7 @@ import {
 import PropTypes from 'prop-types';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { db } from '../../database/db';
-// import myTheme from '../screens/Themes';
+import { muted } from '../screens/Themes';
 
 const styles = StyleSheet.create({
   centerModal: {
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'lightgray',
+    backgroundColor: muted.red,
     margin: 20,
     marginBottom: 0,
   },

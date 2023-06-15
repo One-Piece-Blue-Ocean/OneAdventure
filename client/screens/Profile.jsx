@@ -32,6 +32,7 @@ import { db } from '../../database/db';
 import { UserContext } from '../context';
 import FriendCard from '../components/FriendCard';
 import FriendSearchModal from '../components/FriendSearchModal';
+import { muted } from './Themes';
 
 const styles = StyleSheet.create({
   button: {
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   details: {
-    backgroundColor: 'gray',
+    backgroundColor: muted.blue,
     width: '100%',
     height: 200,
     alignItems: 'center',
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   editDropDown: {
-    backgroundColor: 'gray',
+    backgroundColor: muted.blue,
     borderRadius: 8,
   },
   editDropDownWrap: {
@@ -77,16 +78,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   editPhoto: {
-    position: 'absolute',
-    right: 10,
-    bottom: 10,
+    // position: 'absolute',
+    // right: 10,
+    // bottom: 10,
   },
   friendsHeaderContainer: {
     width: '100%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'lightgray',
     flexDirection: 'row',
     position: 'relative',
   },
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   friendsListContainer: {
     width: '100%',
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: muted.blue,
     alignItems: 'center',
     marginTop: StatusBar.currentHeight || 0,
   },
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'lightgray',
+    backgroundColor: muted.red,
     margin: 20,
     marginBottom: 0,
   },
@@ -134,7 +135,8 @@ const styles = StyleSheet.create({
   },
   profileHeader: {
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: 'lightgray',
+    position: 'relative',
   },
   profileImageContainer: {
     borderRadius: 50,
@@ -143,11 +145,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     position: 'relative',
   },
+  uploadPhotoBtn: {
+    position: 'absolute',
+    bottom: 5,
+    left: 4,
+    backgroundColor: 'white',
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
   userNameContainer: {
     flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'lightgray',
   },
   userNameText: {
     fontSize: 25,
@@ -298,7 +311,7 @@ function ProfileScreen() {
         });
       setInput({ email: '', zip: '' });
     } else if (editMode === 4) {
-      const newRadius = update.zip;
+      const newRadius = update;
       updateDoc(doc(pirateCollection, userId), { radius: newRadius })
         .then(() => {
           setSearchRadius(newRadius);
@@ -328,8 +341,6 @@ function ProfileScreen() {
   };
 
   const saveNewPhotoToDb = () => {
-    // save photo to db
-    // setUploadPhoto(false);
     const imageFileName = `${userId}-${Math.random() * 10000000000}`;
     const fileRef = ref(getStorage(), `profilePhotos/${imageFileName}`);
     // eslint-disable-next-line
@@ -378,7 +389,10 @@ function ProfileScreen() {
     // set user info
     infoSet();
     if (userId) {
-      getFriends();
+      if (friendData.length === 0) {
+        console.log('grabbing friends');
+        getFriends();
+      }
     }
   }, [userId]);
 
@@ -398,6 +412,8 @@ function ProfileScreen() {
             }}
             testID="profile.pic"
           />
+        </View>
+        <View style={styles.uploadPhotoBtn}>
           <AntDesign
             testID="profile.editEmail"
             name="edit"
@@ -432,7 +448,12 @@ function ProfileScreen() {
               </TouchableOpacity>
             </View>
 
-            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 200, height: 200, margin: 5 }}
+              />
+            )}
 
             <View style={styles.modalBtnContainer}>
               <TouchableOpacity
@@ -540,7 +561,7 @@ function ProfileScreen() {
       >
         <View style={styles.centerModal}>
           <View style={[styles.modalContainer, styles.shadow]}>
-            {
+            {/* {
               editMode === 1
                 ? (
                   <View>
@@ -557,7 +578,7 @@ function ProfileScreen() {
                     />
                   </View>
                 ) : null
-            }
+            } */}
             {
               editMode === 2
                 ? (
