@@ -8,13 +8,12 @@ import { useChatContext } from '../chatContext';
 
 function MessageScreen({ navigation, route }) {
   const { channel } = useChatContext();
-  const [value, setValue] = useState(route.params.chatName);
 
   useEffect(() => {
     navigation.setOptions({
-      title: value === '' ? 'No title' : value,
+      title: channel.data.name || 'No title',
     });
-  }, [navigation, value]);
+  }, [channel]);
 
   return (
     <Channel channel={channel}>
