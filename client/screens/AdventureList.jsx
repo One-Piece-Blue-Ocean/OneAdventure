@@ -122,7 +122,6 @@ function AdventureListScreen({ navigation, setSearch }) {
     setSearchText('');
     setSearch(searchText);
   };
-  console.log('before update: ', user);
   return (
     <SafeAreaView style={styles.container}>
       <View>

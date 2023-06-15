@@ -107,7 +107,6 @@ function LoginScreen({ navigation }) {
     let uid;
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
         const { user } = userCredential;
         uid = user.uid;
         const docRef = doc(db, 'pirates', uid);
