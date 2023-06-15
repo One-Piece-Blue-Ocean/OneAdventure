@@ -114,6 +114,7 @@ function AdventureTrackingScreen({ navigation }) {
                 console.log('Pressed from Tracking', Object.values(adventure)[0].adventureInfo);
                 navigation.navigate('Detail', Object.values(adventure)[0].adventureInfo);
               }}
+                key={idx}
               >
                 <Card
                   event={Object.values(adventure)[0].adventureInfo}
@@ -121,6 +122,7 @@ function AdventureTrackingScreen({ navigation }) {
                   userEventId={Object.keys(adventure)[0]}
                   loaded
                   toggleField={toggleField}
+                  key={idx}
                 />
               </TouchableOpacity>
             </>
