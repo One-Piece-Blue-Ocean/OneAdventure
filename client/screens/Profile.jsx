@@ -243,8 +243,8 @@ function ProfileScreen() {
 
   const pirateCollection = collection(db, 'pirates');
   const value = useContext(UserContext);
-  const { user } = value;
-  // console.log('---->', value);
+  const { user, updateUserContext } = value;
+  console.log('---->', value);
 
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
@@ -373,7 +373,8 @@ function ProfileScreen() {
                 updateDoc(doc(pirateCollection, userId), { profilePhoto: url })
                   .then(() => {
                     // setProfilePic(url);
-                    user.user.profilePhoto = url;
+                    updateUserContext('profilePhoto', url);
+                    // user.user.profilePhoto = url;
                     infoSet();
                   })
                   .catch((err) => {
@@ -390,6 +391,7 @@ function ProfileScreen() {
     infoSet();
     if (userId) {
       if (friendData.length === 0) {
+        console.log('---->', value);
         console.log('grabbing friends');
         getFriends();
       }
@@ -676,6 +678,7 @@ function ProfileScreen() {
         setFriendSearchModal={setFriendSearchModal}
         userId={userId}
         getFriends={getFriends}
+        friendData={friendData}
       />
 
       <View style={styles.friendsHeaderContainer}>
