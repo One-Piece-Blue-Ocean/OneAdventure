@@ -10,79 +10,46 @@ const keys = ['d7730fb56dd377a7f809600c8bb2ea1622d13b7ce05c86a10620a95af633c739'
 function AdventureToggleScreen() {
   const value = useContext(UserContext).user;
   const { user } = value;
-  const { zipcode } = user;
+  const { zipcode } = user.user;
   const [events, setEvents] = useState([]);
-  // const [search, setSearch] = useState('');
+
+  const [search, setSearch] = useState('');
 
   const AdventureStack = createStackNavigator();
 
-  // useEffect(() => {
-  //   setEvents({
-  //     title: 'Family Nature Fun Hour: Fish Fun',
-  //     date: {
-  //       start_date: 'Jun 17',
-  //       when: 'Sat, Jun 17, 1:30 – 2:30 PM PDT',
-  //     },
-  //     address: [
-  //       'Robert W. Crown Memorial State Beach, 8th Street, Otis Dr',
-  //       'Alameda, CA',
-  //     ],
-  //     link: 'https://baynature.org/event/family-nature-fun-hour-fish-fun/',
-  //     event_location_map: {
-  //       image: 'https://www.google.com/maps/vt/data=3phttjgbcPijIRDFCCFNDaxMHgkWrICC6DM7p4R7n0h4Gq7cqil-1L5krYgZTiGO0Rg5_xU4QCg_mdk4yVhCXv4jsbxXNibf2fZrtsANk4rrc-Bmcyw',
-  //       link: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x808f86b516428677:0x91da17540e2f2ff3?sa=X&hl=en',
-  //       serpapi_link: 'https://serpapi.com/search.json?data=%214m2%213m1%211s0x808f86b516428677%3A0x91da17540e2f2ff3&engine=google_maps&google_domain=google.com&hl=en&q=outdoor+activities+in+san+francisco&type=place',
-  //     },
-  //     description: 'Bay Nature connects the people of the
-  //     San Francisco Bay Area to our natural world and motivates people
-  //      to solve problems with nature in mind.
-  //     Header illustrations by Jane Kim, InkDwell',
-  //     ticket_info: [
-  //       {
-  //         source: 'Bay Nature',
-  //         link: 'https://baynature.org/event/family-nature-fun-hour-fish-fun/',
-  //         link_type: 'more info',
-  //       },
-  //     ],
-  //     venue: {
-  //       name: 'Robert W. Crown Memorial State Beach',
-  //       rating: 4.5,
-  //       reviews: 4105,
-  //       link: 'https://www.google.com/search?hl=en&q=Robert+W.+Crown+Memorial+State+Beach&ludocid=10509738330205138931&ibp=gwp%3B0,7',
-  //     },
-  //     thumbnail: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlsD6R1G5lK946_xymWqWd2VroLd----vbrfy34kwxYiC-xm37d57zgBU&s',
-  //     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd-kECS7HJf0NWvDv2W3eq8ZffI8gTckwfogTsQjkJPw&s=10',
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   axios.get('https://serpapi.com/search?engine=google_events', {
-  //     params: {
-  //       api_key: keys[Math.round(Math.random() * 5)],
-  //       q: `outdoor activities in ${search}`,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       setEvents(response.data.events_results);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [search]);
+  useEffect(() => {
+    if (search !== '') {
+      console.log(search);
+      axios.get('https://serpapi.com/search?engine=google_events', {
+        params: {
+          api_key: keys[Math.round(Math.random() * 5)],
+          q: `outdoor activities in ${search}`,
+        },
+      })
+        .then((response) => {
+          setEvents(response.data.events_results);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [search]);
 
   useEffect(() => {
-    axios.get('https://serpapi.com/search?engine=google_events', {
-      params: {
-        api_key: keys[Math.round(Math.random() * 5)],
-        q: `outdoor activities in ${zipcode}`,
-      },
-    })
-      .then((response) => {
-        setEvents(response.data.events_results);
+    if (events.length === 0) {
+      axios.get('https://serpapi.com/search?engine=google_events', {
+        params: {
+          api_key: keys[Math.round(Math.random() * 5)],
+          q: `outdoor activities in ${zipcode}`,
+        },
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((response) => {
+          setEvents(response.data.events_results);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
@@ -97,8 +64,15 @@ function AdventureToggleScreen() {
         <AdventureStack.Screen
           name="AdventureMap"
           options={{ headerShown: false }}
-          component={AdventureMapScreen}
-        />
+        >
+          {(props) => (
+            <AdventureMapScreen
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...props}
+              setSearch={setSearch}
+            />
+          )}
+        </AdventureStack.Screen>
       </AdventureStack.Navigator>
     </EventContext.Provider>
   );

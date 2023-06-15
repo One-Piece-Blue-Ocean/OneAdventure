@@ -8,8 +8,17 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import {
+  doc,
+  deleteDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+} from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
+import { db } from '../../database/db';
 // import myTheme from '../screens/Themes';
 
 const styles = StyleSheet.create({
@@ -78,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'skyblue',
+    backgroundColor: 'lightgray',
     margin: 20,
     marginBottom: 0,
   },
@@ -103,14 +112,19 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowOpacity: 0.35,
+    shadowRadius: 3,
   },
 });
 
-function FriendCard({ friend, index }) {
+function FriendCard({
+  friend,
+  index,
+  userId,
+  getFriends,
+}) {
   const [modalVisible, setModalVisible] = useState(false);
-  const { profilePic, userName, id } = friend;
+  const { profilePhoto, fullName, uid } = friend;
 
   const onMessage = (friendId) => {
     // eslint-disable-next-line no-console
@@ -119,7 +133,19 @@ function FriendCard({ friend, index }) {
 
   const onRemove = (friendId) => {
     // eslint-disable-next-line no-console
-    console.log('remove friend from friends list in db, id:', friendId);
+    console.log('remove friend from friends list in db, remove this id:', ` here you go${friendId}`, 'from this id', ` here you go${userId}`);
+    const trimmedFriendId = friendId.trim();
+    const trimmedUserId = userId.trim();
+    getDocs(query(collection(db, 'pirates', trimmedUserId, 'friends'), where('friendId', '==', trimmedFriendId)))
+      .then((friendDocs) => {
+        // console.log('-->>', friendDocs, friendDocs.docs, friendDocs.docs[0], friendDocs.docs[0]);
+        deleteDoc(doc(db, 'pirates', trimmedUserId, 'friends', friendDocs.docs[0].id))
+          .then(() => {
+            getFriends();
+            // console.log('sucess');
+          })
+          .catch((err) => console.log(err.message));
+      });
   };
 
   return (
@@ -129,7 +155,7 @@ function FriendCard({ friend, index }) {
         <View style={styles.profileImageWrap}>
           <Image
             source={{
-              uri: profilePic,
+              uri: profilePhoto,
               height: 50,
               width: 50,
             }}
@@ -139,7 +165,7 @@ function FriendCard({ friend, index }) {
 
       <View style={styles.friendCardDetails}>
         <View style={styles.friendNameContainer}>
-          <Text style={styles.friendNameText}>{userName}</Text>
+          <Text style={styles.friendNameText}>{fullName}</Text>
         </View>
         <View style={styles.friendBtnContainer}>
           <TouchableOpacity>
@@ -147,7 +173,7 @@ function FriendCard({ friend, index }) {
               name="message"
               size={24}
               color="black"
-              onPress={() => onMessage(id)}
+              onPress={() => onMessage(uid)}
             />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -174,7 +200,7 @@ function FriendCard({ friend, index }) {
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => {
-                  onRemove(id);
+                  onRemove(uid);
                   setModalVisible(false);
                 }}
               >
@@ -197,11 +223,13 @@ function FriendCard({ friend, index }) {
 
 FriendCard.propTypes = {
   friend: PropTypes.shape({
-    userName: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-    profilePic: PropTypes.string.isRequired,
+    fullName: PropTypes.string.isRequired,
+    uid: PropTypes.string.isRequired,
+    profilePhoto: PropTypes.string.isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,
+  userId: PropTypes.string.isRequired,
+  getFriends: PropTypes.func.isRequired,
 };
 
 export default FriendCard;
