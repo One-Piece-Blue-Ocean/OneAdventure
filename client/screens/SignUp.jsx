@@ -9,6 +9,7 @@ import axios from 'axios';
 import { setDoc, doc } from 'firebase/firestore';
 import { app, db } from '../../database/db';
 import hatLogo from '../../assets/Hat.png';
+import LogoText from '../../assets/LogoText.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,8 +24,13 @@ const styles = StyleSheet.create({
     height: 100,
     width: 300,
     alignSelf: 'center',
-    margin: 30,
+    marginTop: 30,
     resizeMode: 'contain',
+  },
+  logoText: {
+    height: 80,
+    width: 380,
+    alignSelf: 'center',
   },
   input: {
     height: 48,
@@ -150,6 +156,10 @@ function SignUpScreen({ navigation }) {
         <Image
           style={styles.logo}
           source={hatLogo}
+        />
+        <Image
+          style={styles.logoText}
+          source={LogoText}
         />
         <TextInput
           style={styles.input}

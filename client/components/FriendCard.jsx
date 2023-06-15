@@ -21,11 +21,15 @@ import { StreamChat } from 'stream-chat';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { db } from '../../database/db';
+<<<<<<< HEAD
 import { useChatContext } from '../chatContext';
 import createChat from '../utilities/createChat';
 import { UserContext } from '../context';
 import useChatClient from '../hooks/useChatClient';
 // import myTheme from '../screens/Themes';
+=======
+import { muted } from '../screens/Themes';
+>>>>>>> ebd584808507f7bdc9a73825677f500a1415c970
 
 const styles = StyleSheet.create({
   centerModal: {
@@ -93,9 +97,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'lightgray',
+    backgroundColor: muted.red,
     margin: 20,
     marginBottom: 0,
+  },
+  modalText: {
+    padding: 10,
+  },
+  modalTextWrap: {
+    borderRadius: 5,
+    backgroundColor: 'lightgray',
   },
   modalContainer: {
     margin: 20,
@@ -208,7 +219,9 @@ function FriendCard({
       >
         <View style={styles.centerModal}>
           <View style={[styles.modalContainer, styles.shadow]}>
-            <Text style={styles.modalText}>Remove from friends list?</Text>
+            <View style={styles.modalTextWrap}>
+              <Text style={styles.modalText}>Remove from friends list?</Text>
+            </View>
             <View style={styles.modalBtnContainer}>
               <TouchableOpacity
                 style={styles.modalButton}

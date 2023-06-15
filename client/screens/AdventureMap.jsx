@@ -1,13 +1,14 @@
+/* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, Text, View, Modal, TouchableOpacity, TextInput, Button,
+  StyleSheet, Text, View, Modal, TouchableOpacity, TextInput, Button, ActivityIndicator,
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { EventContext, UserContext } from '../context';
 import Card from '../components/card';
 import { db } from '../../database/db';
@@ -20,6 +21,8 @@ const styles = StyleSheet.create({
   modal: {
     backgroundColor: 'white',
     padding: 20,
+    borderRadius: 8,
+    alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -47,10 +50,10 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     bottom: 20,
-    left: 20,
-    right: 20,
+    left: 105,
+    right: 105,
     backgroundColor: '#2e86c1',
-    borderRadius: 5,
+    borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -61,9 +64,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  closeButton: {
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    top: 10,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
 });
 
-function AdventureMapScreen({ navigation, setSearch }) {
+function AdventureMapScreen({ navigation, search, setSearch }) {
   const [selectedEvent, setSelectedEvent] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [markers, setMarkers] = useState([]);
@@ -78,8 +98,11 @@ function AdventureMapScreen({ navigation, setSearch }) {
   const value = useContext(UserContext);
   const { user } = value;
   const { uid, zipcode } = user.user;
+  const interestedEvents = user.interested;
+  const [loading, setLoading] = useState(false);
 
   const handleSearchArea = () => {
+    setLoading(true);
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
         latlng: currentLatLng,
@@ -102,6 +125,7 @@ function AdventureMapScreen({ navigation, setSearch }) {
           console.log('handlesearcharea', city, state);
           const address = `${city}, ${state}`;
           setSearch(address);
+          changeRegion(address);
         }
       })
       .catch((err) => {
@@ -110,10 +134,15 @@ function AdventureMapScreen({ navigation, setSearch }) {
       });
   };
 
-  const handleSearchSubmit = () => {
+  useEffect(() => {
+    setLoading(false);
+    setShowSearchPopup(false);
+  }, [markers]);
+
+  const changeRegion = (input) => {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
-        address: searchText,
+        address: input,
         key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
       },
     })
@@ -130,6 +159,10 @@ function AdventureMapScreen({ navigation, setSearch }) {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  const handleSearchSubmit = () => {
+    changeRegion(searchText);
     setSearchText('');
     setSearch(searchText);
   };
@@ -175,6 +208,8 @@ function AdventureMapScreen({ navigation, setSearch }) {
         }
       })
       .catch((err) => {
+        console.log('jio');
+        console.log(zipcode);
         console.log('asdfasdf');
         console.log(err);
       });
@@ -183,7 +218,21 @@ function AdventureMapScreen({ navigation, setSearch }) {
   }, []);
 
   const handleMarkerPress = (event) => {
-    setSelectedEvent(event);
+    interestedEvents.map((eventId) => {
+      getDoc(doc(db, 'adventures', eventId))
+      .then((res) => {
+        const data = res.data();
+        if (data.description === event.description && data.date === event.date.start_date) {
+          event.interested = true;
+        }
+      })
+      .then(() => {
+        setSelectedEvent(event);
+      })
+      .then(() => {
+        setModalVisible(true);
+      })
+    })
   };
 
   useEffect(() => {
@@ -221,37 +270,47 @@ function AdventureMapScreen({ navigation, setSearch }) {
     fetchMarkers();
   }, [events]);
 
-  useEffect(() => {
-    if (Object.keys(selectedEvent).length) {
-      setModalVisible(true);
-    }
-  }, [selectedEvent]);
-
   const toggleField = () => {
     // eslint-disable-next-line camelcase
     const pirates_adventures_collection = collection(db, 'pirates_adventures');
     // eslint-disable-next-line camelcase
     const adventures_collection = collection(db, 'adventures');
-    addDoc(
-      adventures_collection,
-      {
-        address: selectedEvent.address[0],
-        date: selectedEvent.date.start_date,
-        description: selectedEvent.description,
-        imageUrl: selectedEvent.image,
-        title: selectedEvent.title,
-      },
-    ).then((docRef) => {
-      addDoc(
-        pirates_adventures_collection,
-        {
-          adventureId: docRef.id,
-          attending: false,
-          interested: true,
-          userId: uid,
-        },
-      );
-    });
+    getDocs(query(adventures_collection, where('description', '==', selectedEvent.description)), where('date', '==', selectedEvent.date.start_date))
+      .then((possibleAdventureDoc) => {
+        if (!possibleAdventureDoc.docs.length) {
+          addDoc(
+            adventures_collection,
+            {
+              address: selectedEvent.address[0],
+              date: selectedEvent.date.start_date,
+              description: selectedEvent.description,
+              imageUrl: selectedEvent.image,
+              title: selectedEvent.title,
+            },
+          ).then((docRef) => {
+            addDoc(
+              pirates_adventures_collection,
+              {
+                adventureId: docRef.id,
+                attending: false,
+                interested: true,
+                userId: uid,
+              },
+            );
+          });
+        } else {
+          const docId = possibleAdventureDoc.docs[0].id;
+          addDoc(
+            pirates_adventures_collection,
+            {
+              adventureId: docId,
+              attending: false,
+              interested: true,
+              userId: uid,
+            },
+          );
+        }
+      });
   };
 
   return (
@@ -268,7 +327,7 @@ function AdventureMapScreen({ navigation, setSearch }) {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="search"
+          placeholder="Enter a city or zipcode"
           value={searchText}
           onChangeText={setSearchText}
           onSubmitEditing={handleSearchSubmit}
@@ -277,7 +336,11 @@ function AdventureMapScreen({ navigation, setSearch }) {
       </View>
       {showSearchPopup && (
         <TouchableOpacity onPress={handleSearchArea} style={styles.button}>
-          <Text style={styles.buttonText}>Search This Area</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="white" />
+          ): (
+            <Text style={styles.buttonText}>Search This Area</Text>
+          )}
         </TouchableOpacity>
       )}
       <Modal
@@ -289,13 +352,13 @@ function AdventureMapScreen({ navigation, setSearch }) {
           setSelectedEvent({});
         }}
       >
-        <View style={styles.container}>
+        <View style={styles.modalContainer}>
           <View style={styles.modal}>
             {modalVisible && (
               <TouchableOpacity onPress={() => {
                 setModalVisible(false);
                 console.log('Pressed from Map', selectedEvent);
-                navigation.navigate('Detail', selectedEvent);
+                navigation.navigate('Detail', { selectedEvent, uid });
               }}
               >
                 <Card
@@ -307,7 +370,7 @@ function AdventureMapScreen({ navigation, setSearch }) {
                     title: selectedEvent.title,
                   }}
                   userEvent={{
-                    interested: false,
+                    interested: selectedEvent.interested || false,
                     attending: false,
                   }}
                   userEventId=""
@@ -316,8 +379,8 @@ function AdventureMapScreen({ navigation, setSearch }) {
                 />
               </TouchableOpacity>
             )}
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text>Close Modal</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Close Modal</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -348,6 +411,7 @@ AdventureMapScreen.propTypes = {
       path: PropTypes.string,
     }),
   }).isRequired,
+  search: PropTypes.string.isRequired,
   setSearch: PropTypes.func.isRequired,
 };
 
