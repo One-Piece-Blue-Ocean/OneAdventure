@@ -42,6 +42,7 @@ function AdventureListScreen({ navigation }) {
   const toggleField = () => {
 
   };
+
   console.log('outisde ue', events);
   return (
     <SafeAreaView style={styles.container}>
@@ -61,7 +62,9 @@ function AdventureListScreen({ navigation }) {
         {events.map((event) => {
           console.log('This Event', event);
           return (
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Detail', event)}
+            >
               <Card
                 event={{
                   address: event.address[0],
@@ -77,6 +80,7 @@ function AdventureListScreen({ navigation }) {
                 userEventId=""
                 loaded
                 toggleField={toggleField}
+                key={event.image + event.date.start_date}
               />
             </TouchableOpacity>
           );
