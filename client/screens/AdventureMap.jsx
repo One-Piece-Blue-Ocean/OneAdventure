@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, Text, View, Modal, TouchableOpacity, TextInput, Button,
+  StyleSheet, Text, View, Modal, TouchableOpacity, TextInput, Button, ActivityIndicator,
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     bottom: 20,
-    left: 20,
-    right: 20,
+    left: 105,
+    right: 105,
     backgroundColor: '#2e86c1',
-    borderRadius: 5,
+    borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function AdventureMapScreen({ navigation, setSearch }) {
+function AdventureMapScreen({ navigation, search, setSearch }) {
   const [selectedEvent, setSelectedEvent] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [markers, setMarkers] = useState([]);
@@ -98,8 +98,10 @@ function AdventureMapScreen({ navigation, setSearch }) {
   const value = useContext(UserContext);
   const { user } = value;
   const { uid, zipcode } = user.user;
+  const [loading, setLoading] = useState(false);
 
   const handleSearchArea = () => {
+    setLoading(true);
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
         latlng: currentLatLng,
@@ -122,6 +124,7 @@ function AdventureMapScreen({ navigation, setSearch }) {
           console.log('handlesearcharea', city, state);
           const address = `${city}, ${state}`;
           setSearch(address);
+          changeRegion(address);
         }
       })
       .catch((err) => {
@@ -130,10 +133,15 @@ function AdventureMapScreen({ navigation, setSearch }) {
       });
   };
 
-  const handleSearchSubmit = () => {
+  useEffect(() => {
+    setLoading(false);
+    setShowSearchPopup(false);
+  }, [markers]);
+
+  const changeRegion = (input) => {
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
-        address: searchText,
+        address: input,
         key: 'AIzaSyC4Up0GjtGbZpA2ZukzgLz0o4HinVx1AW0',
       },
     })
@@ -150,6 +158,10 @@ function AdventureMapScreen({ navigation, setSearch }) {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  const handleSearchSubmit = () => {
+    changeRegion(searchText);
     setSearchText('');
     setSearch(searchText);
   };
@@ -307,7 +319,7 @@ function AdventureMapScreen({ navigation, setSearch }) {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="search"
+          placeholder="Enter a city or zipcode"
           value={searchText}
           onChangeText={setSearchText}
           onSubmitEditing={handleSearchSubmit}
@@ -316,7 +328,11 @@ function AdventureMapScreen({ navigation, setSearch }) {
       </View>
       {showSearchPopup && (
         <TouchableOpacity onPress={handleSearchArea} style={styles.button}>
-          <Text style={styles.buttonText}>Search This Area</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="white" />
+          ): (
+            <Text style={styles.buttonText}>Search This Area</Text>
+          )}
         </TouchableOpacity>
       )}
       <Modal
@@ -387,6 +403,7 @@ AdventureMapScreen.propTypes = {
       path: PropTypes.string,
     }),
   }).isRequired,
+  search: PropTypes.string.isRequired,
   setSearch: PropTypes.func.isRequired,
 };
 
