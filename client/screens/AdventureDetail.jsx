@@ -107,18 +107,20 @@ function AdventureDetail({ navigation, route }) {
         .then((adventureDoc) => {
           // if we have this event in the database, then there must be people listed as attending this event
           if (adventureDoc.docs.length) {
-            const adventureId = adventureDoc.docs[0].id;
+            const adventureId = adventureDoc.docs[0].id.trim();
+            console.log(`\nAdventureId is${adventureDoc.docs[0].id}`, adventureId, adventureDoc.docs[0].id, adventureDoc.docs[0].id.trim())
             // get all people who are attending this event
-            getDocs(query(collection(db, 'adventures_pirates'), where('adventureId', '==', adventureId)))
+            getDocs(query(collection(db, 'pirates_adventures'), where('adventureId', '==', adventureId)))
               .then((piratesAdventuresDocs) => {
                 const allPiratesAttending = piratesAdventuresDocs.docs.map((paDoc) => paDoc.data().userId);
                 // now we can find the intersect of people attending this event and this user's friends
                 const friendsAttendingAdventureIds = friendsIds.filter((id) => allPiratesAttending.includes(id));
+                console.log('\nallPiratesAttending\n', allPiratesAttending, '\nfriendsIds\n', friendsIds)
                 // once we have the user's friends who are also attending this event, get their names, id, imageurls
                 const promiseArr = friendsAttendingAdventureIds.map((idFriendAttending) =>
                   getDoc(doc(db, 'pirates', idFriendAttending)).then((friendDocData) => {
                     const friendData = friendDocData.data();
-                    return {id: friendData.id, name: friendData.fullName, imageUrl: friendData.imageUrl}
+                    return {id: friendData.uid, userName: friendData.fullName, profilePic: friendData.profilePhoto}
                   })
                 )
                 // finally set the friends who are attending this events' information to the friends state
@@ -128,7 +130,7 @@ function AdventureDetail({ navigation, route }) {
         })
       })
   }
-
+  console.log(friends);
   useEffect(() => {
     if (!friends.length) {
       getThisAdventuresFriends()
