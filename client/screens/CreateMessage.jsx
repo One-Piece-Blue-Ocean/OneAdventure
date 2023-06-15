@@ -133,14 +133,12 @@ function CreateMessage({ navigation }) {
   //   // option to add custom fields
   // });
 
-  const userId = user.uid;
-  const getFriends = () => (
-    // console.log('getFriends userid------->', userId);
-    getDocs(collection(db, 'pirates', userId, 'friends'))
+  const getFriends = () => {
+    console.log('user id', user.uid);
+    return getDocs(collection(db, 'pirates', user.uid, 'friends'))
       .then((friendsDocs) => {
         const promiseArr = friendsDocs.docs.map((singleFriendsDoc) => {
           const currentFriend = singleFriendsDoc.data().friendId;
-          // console.log(singleFriendsDoc.data(), 'MY CURRENT FRIEND~~~!!!', currentFriend);
           return getDoc(doc(db, 'pirates', currentFriend))
             .then((friendDoc) => friendDoc.data());
         });
@@ -148,12 +146,8 @@ function CreateMessage({ navigation }) {
           setFriends(friendDocs);
           return friendDocs;
         });
-      })
-  );
-
-  useEffect(() => {
-
-  }, []);
+      });
+  };
 
   return (
     <>

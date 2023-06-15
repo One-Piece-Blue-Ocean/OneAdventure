@@ -7,7 +7,7 @@ import { OverlayProvider, Chat } from 'stream-chat-expo';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import useChatClient from '../hooks/useChatClient';
-import { ChatProvider } from '../chatContext';
+// import { ChatProvider } from '../chatContext';
 
 import MessagesScreen from './Messages';
 import MessageScreen from './Message';
@@ -24,7 +24,7 @@ function MessagingScreen({ navigation }) {
   }
 
   return (
-    <ChatProvider>
+
       <OverlayProvider>
         <Chat client={chatClient}>
           <ChatStack.Navigator initialRouteName="Messages">
@@ -49,7 +49,7 @@ function MessagingScreen({ navigation }) {
           </ChatStack.Navigator>
         </Chat>
       </OverlayProvider>
-    </ChatProvider>
+
   );
 }
 
