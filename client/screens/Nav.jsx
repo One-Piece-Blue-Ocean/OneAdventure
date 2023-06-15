@@ -1,6 +1,5 @@
 /* eslint-disable import/no-named-as-default */
 import React, { useState, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PropTypes from 'prop-types';
 import { FontAwesome, Entypo, FontAwesome5 } from '@expo/vector-icons';
