@@ -10,6 +10,7 @@ import {
 } from '../firebase/utils';
 // import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import hatLogo from '../../assets/Hat.png';
+import LogoText from '../../assets/LogoText.png';
 
 import { app, db } from '../../database/db';
 
@@ -25,12 +26,15 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 100,
     width: 300,
-    height: 100,
-    width: 300,
     alignSelf: 'center',
-    margin: 30,
+    marginTop: 50,
     resizeMode: 'contain',
-    resizeMode: 'contain',
+  },
+  logoText: {
+    height: 80,
+    width: 380,
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   input: {
     height: 48,
@@ -139,7 +143,10 @@ function LoginScreen({ navigation }) {
         <Image
           style={styles.logo}
           source={hatLogo}
-          source={hatLogo}
+        />
+        <Image
+          style={styles.logoText}
+          source={LogoText}
         />
         <TextInput
           style={styles.input}
