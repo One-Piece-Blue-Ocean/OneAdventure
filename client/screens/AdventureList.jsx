@@ -1,4 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState, useContext, useEffect,
+} from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,6 +19,7 @@ import {
 } from '../firebase/utils';
 import { db } from '../../database/db';
 import Card from '../components/card';
+import FadeInView from '../components/FadeInView';
 import { muted } from './Themes';
 
 import { EventContext, UserContext } from '../context';
@@ -175,7 +178,7 @@ function AdventureListScreen({ navigation, setSearch }) {
       </View>
       {
         showSearch && (
-        <View style={styles.searchContainer}>
+        <FadeInView style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
             value={searchText}
@@ -189,7 +192,7 @@ function AdventureListScreen({ navigation, setSearch }) {
               setShowSearch(false);
             }}
           />
-        </View>
+        </FadeInView>
         )
       }
       {loading ? (
