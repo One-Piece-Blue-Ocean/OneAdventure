@@ -8,7 +8,7 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { addDoc, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { EventContext, UserContext } from '../context';
 import Card from '../components/card';
 import { db } from '../../database/db';
@@ -96,9 +96,9 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
   const [currentLatLng, setCurrentLatLng] = useState('');
   const { events } = useContext(EventContext);
   const value = useContext(UserContext);
-  const { user } = value;
+  const { user, setInterestedContext, setPiratesAdventuresContext } = value;
   const { uid, zipcode } = user.user;
-  const interestedEvents = user.interested;
+  const {interested, pirates_adventures} = user;
   const [loading, setLoading] = useState(false);
 
   const handleSearchArea = () => {
@@ -208,9 +208,7 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
         }
       })
       .catch((err) => {
-        console.log('jio');
         console.log(zipcode);
-        console.log('asdfasdf');
         console.log(err);
       });
     setSearch(zipcode);
@@ -218,22 +216,29 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
   }, []);
 
   const handleMarkerPress = (event) => {
-    interestedEvents.map((eventId) => {
-      getDoc(doc(db, 'adventures', eventId))
-      .then((res) => {
-        const data = res.data();
-        if (data.description === event.description && data.date === event.date.start_date) {
-          event.interested = true;
-        }
+    if (interested.length) {
+      interested.map((eventId) => {
+        getDoc(doc(db, 'adventures', eventId))
+        .then((res) => {
+          const data = res.data();
+          if (data.description === event.description && data.date === event.date.start_date) {
+            event.interested = true;
+          }
+        })
+        .then(() => {
+          setSelectedEvent(event);
+        })
       })
-      .then(() => {
-        setSelectedEvent(event);
-      })
-      .then(() => {
-        setModalVisible(true);
-      })
-    })
+    } else {
+      setSelectedEvent(event);
+    }
   };
+
+  useEffect(() => {
+    if (Object.keys(selectedEvent).length) {
+      setModalVisible(true);
+    }
+  }, [selectedEvent])
 
   useEffect(() => {
     const fetchMarkers = async () => {
@@ -270,7 +275,7 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
     fetchMarkers();
   }, [events]);
 
-  const toggleField = () => {
+  const toggleField = (blah, blah2, interestedValue) => {
     // eslint-disable-next-line camelcase
     const pirates_adventures_collection = collection(db, 'pirates_adventures');
     // eslint-disable-next-line camelcase
@@ -297,18 +302,39 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
                 userId: uid,
               },
             );
-          });
+            setPiratesAdventuresContext(docRef.id, true);
+            setInterestedContext(docRef.id, true);
+          })
+          .catch((err) => {
+            console.log('this', err);
+          })
         } else {
           const docId = possibleAdventureDoc.docs[0].id;
-          addDoc(
-            pirates_adventures_collection,
-            {
-              adventureId: docId,
-              attending: false,
-              interested: true,
-              userId: uid,
-            },
-          );
+          if (!pirates_adventures.includes(docId)) {
+            addDoc(
+              pirates_adventures_collection,
+              {
+                adventureId: docId,
+                attending: false,
+                interested: true,
+                userId: uid,
+              },
+            );
+            setPiratesAdventuresContext(docId, true);
+            setInterestedContext(docId, true);
+          } else {
+            getDocs(query(collection(db, 'pirates_adventures'), where("userId", "==", uid), where("adventureId", "==", docId)))
+            .then((snapshot) => {
+              console.log(interestedValue);
+              console.log(snapshot.docs[0].id);
+              updateDoc(doc(db, "pirates_adventures", snapshot.docs[0].id), {interested: !interestedValue[0]});
+              setInterestedContext(docId, !interestedValue[0]);
+            })
+            .catch((err) => {
+              console.log('here');
+              console.log(err);
+            })
+          }
         }
       });
   };
@@ -379,7 +405,10 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
                 />
               </TouchableOpacity>
             )}
-            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => {
+              setSelectedEvent({});
+              setModalVisible(false);
+              }}>
               <Text style={styles.closeButtonText}>Close Modal</Text>
             </TouchableOpacity>
           </View>
