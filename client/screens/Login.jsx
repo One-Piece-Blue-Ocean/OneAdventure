@@ -79,7 +79,11 @@ const styles = StyleSheet.create({
 });
 
 function LoginScreen({ navigation }) {
+<<<<<<< HEAD
   const [email, setEmail] = useState('monkey@luffy.com');
+=======
+  const [email, setEmail] = useState('roro@zoro.com');
+>>>>>>> 6e48cf0 (fixed creating chat bug)
   const [password, setPassword] = useState('hello1');
 
   const createOneButtonAlert = (message) => (
