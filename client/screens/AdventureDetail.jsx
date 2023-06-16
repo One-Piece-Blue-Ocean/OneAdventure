@@ -85,7 +85,7 @@ function AdventureDetail({ navigation, route }) {
   const event = {
     imageUrl: selectedEvent.image ? selectedEvent.image : selectedEvent.imageUrl,
     title: selectedEvent.title,
-    address: selectedEvent.address[0],
+    address: selectedEvent.address,
     description: selectedEvent.description,
     date: selectedEvent.date.start_date,
     link: selectedEvent.link,
