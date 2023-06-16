@@ -73,11 +73,9 @@ function Nav({ route }) {
       setUser({ ...user });
     }
   };
+
   const contextObj = useMemo(() => ({
-    user,
-    updateUserContext,
-    setInterestedContext,
-    setPiratesAdventuresContext,
+    user, updateUserContext, setInterestedContext, setPiratesAdventuresContext,
   }), [user]);
 
   return (

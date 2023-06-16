@@ -101,9 +101,6 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
   const {interested, pirates_adventures} = user;
   const [loading, setLoading] = useState(false);
 
-  // console.log(pirates_adventures, interested);
-  //console.log(setInterestedContext, setPiratesAdventuresContext);
-
   const handleSearchArea = () => {
     setLoading(true);
     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
@@ -211,9 +208,7 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
         }
       })
       .catch((err) => {
-        console.log('jio');
         console.log(zipcode);
-        console.log('asdfasdf');
         console.log(err);
       });
     setSearch(zipcode);
