@@ -62,6 +62,8 @@ function AdventureListScreen({ navigation, setSearch }) {
   const { user } = value;
   const { uid } = user.user;
   const [searchText, setSearchText] = useState('');
+  // let adventureId;
+
   const handleStarPress = (event) => {
     // eslint-disable-next-line camelcase
     const pirates_adventures_collection = collection(db, 'pirates_adventures');
@@ -103,6 +105,8 @@ function AdventureListScreen({ navigation, setSearch }) {
               userId: uid,
             },
           );
+          // setInterestedContext(docId, false);
+          // console.log('after update: ', user);
         }
       })
       .catch((error) => {
@@ -118,7 +122,6 @@ function AdventureListScreen({ navigation, setSearch }) {
     setSearchText('');
     setSearch(searchText);
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -145,8 +148,9 @@ function AdventureListScreen({ navigation, setSearch }) {
       <ScrollView style={styles.scrollContainer}>
         {events.map((event) => (
           <TouchableOpacity
+            key={event.image + event.date.when}
             style={styles.cardContainer}
-            onPress={() => navigation.navigate('Detail', event)}
+            onPress={() => navigation.navigate('Detail', { selectedEvent: event, uid })}
           >
             <Card
               event={{
@@ -164,7 +168,6 @@ function AdventureListScreen({ navigation, setSearch }) {
               loaded
               toggleField={toggleField}
               onStarPress={handleStarPress}
-              key={event.image + event.date.when}
             />
           </TouchableOpacity>
         ))}

@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
 function AdventureDetail({ navigation, route }) {
   const { selectedEvent, uid: userId} = route.params;
   const [friends, setFriends] = useState([]);
-
   const event = {
     imageUrl: selectedEvent.image,
     title: selectedEvent.title,
