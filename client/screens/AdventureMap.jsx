@@ -98,8 +98,11 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
   const value = useContext(UserContext);
   const { user, setInterestedContext, setPiratesAdventuresContext } = value;
   const { uid, zipcode } = user.user;
-  const {interested, pirates_adventures} = user;
+  const { interested, pirates_adventures } = user;
   const [loading, setLoading] = useState(false);
+
+  console.log(user);
+  console.log('why', pirates_adventures);
 
   const handleSearchArea = () => {
     setLoading(true);
@@ -216,6 +219,10 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
   }, []);
 
   const handleMarkerPress = (event) => {
+    if (interested === undefined) {
+      setSelectedEvent(event);
+      return;
+    }
     if (interested.length) {
       interested.map((eventId) => {
         getDoc(doc(db, 'adventures', eventId))
@@ -223,6 +230,8 @@ function AdventureMapScreen({ navigation, search, setSearch }) {
           const data = res.data();
           if (data.description === event.description && data.date === event.date.start_date) {
             event.interested = true;
+          } else {
+            event.interested = false;
           }
         })
         .then(() => {
