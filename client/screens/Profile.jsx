@@ -245,7 +245,7 @@ function ProfileScreen({ navigation }) {
   const pirateCollection = collection(db, 'pirates');
   const value = useContext(UserContext);
   const { user, updateUserContext } = value;
-  console.log('---->', value, '\n\nscreen rerender ^^^');
+  // console.log('---->', value, '\n\nscreen rerender ^^^');
 
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
@@ -385,7 +385,7 @@ function ProfileScreen({ navigation }) {
       // An error happened.
       console.log('sign out err', error.message);
     });
-    console.log('sign out');
+    // console.log('sign out');
   };
 
   useEffect(() => {
