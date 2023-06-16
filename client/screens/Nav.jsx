@@ -26,8 +26,17 @@ function Nav({ route }) {
       setUser({ ...user });
     }
   };
-
-  const contextObj = useMemo(() => ({ user, updateUserContext }), [user]);
+  const setInterestedContext = (documentId, isInterested) => {
+    if (isInterested) {
+      user.interested.push(documentId);
+      setUser({ ...user });
+    } else {
+      const update = user.interested.filter((id) => id !== documentId);
+      user.interested = update;
+      setUser({ ...user });
+    }
+  };
+  const contextObj = useMemo(() => ({ user, updateUserContext, setInterestedContext }), [user]);
 
   return (
     <UserContext.Provider value={contextObj}>
