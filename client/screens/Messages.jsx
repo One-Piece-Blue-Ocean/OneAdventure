@@ -36,8 +36,9 @@ function MessagesScreen(props) {
         sort={sort}
         onSelect={(channel) => {
           const { navigation } = props;
+          // console.log('At messages, setting channel to', channel.cid);
           setChannel(channel);
-          navigation.navigate('Message', { chatName: channel.data.name });
+          navigation.navigate('Message');
         }}
       />
       <IconButton

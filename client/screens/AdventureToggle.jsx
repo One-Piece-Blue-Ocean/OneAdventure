@@ -10,7 +10,7 @@ const keys = ['d7730fb56dd377a7f809600c8bb2ea1622d13b7ce05c86a10620a95af633c739'
 function AdventureToggleScreen() {
   const value = useContext(UserContext);
   const { user } = value;
-  const { zipcode } = user;
+  const { zipcode } = user.user;
   const [events, setEvents] = useState([]);
 
   const [search, setSearch] = useState('');
@@ -58,9 +58,16 @@ function AdventureToggleScreen() {
       <AdventureStack.Navigator>
         <AdventureStack.Screen
           name="AdventureList"
-          component={AdventureListScreen}
           options={{ headerShown: false }}
-        />
+        >
+          {(props) => (
+            <AdventureListScreen
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...props}
+              setSearch={setSearch}
+            />
+          )}
+        </AdventureStack.Screen>
         <AdventureStack.Screen
           name="AdventureMap"
           options={{ headerShown: false }}
@@ -69,6 +76,7 @@ function AdventureToggleScreen() {
             <AdventureMapScreen
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...props}
+              search={search}
               setSearch={setSearch}
             />
           )}

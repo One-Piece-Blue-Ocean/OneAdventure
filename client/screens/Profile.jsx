@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default-member */
+/* eslint-disable import/no-named-as-default */
 import React, { useState, useEffect, useContext } from 'react';
 import {
   Text,
@@ -26,12 +28,13 @@ import {
   uploadBytes,
   getDownloadURL,
 } from 'firebase/storage';
-// import { v4 } from 'uuid';
+import { getAuth, signOut } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
 import { db } from '../../database/db';
 import { UserContext } from '../context';
 import FriendCard from '../components/FriendCard';
 import FriendSearchModal from '../components/FriendSearchModal';
+import { muted } from './Themes';
 
 const styles = StyleSheet.create({
   button: {
@@ -51,7 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   details: {
-    backgroundColor: 'gray',
+    backgroundColor: muted.blue,
     width: '100%',
     height: 200,
     alignItems: 'center',
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   editDropDown: {
-    backgroundColor: 'gray',
+    backgroundColor: muted.blue,
     borderRadius: 8,
   },
   editDropDownWrap: {
@@ -76,17 +79,12 @@ const styles = StyleSheet.create({
     width: 200,
     alignItems: 'center',
   },
-  editPhoto: {
-    position: 'absolute',
-    right: 10,
-    bottom: 10,
-  },
   friendsHeaderContainer: {
     width: '100%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'lightgray',
     flexDirection: 'row',
     position: 'relative',
   },
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
   friendsListContainer: {
     width: '100%',
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: muted.blue,
     alignItems: 'center',
     marginTop: StatusBar.currentHeight || 0,
   },
@@ -109,32 +107,35 @@ const styles = StyleSheet.create({
   },
   modalBtnContainer: {
     flexDirection: 'row',
+    margin: 10,
   },
   modalButton: {
     borderRadius: 5,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'lightgray',
+    backgroundColor: muted.red,
     margin: 20,
-    marginBottom: 0,
+
   },
   modalContainer: {
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 40,
+    paddingHorizontal: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   modalTextWrap: {
     padding: 8,
-    marginBottom: 10,
+    margin: 20,
     borderRadius: 5,
     alignItems: 'center',
+    backgroundColor: 'lightgray',
   },
   profileHeader: {
     flexDirection: 'row',
     backgroundColor: 'white',
+    position: 'relative',
   },
   profileImageContainer: {
     borderRadius: 50,
@@ -142,6 +143,17 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     backgroundColor: 'white',
     position: 'relative',
+  },
+  uploadPhotoBtn: {
+    position: 'absolute',
+    bottom: 5,
+    left: 4,
+    backgroundColor: 'lightgray',
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
   },
   userNameContainer: {
     flex: 3,
@@ -200,19 +212,21 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  signOutBtn: {
+    backgroundColor: muted.red,
+    padding: 5,
+    borderRadius: 5,
+    position: 'absolute',
+    right: 5,
+    top: 5,
+  },
+  signOutText: {
+    fontWeight: 'bold',
+    color: 'white',
+  },
 });
 
-// const tempUser = {
-//   uid: '58694a0f-3da1-471f-bd96-145571e29zzz',
-//   fullName: 'Buckey',
-//   email: 'buckey@mail.com',
-//   profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-//   zipcode: 98765,
-//   radius: 50,
-//   category: 'Hiking',
-// };
-
-function ProfileScreen() {
+function ProfileScreen({ navigation }) {
   const [friendData, setFriendData] = useState([]);
   const [friendSearchModal, setFriendSearchModal] = useState(false);
   const [userId, setUserId] = useState('');
@@ -230,14 +244,15 @@ function ProfileScreen() {
 
   const pirateCollection = collection(db, 'pirates');
   const value = useContext(UserContext);
-  const { user } = value;
-  // console.log('---->', value);
+  const { user, updateUserContext } = value;
+  console.log('---->', value, '\n\nscreen rerender ^^^');
 
   const types = ['Sailing', 'Hiking', 'Biking', 'Climbing', 'Surfing', 'Kayaking', 'Rafting', 'Skiing', 'Camping'];
   const radius = [10, 25, 50, 100, 200];
 
+  // eslint-disable-next-line arrow-body-style
   const getFriends = () => {
-    console.log('user id', userId);
+    // console.log('user id', userId);
     return getDocs(collection(db, 'pirates', userId, 'friends'))
       .then((friendsDocs) => {
         const promiseArr = friendsDocs.docs.map((singleFriendsDoc) => {
@@ -262,25 +277,14 @@ function ProfileScreen() {
       setSearchRadius(user.user.radius || 10);
       setTypePreference(user.user.category || 'Sailing');
     }
-    setUploadPhoto(false);
   };
 
   const updateProfile = (update) => {
-    if (editMode === 1) {
-      const updatedEmail = input.email;
-      updateDoc(doc(pirateCollection, userId), { email: updatedEmail })
-        .then(() => {
-          setEmail(updatedEmail);
-        })
-        .catch((err) => {
-          // eslint-disable-next-line no-console
-          console.log('profile update err', err.message);
-        });
-      setInput({ email: '', zip: '' });
-    } else if (editMode === 2) {
+    if (editMode === 2) {
       updateDoc(doc(pirateCollection, userId), { category: update })
         .then(() => {
-          setTypePreference(update);
+          updateUserContext('category', update);
+          // setTypePreference(update);
         })
         .catch((err) => {
           // eslint-disable-next-line no-console
@@ -290,7 +294,8 @@ function ProfileScreen() {
       const updatedLocation = input.zip;
       updateDoc(doc(pirateCollection, userId), { zipcode: updatedLocation })
         .then(() => {
-          setLocation(updatedLocation);
+          updateUserContext('zipcode', updatedLocation);
+          // setLocation(updatedLocation);
         })
         .catch((err) => {
           // eslint-disable-next-line no-console
@@ -298,17 +303,17 @@ function ProfileScreen() {
         });
       setInput({ email: '', zip: '' });
     } else if (editMode === 4) {
-      const newRadius = update.zip;
+      const newRadius = update;
       updateDoc(doc(pirateCollection, userId), { radius: newRadius })
         .then(() => {
-          setSearchRadius(newRadius);
+          updateUserContext('radius', newRadius);
+          // setSearchRadius(newRadius);
         })
         .catch((err) => {
           // eslint-disable-next-line no-console
           console.log('profile update err', err.message);
         });
     }
-    // call function to update userContext
   };
 
   const pickImage = async () => {
@@ -317,7 +322,7 @@ function ProfileScreen() {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.2,
     });
 
     // console.log(result);
@@ -328,8 +333,6 @@ function ProfileScreen() {
   };
 
   const saveNewPhotoToDb = () => {
-    // save photo to db
-    // setUploadPhoto(false);
     const imageFileName = `${userId}-${Math.random() * 10000000000}`;
     const fileRef = ref(getStorage(), `profilePhotos/${imageFileName}`);
     // eslint-disable-next-line
@@ -361,9 +364,9 @@ function ProfileScreen() {
               .then((url) => {
                 updateDoc(doc(pirateCollection, userId), { profilePhoto: url })
                   .then(() => {
-                    // setProfilePic(url);
-                    user.user.profilePhoto = url;
-                    infoSet();
+                    updateUserContext('profilePhoto', url);
+                    // user.user.profilePhoto = url;
+                    // infoSet();
                   })
                   .catch((err) => {
                     // eslint-disable-next-line no-console
@@ -374,17 +377,32 @@ function ProfileScreen() {
       });
   };
 
+  const signOutNow = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigation.navigate('Login');
+    }).catch((error) => {
+      // An error happened.
+      console.log('sign out err', error.message);
+    });
+    console.log('sign out');
+  };
+
   useEffect(() => {
     // set user info
     infoSet();
     if (userId) {
-      getFriends();
+      if (friendData.length === 0) {
+        // console.log('\n\n---->a', friendData, 'and this is value\n\n', value);
+        // console.log('grabbing friends');
+        getFriends();
+      }
     }
   }, [userId]);
 
   useEffect(() => {
-
-  }, []);
+    infoSet();
+  }, [user.user.category, user.user.zipcode, user.user.radius, user.user.profilePhoto]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -398,12 +416,13 @@ function ProfileScreen() {
             }}
             testID="profile.pic"
           />
+        </View>
+        <View style={styles.uploadPhotoBtn}>
           <AntDesign
-            testID="profile.editEmail"
+            testID="profile.editPhoto"
             name="edit"
             size={28}
             color="black"
-            style={styles.editPhoto}
             onPress={() => {
               // open edit photo modal
               setUploadPhoto(true);
@@ -412,6 +431,12 @@ function ProfileScreen() {
         </View>
         <View style={styles.userNameContainer}>
           <Text style={styles.userNameText} testID="profile.userName">{userName}</Text>
+          <TouchableOpacity
+            style={styles.signOutBtn}
+            onPress={signOutNow}
+          >
+            <Text style={styles.signOutText}>Sign Out</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -432,13 +457,19 @@ function ProfileScreen() {
               </TouchableOpacity>
             </View>
 
-            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 200, height: 200, margin: 5 }}
+              />
+            )}
 
             <View style={styles.modalBtnContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.shadow]}
                 onPress={() => {
                   saveNewPhotoToDb();
+                  setUploadPhoto(false);
                 }}
               >
                 <Text>Upload</Text>
@@ -447,12 +478,11 @@ function ProfileScreen() {
                 style={[styles.modalButton, styles.shadow]}
                 onPress={() => setUploadPhoto(false)}
               >
-                <Text>Done</Text>
+                <Text>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-
       </Modal>
 
       <View style={styles.details}>
@@ -461,18 +491,6 @@ function ProfileScreen() {
             <Text style={styles.text}>Email:</Text>
             <Text style={styles.text}>{email}</Text>
           </View>
-          {/* <View style={styles.optionEdit}>
-            <AntDesign
-              testID="profile.editEmail"
-              name="edit"
-              size={20}
-              color="black"
-              onPress={() => {
-                setEditMode(1);
-                setModalVisible(true);
-              }}
-            />
-          </View> */}
         </View>
 
         <View style={styles.textWrap}>
@@ -540,24 +558,6 @@ function ProfileScreen() {
       >
         <View style={styles.centerModal}>
           <View style={[styles.modalContainer, styles.shadow]}>
-            {
-              editMode === 1
-                ? (
-                  <View>
-                    <View style={styles.modalTextWrap}>
-                      <Text>Update Email</Text>
-                    </View>
-                    <TextInput
-                      placeholder="email"
-                      value={input.email}
-                      style={styles.input}
-                      onChangeText={(text) => {
-                        setInput({ email: text, zip: 0 });
-                      }}
-                    />
-                  </View>
-                ) : null
-            }
             {
               editMode === 2
                 ? (
@@ -655,6 +655,7 @@ function ProfileScreen() {
         setFriendSearchModal={setFriendSearchModal}
         userId={userId}
         getFriends={getFriends}
+        friendData={friendData}
       />
 
       <View style={styles.friendsHeaderContainer}>

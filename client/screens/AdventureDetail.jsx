@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: 'bold',
-    padding: 10,
   },
   location: {
     fontSize: 12,
@@ -80,8 +79,6 @@ const styles = StyleSheet.create({
 function AdventureDetail({ navigation, route }) {
   const { selectedEvent, uid: userId } = route.params;
   const [friends, setFriends] = useState([]);
-
-  // console.log('Whats in here?', selectedEvent, route.params);
   const event = {
     imageUrl: selectedEvent.image ? selectedEvent.image : selectedEvent.imageUrl,
     title: selectedEvent.title,

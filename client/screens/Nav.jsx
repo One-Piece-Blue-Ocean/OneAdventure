@@ -9,6 +9,7 @@ import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
 import { UserContext } from '../context';
 import MessagingScreen from './Messaging';
+import { muted } from './Themes';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,17 +44,24 @@ const profileIcon = ({ focused }) => (
 
 function Nav({ route }) {
   const [user, setUser] = useState(route.params);
-
-  // console.log(user);
-
   const updateUserContext = (key, value) => {
-    user.user[key] = value;
-    setUser({ ...user });
+    if (user.user[key]) {
+      user.user[key] = value;
+      setUser({ ...user });
+    }
   };
+  const setInterestedContext = (documentId, isInterested) => {
+    if (isInterested) {
+      user.interested.push(documentId);
+      setUser({ ...user });
+    } else {
+      const update = user.interested.filter((id) => id !== documentId);
+      user.interested = update;
+      setUser({ ...user });
+    }
+  };
+  const contextObj = useMemo(() => ({ user, updateUserContext, setInterestedContext }), [user]);
 
-  const contextObj = useMemo(() => ({ user, updateUserContext }), [user]);
-  // console.log(contextObj);
-  console.log('IN NAV: Which route?', route);
   return (
     <UserContext.Provider value={contextObj}>
       <Tab.Navigator
@@ -64,6 +72,7 @@ function Nav({ route }) {
             backgroundColor: route.name === 'Adventures'
               || route.name === 'AdventureTracking' ? '#00A5E0' : '#FF2F00',
           },
+          paddingTop: 12,
         })}
       >
         <Tab.Screen

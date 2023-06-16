@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import {
   StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Alert,
@@ -6,10 +5,10 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import PropTypes from 'prop-types';
 import {
-  doc, getDoc, getAuth, signInWithEmailAndPassword,
+  doc, getDoc, query, where, collection, getDocs, getAuth, signInWithEmailAndPassword,
 } from '../firebase/utils';
-// import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import hatLogo from '../../assets/Hat.png';
+import LogoText from '../../assets/LogoText.png';
 
 import { app, db } from '../../database/db';
 
@@ -25,12 +24,15 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 100,
     width: 300,
-    height: 100,
-    width: 300,
     alignSelf: 'center',
-    margin: 30,
+    marginTop: 50,
     resizeMode: 'contain',
-    resizeMode: 'contain',
+  },
+  logoText: {
+    height: 80,
+    width: 380,
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   input: {
     height: 48,
@@ -99,15 +101,41 @@ function LoginScreen({ navigation }) {
 
   const onLoginPress = () => {
     const auth = getAuth(app);
+    let userInfo;
+    const piratesAdventures = [];
+    const interestedAdventures = [];
+    let uid;
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential)
         const { user } = userCredential;
-        const docRef = doc(db, 'pirates', user.uid);
+        uid = user.uid;
+        const docRef = doc(db, 'pirates', uid);
         return getDoc(docRef);
       })
       .then((docSnap) => {
-        navigation.navigate('Nav', { user: docSnap.data() });
+        userInfo = docSnap.data();
+      })
+      .then(() => {
+        // pa = pirates_adventures collection
+        const paRef = query(collection(db, 'pirates_adventures'), where('userId', '==', uid));
+        return getDocs(paRef);
+      })
+      .then((querySnapshot) => {
+        querySnapshot.docs.forEach((document) => {
+          const adventure = document.data();
+          piratesAdventures.push(adventure.adventureId);
+        });
+      })
+      .then(() => {
+        const interestedRef = query(collection(db, 'pirates_adventures'), where('userId', '==', uid), where('interested', '==', true));
+        return getDocs(interestedRef);
+      })
+      .then((querySnapshot) => {
+        querySnapshot.forEach((document) => {
+          const interestedAdventure = document.data();
+          interestedAdventures.push(interestedAdventure.adventureId);
+        });
+        navigation.navigate('Nav', { user: userInfo, pirates_adventures: piratesAdventures, interested: interestedAdventures });
       })
       .catch((error) => {
         createOneButtonAlert('Invalid login credentials');
@@ -124,7 +152,10 @@ function LoginScreen({ navigation }) {
         <Image
           style={styles.logo}
           source={hatLogo}
-          source={hatLogo}
+        />
+        <Image
+          style={styles.logoText}
+          source={LogoText}
         />
         <TextInput
           style={styles.input}
