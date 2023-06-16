@@ -71,8 +71,11 @@ function Nav({ route }) {
           tabBarStyle: {
             backgroundColor: route.name === 'Adventures'
               || route.name === 'AdventureTracking' ? '#00A5E0' : '#FF2F00',
+            paddingTop: 12,
           },
-          paddingTop: 12,
+          tabBarLabelStyle: {
+            display: 'none',
+          },
         })}
       >
         <Tab.Screen
