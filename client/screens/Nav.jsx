@@ -9,6 +9,7 @@ import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
 import { UserContext } from '../context';
 import MessagingScreen from './Messaging';
+import { muted } from './Themes';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,14 @@ function Nav({ route }) {
 
   return (
     <UserContext.Provider value={contextObj}>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={() => ({
+          tabBarStyle: {
+            backgroundColor: muted.red,
+            paddingTop: 12,
+          },
+        })}
+      >
         <Tab.Screen
           name="Adventures"
           component={AdventureToggle}
