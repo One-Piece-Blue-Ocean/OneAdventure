@@ -91,7 +91,6 @@ function AdventureListScreen({ navigation, setSearch }) {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
-  // let adventureId;
 
   const handleStarPress = (event) => {
     // eslint-disable-next-line camelcase

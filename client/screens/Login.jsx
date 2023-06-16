@@ -9,6 +9,7 @@ import {
 } from '../firebase/utils';
 import hatLogo from '../../assets/Hat.png';
 import LogoText from '../../assets/LogoText.png';
+import { muted } from './Themes';
 
 import { app, db } from '../../database/db';
 
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 5,
     overflow: 'hidden',
-    backgroundColor: 'white',
+    backgroundColor: muted.white,
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 30,
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   button: {
-    backgroundColor: '#1c8fd2',
+    backgroundColor: muted.blue,
     marginLeft: 30,
     marginRight: 30,
     marginTop: 20,
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonTitle: {
-    color: 'white',
+    color: muted.white,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -67,10 +68,10 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 16,
-    color: '#2e2e2d',
+    color: muted.black,
   },
   footerLink: {
-    color: '#1c8fd2',
+    color: muted.blue,
     fontWeight: 'bold',
     fontSize: 16,
     marginTop: 10,
