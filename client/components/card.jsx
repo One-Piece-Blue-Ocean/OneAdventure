@@ -21,7 +21,12 @@ function Card({
   onStarPress,
 }) {
   return (
-    <Box alignItems="center">
+    <Box
+      alignItems="center"
+      backgroundColor={muted.white}
+      rounded="lg"
+      shadow="5"
+    >
       <Box
         maxW="80"
         width="80"

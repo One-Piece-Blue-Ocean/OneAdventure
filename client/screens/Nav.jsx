@@ -9,13 +9,38 @@ import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
 import { UserContext } from '../context';
 import MessagingScreen from './Messaging';
+// import { muted } from './Themes';
 
 const Tab = createBottomTabNavigator();
 
-const adventureIcon = () => <FontAwesome name="list" size={24} color="black" />;
-const messageIcon = () => <Entypo name="message" size={24} color="black" />;
-const trackerIcon = () => <FontAwesome5 name="walking" size={24} color="black" />;
-const profileIcon = () => <FontAwesome name="user" size={24} color="black" />;
+const adventureIcon = ({ focused }) => (
+  <FontAwesome
+    name="list"
+    size={32}
+    color={focused ? 'white' : 'black'}
+  />
+);
+const messageIcon = ({ focused }) => (
+  <Entypo
+    name="message"
+    size={32}
+    color={focused ? 'white' : 'black'}
+  />
+);
+const trackerIcon = ({ focused }) => (
+  <FontAwesome5
+    name="walking"
+    size={32}
+    color={focused ? 'white' : 'black'}
+  />
+);
+const profileIcon = ({ focused }) => (
+  <FontAwesome
+    name="user"
+    size={32}
+    color={focused ? 'white' : 'black'}
+  />
+);
 
 function Nav({ route }) {
   const [user, setUser] = useState(route.params);
@@ -57,14 +82,27 @@ function Nav({ route }) {
 
   return (
     <UserContext.Provider value={contextObj}>
-      <Tab.Navigator>
+      <Tab.Navigator
+        // eslint-disable-next-line no-shadow
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: route.name === 'Adventures'
+              || route.name === 'AdventureTracking' ? '#00A5E0' : '#FF2F00',
+            paddingTop: 12,
+          },
+          tabBarLabelStyle: {
+            display: 'none',
+          },
+        })}
+      >
         <Tab.Screen
           name="Adventures"
           component={AdventureToggle}
           options={{
             tabBarLabel: '',
             tabBarIcon: adventureIcon,
-            headerShown: false,
+            // headerShown: false,
           }}
         />
         <Tab.Screen
@@ -73,7 +111,7 @@ function Nav({ route }) {
           options={{
             tabBarLabel: '',
             tabBarIcon: messageIcon,
-            headerShown: false,
+            // headerShown: false,
           }}
         />
         <Tab.Screen
@@ -82,7 +120,7 @@ function Nav({ route }) {
           options={{
             tabBarLabel: '',
             tabBarIcon: trackerIcon,
-            headerShown: false,
+            // headerShown: false,
           }}
         />
         <Tab.Screen
@@ -91,7 +129,7 @@ function Nav({ route }) {
           options={{
             tabBarLabel: '',
             tabBarIcon: profileIcon,
-            headerShown: false,
+            // headerShown: false,
           }}
         />
       </Tab.Navigator>
