@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+import { Heading } from 'native-base';
 import {
   collection,
   doc,
@@ -20,6 +21,7 @@ import PropTypes from 'prop-types';
 import { db } from '../../database/db';
 import { UserContext } from '../context';
 import Card from '../components/card';
+import { muted } from './Themes';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +29,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: muted.blue,
   },
+  text: {
+    color: muted.white,
+    alignSelf: 'center',
+  },
+  subText: {
+    color: muted.white,
+    alignSelf: 'center',
+  },
+  card: {
+    margin: 10,
+  }
 });
 
 function AdventureTrackingScreen({ navigation }) {
@@ -102,25 +116,28 @@ function AdventureTrackingScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text> AdventureTracking </Text>
-        <Text> Upcoming Adventures </Text>
+        <Heading size="xl"  style={styles.text}> Your Adventures </Heading>
+        <Heading size="lg" style={styles.subText} > Upcoming Adventures </Heading>
         {adventuresList.length
           ? adventuresList.map((adventure, idx) => (
             <>
               {idx === pastIndex
-                ? (<Text>Past Adventures</Text>)
+                ? (<Heading size="lg" style={styles.subText}>Past Adventures</Heading>)
                 : null}
-              <TouchableOpacity onPress={() => {
-                console.log('Pressed from Tracking', Object.values(adventure)[0].adventureInfo);
-                navigation.navigate('Detail', {selectedEvent: {
-                  image: Object.values(adventure)[0].adventureInfo.imageUrl,
-                  title: Object.values(adventure)[0].adventureInfo.title,
-                  address: Object.values(adventure)[0].adventureInfo.address,
-                  description: Object.values(adventure)[0].adventureInfo.description,
-                  date: {start_date: Object.values(adventure)[0].adventureInfo.date},
-                  link: Object.values(adventure)[0].adventureInfo.link,
-                }, uid: userId});
-              }}
+              <TouchableOpacity
+                style={styles.card}
+                rounded="lg"
+                onPress={() => {
+                  console.log('Pressed from Tracking', Object.values(adventure)[0].adventureInfo);
+                  navigation.navigate('Detail', {selectedEvent: {
+                    image: Object.values(adventure)[0].adventureInfo.imageUrl,
+                    title: Object.values(adventure)[0].adventureInfo.title,
+                    address: Object.values(adventure)[0].adventureInfo.address,
+                    description: Object.values(adventure)[0].adventureInfo.description,
+                    date: {start_date: Object.values(adventure)[0].adventureInfo.date},
+                    link: Object.values(adventure)[0].adventureInfo.link,
+                  }, uid: userId});
+                }}
               >
                 <Card
                   event={Object.values(adventure)[0].adventureInfo}
@@ -128,6 +145,7 @@ function AdventureTrackingScreen({ navigation }) {
                   userEventId={Object.keys(adventure)[0]}
                   loaded
                   toggleField={toggleField}
+                  style={styles.card}
                 />
               </TouchableOpacity>
             </>

@@ -14,18 +14,16 @@ import { EventContext, UserContext } from '../context';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
   },
   logo: {
     flex: 1,
     position: 'absolute',
     top: 5,
     right: 20,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start',
   },
   scrollContainer: {
-    flex: 1,
+    width: '100%',
     marginTop: 75,
   },
   title: {
@@ -53,6 +51,8 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginBottom: 20,
+    width: '82%',
+    alignSelf: 'center',
   },
 });
 
