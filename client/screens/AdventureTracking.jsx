@@ -48,10 +48,12 @@ function AdventureTrackingScreen({ navigation }) {
   const [adventuresList, setAdventuresList] = useState([]);
   const [pastIndex, setPastIndex] = useState(adventuresList.length);
   const value = useContext(UserContext);
-  const { user } = value.user;
+  const { user, interested } = value.user;
   const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
   const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
+
+  console.log(interested);
 
   const getAdventures = () => {
     let currentUserAdventure;
@@ -102,6 +104,10 @@ function AdventureTrackingScreen({ navigation }) {
           });
       });
   };
+
+  useEffect(() => {
+    getAdventures();
+  }, [interested]);
 
 
   useEffect(() => {
