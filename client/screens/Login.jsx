@@ -121,7 +121,7 @@ function LoginScreen({ navigation }) {
         return getDocs(paRef);
       })
       .then((querySnapshot) => {
-        querySnapshot.docs.forEach((document) => {
+        querySnapshot.forEach((document) => {
           const adventure = document.data();
           piratesAdventures.push(adventure.adventureId);
         });

@@ -185,6 +185,7 @@ function SignUpScreen({ navigation }) {
           placeholderTextColor="#aaaaaa"
           onChangeText={(text) => setZipcode(text)}
           value={zipcode}
+          keyboardType="numeric"
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         />
