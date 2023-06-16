@@ -9,7 +9,7 @@ import AdventureTrackingScreen from './AdventureTracking';
 import ProfileScreen from './Profile';
 import { UserContext } from '../context';
 import MessagingScreen from './Messaging';
-import { muted } from './Themes';
+// import { muted } from './Themes';
 
 const Tab = createBottomTabNavigator();
 
