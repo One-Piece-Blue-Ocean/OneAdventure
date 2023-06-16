@@ -23,7 +23,6 @@ import { db } from '../../database/db';
 import { useChatContext } from '../chatContext';
 import createChat from '../utilities/createChat';
 import useChatClient from '../hooks/useChatClient';
-// import myTheme from '../screens/Themes';
 import { muted } from '../screens/Themes';
 
 const styles = StyleSheet.create({
@@ -139,12 +138,9 @@ function FriendCard({
   const { profilePhoto, fullName, uid } = friend;
   const navigation = useNavigation();
   const { setChannel } = useChatContext();
-  // const { user } = useContext(UserContext).user;
   const clientIsReady = useChatClient();
 
   const onMessage = () => {
-    console.log('onMessage is being called');
-
     if (clientIsReady) {
       createChat([friend], setChannel, navigation, userId);
     }
@@ -156,11 +152,9 @@ function FriendCard({
     const trimmedUserId = userId.trim();
     getDocs(query(collection(db, 'pirates', trimmedUserId, 'friends'), where('friendId', '==', trimmedFriendId)))
       .then((friendDocs) => {
-        // console.log('-->>', friendDocs, friendDocs.docs, friendDocs.docs[0], friendDocs.docs[0]);
         deleteDoc(doc(db, 'pirates', trimmedUserId, 'friends', friendDocs.docs[0].id))
           .then(() => {
             getFriends();
-            // console.log('sucess');
           })
           .catch(() => {});
       });

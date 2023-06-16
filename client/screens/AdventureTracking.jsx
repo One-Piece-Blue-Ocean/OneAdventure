@@ -48,10 +48,12 @@ function AdventureTrackingScreen({ navigation }) {
   const [adventuresList, setAdventuresList] = useState([]);
   const [pastIndex, setPastIndex] = useState(adventuresList.length);
   const value = useContext(UserContext);
-  const { user } = value.user;
+  const { user, interested } = value.user;
   const userId = user.uid || '8eSNW7SqbpVpe1NzD9XR3f4yclg1';
   const userAdventuresRef = collection(db, 'pirates_adventures');
   const adventureRef = collection(db, 'adventures');
+
+  console.log(interested);
 
   const getAdventures = () => {
     let currentUserAdventure;
@@ -103,6 +105,10 @@ function AdventureTrackingScreen({ navigation }) {
       });
   };
 
+  useEffect(() => {
+    getAdventures();
+  }, [interested]);
+
 
   useEffect(() => {
     if (!adventuresList.length) {
@@ -116,7 +122,7 @@ function AdventureTrackingScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Heading size="xl"  style={styles.text}> Your Adventures </Heading>
+        <Heading size="xl" style={styles.text}> Your Adventures </Heading>
         <Heading size="lg" style={styles.subText} > Upcoming Adventures </Heading>
         {adventuresList.length
           ? adventuresList.map((adventure, idx) => (
@@ -129,14 +135,16 @@ function AdventureTrackingScreen({ navigation }) {
                 rounded="lg"
                 onPress={() => {
                   console.log('Pressed from Tracking', Object.values(adventure)[0].adventureInfo);
-                  navigation.navigate('Detail', {selectedEvent: {
-                    image: Object.values(adventure)[0].adventureInfo.imageUrl,
-                    title: Object.values(adventure)[0].adventureInfo.title,
-                    address: Object.values(adventure)[0].adventureInfo.address,
-                    description: Object.values(adventure)[0].adventureInfo.description,
-                    date: {start_date: Object.values(adventure)[0].adventureInfo.date},
-                    link: Object.values(adventure)[0].adventureInfo.link,
-                  }, uid: userId});
+                  navigation.navigate('Detail', {
+                    selectedEvent: {
+                      image: Object.values(adventure)[0].adventureInfo.imageUrl,
+                      title: Object.values(adventure)[0].adventureInfo.title,
+                      address: Object.values(adventure)[0].adventureInfo.address,
+                      description: Object.values(adventure)[0].adventureInfo.description,
+                      date: { start_date: Object.values(adventure)[0].adventureInfo.date },
+                      link: Object.values(adventure)[0].adventureInfo.link,
+                    }, uid: userId
+                  });
                 }}
               >
                 <Card
