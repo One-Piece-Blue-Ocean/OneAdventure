@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: muted.blue,
+    // backgroundColor: '#FF2F00',
   },
   text: {
     color: muted.white,

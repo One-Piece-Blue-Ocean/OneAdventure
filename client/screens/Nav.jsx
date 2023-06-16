@@ -82,11 +82,12 @@ function Nav({ route }) {
     <UserContext.Provider value={contextObj}>
       <Tab.Navigator
         // eslint-disable-next-line no-shadow
-        screenOptions={({ route }) => ({
+        screenOptions={() => ({
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: route.name === 'Adventures'
-              || route.name === 'AdventureTracking' ? '#00A5E0' : '#FF2F00',
+            // backgroundColor: route.name === 'Adventures'
+            //   || route.name === 'AdventureTracking' ? '#00A5E0' : '#FF2F00',
+            backgroundColor: '#FF2F00',
             paddingTop: 12,
           },
           tabBarLabelStyle: {
