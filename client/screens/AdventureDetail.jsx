@@ -21,12 +21,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     height: '100%',
-    marginTop: StatusBar.currentHeight || 0,
+    paddingTop: 50,
   },
   heading: {
     alignItems: 'center',
     flex: 2,
-    height: '70%',
   },
   friends: {
     fontSize: 14,
@@ -53,6 +52,7 @@ const styles = StyleSheet.create({
     height: '50%',
     resizeMode: 'contain',
     margin: 5,
+    backgroundColor: '#d3d3d3',
   },
   icon: {
     position: 'absolute',
