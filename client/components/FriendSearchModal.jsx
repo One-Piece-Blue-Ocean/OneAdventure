@@ -18,40 +18,6 @@ import {
 import { db } from '../../database/db';
 import { muted } from '../screens/Themes';
 
-// temp friend data
-// const DATA = [
-//   {
-//     uid: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-//     fullName: 'Dave',
-//     profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-//   },
-//   {
-//     uid: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-//     fullName: 'Steve',
-//     profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-//   },
-//   {
-//     uid: '58694a0f-3da1-471f-bd96-145571e29d72',
-//     fullName: 'Jim',
-//     profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-//   },
-//   {
-//     uid: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
-//     fullName: 'Sara',
-//     profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-//   },
-//   {
-//     uid: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
-//     fullName: 'Billy',
-//     profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-//   },
-//   {
-//     uid: '58694a0f-3da1-471f-bd96-145571e29d7z',
-//     fullName: 'Chris',
-//     profilePhoto: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-//   },
-// ];
-
 const styles = StyleSheet.create({
   addFriendBtn: {
     width: 250,
@@ -131,10 +97,8 @@ function FriendSearchModal({
   friendData,
 }) {
   const [pirates, setPirates] = useState([]);
-  // const pirateCollection = collection(db, 'pirates');
 
   const getAllPirates = () => {
-    // query for all pirates
     getDocs(collection(db, 'pirates'))
       .then((piratesDocs) => {
         const myPirateFriendArr = piratesDocs.docs.map((pirateDoc) => ({
@@ -151,15 +115,11 @@ function FriendSearchModal({
   };
 
   const addFriend = (friend) => {
-    console.log('trying to add this friend', friend, 'to this user id', userId, 'friendData');
-    // console.log('my friends!!!!!!!!', friendData);
     const allCurrentPiratesIds = friendData.map((singleFriend) => singleFriend.uid);
     if (!allCurrentPiratesIds.includes(friend.uid)) {
       addDoc(collection(db, 'pirates', userId, 'friends'), { friendId: friend.uid })
         .then(() => {
-          console.log('sucess, grabbing updated friends list');
           getFriends();
-          // getPirates(); get new friend list
         })
         .catch((err) => console.log(err.message));
     } else {
@@ -238,7 +198,6 @@ function FriendSearchModal({
   );
 }
 
-// this will need to be updated
 FriendSearchModal.propTypes = {
   friendSearchModal: PropTypes.bool.isRequired,
   setFriendSearchModal: PropTypes.func.isRequired,
