@@ -136,6 +136,7 @@ function LoginScreen({ navigation }) {
           const interestedAdventure = document.data();
           interestedAdventures.push(interestedAdventure.adventureId);
         });
+        console.log('adventures', piratesAdventures);
         navigation.navigate('Nav', { user: userInfo, pirates_adventures: piratesAdventures, interested: interestedAdventures });
       })
       .catch((error) => {

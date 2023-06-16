@@ -44,6 +44,7 @@ const profileIcon = ({ focused }) => (
 
 function Nav({ route }) {
   const [user, setUser] = useState(route.params);
+  console.log('jk', user);
   const updateUserContext = (key, value) => {
     if (user.user[key]) {
       user.user[key] = value;
