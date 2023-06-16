@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: muted.blue,
-    backgroundColor: '#FF2F00',
+    backgroundColor: muted.blue,
+    // backgroundColor: '#FF2F00',
   },
   text: {
     color: muted.white,
