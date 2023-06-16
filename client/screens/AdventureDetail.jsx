@@ -77,12 +77,12 @@ const styles = StyleSheet.create({
 });
 
 function AdventureDetail({ navigation, route }) {
-  const { selectedEvent, uid: userId} = route.params;
+  const { selectedEvent, uid: userId } = route.params;
   const [friends, setFriends] = useState([]);
   const event = {
-    imageUrl: selectedEvent.image,
+    imageUrl: selectedEvent.image ? selectedEvent.image : selectedEvent.imageUrl,
     title: selectedEvent.title,
-    address: selectedEvent.address[0],
+    address: selectedEvent.address,
     description: selectedEvent.description,
     date: selectedEvent.date.start_date,
     link: selectedEvent.link,
@@ -102,28 +102,28 @@ function AdventureDetail({ navigation, route }) {
         friendsIds = allFriendsDocs.docs.map((friendDoc) => friendDoc.data().friendId)
         // get the adventure from the database (if it exists in the db)
         getDocs(query(collection(db, 'adventures'), where('description', '==', event.description), where('date', '==', event.date)))
-        .then((adventureDoc) => {
-          // if we have this event in the database, then there must be people listed as attending this event
-          if (adventureDoc.docs.length) {
-            const adventureId = adventureDoc.docs[0].id.trim();
-            // get all people who are attending this event
-            getDocs(query(collection(db, 'pirates_adventures'), where('adventureId', '==', adventureId)))
-              .then((piratesAdventuresDocs) => {
-                const allPiratesAttending = piratesAdventuresDocs.docs.map((paDoc) => paDoc.data().userId);
-                // now we can find the intersect of people attending this event and this user's friends
-                const friendsAttendingAdventureIds = friendsIds.filter((id) => allPiratesAttending.includes(id));
-                // once we have the user's friends who are also attending this event, get their names, id, imageurls
-                const promiseArr = friendsAttendingAdventureIds.map((idFriendAttending) =>
-                  getDoc(doc(db, 'pirates', idFriendAttending)).then((friendDocData) => {
-                    const friendData = friendDocData.data();
-                    return {id: friendData.uid, userName: friendData.fullName, profilePic: friendData.profilePhoto}
-                  })
-                )
-                // finally set the friends who are attending this events' information to the friends state
-                Promise.all(promiseArr).then((friendsDataArr) => setFriends(friendsDataArr))
-              })
-          }
-        })
+          .then((adventureDoc) => {
+            // if we have this event in the database, then there must be people listed as attending this event
+            if (adventureDoc.docs.length) {
+              const adventureId = adventureDoc.docs[0].id.trim();
+              // get all people who are attending this event
+              getDocs(query(collection(db, 'pirates_adventures'), where('adventureId', '==', adventureId)))
+                .then((piratesAdventuresDocs) => {
+                  const allPiratesAttending = piratesAdventuresDocs.docs.map((paDoc) => paDoc.data().userId);
+                  // now we can find the intersect of people attending this event and this user's friends
+                  const friendsAttendingAdventureIds = friendsIds.filter((id) => allPiratesAttending.includes(id));
+                  // once we have the user's friends who are also attending this event, get their names, id, imageurls
+                  const promiseArr = friendsAttendingAdventureIds.map((idFriendAttending) =>
+                    getDoc(doc(db, 'pirates', idFriendAttending)).then((friendDocData) => {
+                      const friendData = friendDocData.data();
+                      return { id: friendData.uid, userName: friendData.fullName, profilePic: friendData.profilePhoto }
+                    })
+                  )
+                  // finally set the friends who are attending this events' information to the friends state
+                  Promise.all(promiseArr).then((friendsDataArr) => setFriends(friendsDataArr))
+                })
+            }
+          })
       })
   }
   useEffect(() => {
@@ -232,74 +232,74 @@ AdventureDetail.propTypes = {
         image: PropTypes.string,
       }),
       uid: PropTypes.string.isRequired,
-      },
+    },
     ).isRequired,
   }).isRequired,
 };
-  // date: PropTypes.string.isRequired,
-  // star: PropTypes.bool.isRequired,
-  // TODO: Update once we figure out friends object
-  // friend: PropTypes.arrayOf(
-  //   PropTypes.shape({
-  //     id: PropTypes.string.isRequired,
-  //     name: PropTypes.string.isRequired,
-  //     imageUrl: PropTypes.string.isRequired,
-  //   }),
-  // ),
-  // imageUrl: PropTypes.string,
-  // }),
+// date: PropTypes.string.isRequired,
+// star: PropTypes.bool.isRequired,
+// TODO: Update once we figure out friends object
+// friend: PropTypes.arrayOf(
+//   PropTypes.shape({
+//     id: PropTypes.string.isRequired,
+//     name: PropTypes.string.isRequired,
+//     imageUrl: PropTypes.string.isRequired,
+//   }),
+// ),
+// imageUrl: PropTypes.string,
+// }),
 
-   // "address"
-  // "date"
-  // "description"
-  // "imageUrl"
-  // "link"
-  // "title"
-  // const event = {
-  //   address: route.params[0],
-  //   date: route.params[1],
-  //   description: route.params[2],
-  //   imageUrl: route.params[3],
-  //   link: route.params[4],
-  //   title: route.params[5],
-  // };
+// "address"
+// "date"
+// "description"
+// "imageUrl"
+// "link"
+// "title"
+// const event = {
+//   address: route.params[0],
+//   date: route.params[1],
+//   description: route.params[2],
+//   imageUrl: route.params[3],
+//   link: route.params[4],
+//   title: route.params[5],
+// };
 
-  // const event = route.params.adventureInfo;
-  // console.log(route.params)
+// const event = route.params.adventureInfo;
+// console.log(route.params)
 
-  // const friends = event.friend ? event.friend : [];
-  // temp friend data
-  // const friends = [
-  //   {
-  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-  //     userName: 'Dave',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-  //     userName: 'Steve',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-  //     userName: 'Jim',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
-  //     userName: 'Sara',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
-  //     userName: 'Billy',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  //   {
-  //     id: '58694a0f-3da1-471f-bd96-145571e29d7z',
-  //     userName: 'Chris',
-  //     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
-  //   },
-  // ];
+// const friends = event.friend ? event.friend : [];
+// temp friend data
+// const friends = [
+//   {
+//     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+//     userName: 'Dave',
+//     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+//   },
+//   {
+//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+//     userName: 'Steve',
+//     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+//   },
+//   {
+//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
+//     userName: 'Jim',
+//     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+//   },
+//   {
+//     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bz',
+//     userName: 'Sara',
+//     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+//   },
+//   {
+//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f6z',
+//     userName: 'Billy',
+//     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+//   },
+//   {
+//     id: '58694a0f-3da1-471f-bd96-145571e29d7z',
+//     userName: 'Chris',
+//     profilePic: 'https://www.workforcesolutionsalamo.org/wp-content/uploads/2021/04/board-member-missing-image.png',
+//   },
+// ];
 
 export default AdventureDetail;
