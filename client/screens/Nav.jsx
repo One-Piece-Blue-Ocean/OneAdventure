@@ -35,7 +35,25 @@ function Nav({ route }) {
       setUser({ ...user });
     }
   };
-  const contextObj = useMemo(() => ({ user, updateUserContext, setInterestedContext }), [user]);
+
+  // eslint-disable-next-line camelcase
+  const setPiratesAdventuresContext = (documentId, pirates_adventures) => {
+    // eslint-disable-next-line camelcase
+    if (pirates_adventures) {
+      user.pirates_adventures.push(documentId);
+      setUser({ ...user });
+    } else {
+      const update = user.pirates_adventures.filter((id) => id !== documentId);
+      user.pirates_adventures = update;
+      setUser({ ...user });
+    }
+  };
+  const contextObj = useMemo(() => ({
+    user,
+    updateUserContext,
+    setInterestedContext,
+    setPiratesAdventuresContext,
+  }), [user]);
 
   return (
     <UserContext.Provider value={contextObj}>
