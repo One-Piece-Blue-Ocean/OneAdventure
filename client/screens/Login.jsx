@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 });
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('monkey@luffy.com');
+  const [email, setEmail] = useState('roro@zoro.com');
   const [password, setPassword] = useState('hello1');
 
   const createOneButtonAlert = (message) => (

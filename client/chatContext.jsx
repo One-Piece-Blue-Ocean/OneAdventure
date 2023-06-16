@@ -23,11 +23,11 @@ export function ChatProvider({ children }) {
     if (channel !== undefined) {
       // const chatName = () => (channel ? channel.cid : 'undefined');
       console.log('Chat Provider Channel State -----', channel.cid);
-      // navigation.navigate('Nav', {
-      //   screen: 'Messaging',
-      //   params: {
-      //   },
-      // });
+      navigation.navigate('Nav', {
+        screen: 'Messaging',
+        params: {
+        },
+      });
     }
   }, [channel]);
 

@@ -25,11 +25,12 @@ const createChannel = (friends, setChannel, navigation, userId) => {
   channelClient.create()
     .then((result) => {
       setChannel(result.channel);
-      navigation.navigate('Nav', {
-        screen: 'Messaging',
-        params: {
-        },
-      });
+      // navigation.navigate('Nav', {
+      //   screen: 'Messaging',
+      //   params: {
+
+      //   },
+      // });
     })
     .catch((error) => console.log(error));
 };
