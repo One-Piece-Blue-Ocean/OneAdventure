@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
 });
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('ChatBot2@gmail.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('monkey@luffy.com');
+  const [password, setPassword] = useState('hello1');
 
   const createOneButtonAlert = (message) => (
     Alert.alert('Error', message, [

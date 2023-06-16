@@ -180,6 +180,7 @@ function AdventureListScreen({ navigation, setSearch }) {
         <FadeInView style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
+            placeholder="Enter a city or zipcode"
             value={searchText}
             onChangeText={setSearchText}
           />
