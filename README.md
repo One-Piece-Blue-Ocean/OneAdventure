@@ -154,30 +154,43 @@ No matter the environment, first run `npm install` for all 3 packages (root, cli
 </details>
 <br>
 
-### 🦮 Profile
+### Profile
 <hr>
 <details>
-  <summary>PROFILE VIEW</summary>
+  <summary>Changing Profile Photo</summary>
   <br>
   <ul>
-    <li>Displays profile of the current user</li>
-    <li>Renders available pics, information, and conditional "friendly" tags</li>
-    <li>Tapping pencil brings up edit feature</li>
+    <li>Tapping the edit button just below the profile photo opens a modal</li>
+    <li>The Choose Photo button lets user browse their phone for a photo</li>
+    <li>Tap upload once a photo has been chosen</li>
   </ul>
-<img width="247.5" alt="profile" src="https://user-images.githubusercontent.com/112882051/224509724-37226e59-ab9b-4cc4-9482-131ca0199d58.png">
+  <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/62e20d90-6641-45a6-9eea-a8b0917d8211' width=180/>
 </details>
 <details>
-  <summary>EDIT PROFILE</summary>
+  <summary>Editing Profile Details</summary>
   <br>
   <ul>
-    <li>Allows customization of all dog pics</li>
-    <li>City & State can be changed</li>
-    <li>Bio can be edited</li>
-    <li>All unedited/untouched items remain the same as pre-editing</li>
-    <li>User has option to discard edits with "Go Back" button</li>
-    <li><em>Future enhancement: </em>Street address can be changed</li>
+    <li>Tapping the edit button to the right of a detail opens a modal</li>
+    <li>When satitisfied with input tap the Submit button</li>
   </ul>
-<img width="247.5" alt="edit profile" src="https://user-images.githubusercontent.com/112882051/224509606-0b2f5c64-3a39-4362-9f2d-2156bfbab918.png">
+  <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/716fdc83-65db-4674-b85d-6c92eb3a313c' width=180/>
+</details>
+<details>
+  <summary>Following / Unfollow Friends</summary>
+  <br>
+  <ul>
+    <li>To find friends to follow, tap the search button on the Friends List</li>
+    <li>Tap a friend to follow them</li>
+  </ul>
+  <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/2eea0d31-8e70-4772-8bdc-d64f91b4b1ed' width=180/>
+  
+  <summary>Unfollowing Friends</summary>
+  <br>
+  <ul>
+    <li>To unfollow a friend, tapping the X button opens a modal</li>
+    <li>Tap Confirm to unfollow</li>
+  </ul>
+  <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/a4391361-b124-4d3c-9127-7eb1159a7109' width=180/>
 </details>
 <br>
 
