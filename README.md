@@ -2,10 +2,9 @@
 
 <h1 align="center">
   <br>
-    # 🐶 puppypals
+    # One Adventure
     <h3 align="left">
-        <i>A social networking mobile application designed to allow local dog owners to meet,
-           host events, chat, and organize play dates with each other.</i>
+        <i>A social networking mobile application designed to allow users to find and invite friends to nearby outdoor adventures.</i>
       <br>
     </h3>
     <br>
@@ -23,8 +22,7 @@
 
 ### backend
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
-![mongoDB](https://img.shields.io/badge/mongoDB-FFF?style=for-the-badge&logo=mongodb&logoColor=green)
+![Firebase](![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white))
 
 ### front-to-back
 ![Socket.io](https://img.shields.io/badge/socket.io-FFF?style=for-the-badge&logo=socket.io&logoColor=black)
@@ -32,20 +30,19 @@
 
 ## 🚀 Getting Started
 
-No matter the environment, first run `npm install` for all 3 packages (root, client, server).
+No matter the environment, first run `npm install` in the root directory.
 
-1. Start MongoDB instance.
-2. `npm start` in `ROOTDIR/server`
-3. `npm start` in `ROOTDIR/client`
+1. Create a new Firebase project and initialize Firestore and Authentication via email and password.
+2. `npm run start` in `ROOTDIR`
 4. Use the corresponding keys to launch the app on your specified device.
 <br>
 
-## 🐾 The App
+## The App
 <img width="247.5" alt="landing page" src="https://user-images.githubusercontent.com/112882051/224513607-b23c1c25-df1e-42ad-b301-b814d95141f9.png">
 
 <br>
 
-### 🐕 Landing Page
+### Landing Page
 <hr>
 <details>
 <summary>LOGIN</summary>
@@ -55,40 +52,38 @@ No matter the environment, first run `npm install` for all 3 packages (root, cli
   <li>Redirects to "Home" page on successful login</li>
   <li>Nav Bar (bottom) is rendered upon succesful login</li>
 </ul>
-<img width="247.5" alt="sign in" src="https://user-images.githubusercontent.com/112882051/224507524-c8424c43-cb2e-4128-91fa-1449488b6213.png">
+<img width="247.5" alt="sign in" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/5e9dc0d4-6d5e-4810-b43a-4faaf5a44d6a"
+">
 </details>
 <details>
   <summary>SIGN UP</summary>
   <br>
   <ul>
     <li>Allows for creation of new account</li>
-    <li>Validates age-appropriateness of user (client spec. of 18 yrs or older)</li>
     <li>"Create Account" button directs new user to set up profile</li>
       <ul>
-        <li>User uploads one Human pic</li>
-        <li>User uploads one main Dog pic, and up to five additional Dog pics</li>
-        <li>User builds profile w/ variety of text inputs and dropdown inputs</li>
+        <li>User Enters Basic Information</li>
         <li>Upon successful account creation, new user is redirected to "Home" page</li>
         <li>Nav Bar (bottom) is rendered</li>
       </ul>
   </ul>
-  <img width="247.5" alt="sign up" src="https://user-images.githubusercontent.com/112882051/224507661-154cf8b5-4bcd-441e-9c93-7c6ba00c13d7.png">
+  <img width="247.5" alt="sign up" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/48eea807-5664-4f79-b440-255a894023c7"
+>
 </details>
 <br>
 
-### 🦴 Home Page
+### Adventure List 
 <hr>
 <details>
   <summary>MAIN VIEW</summary>
   <br>
   <ul>
-    <li>Swipe right to send a friend invite</li>
-    <li>Swipe left to pass</li>
-    <li>Use the <code>...</code> button to filter dogs</li>
+    <li>Scroll to view adventures in your area</li>
+    <li>Tap an event card for more information</li>
+    <li>Tap the star on an event card to save the event to your list of interested events</li>
   </ul>
   <div style="display: flex; flex-direction: row; align-items: space-evenly;">
-    <img width="247.5" alt="home page" src="https://user-images.githubusercontent.com/112882051/224508184-f5ddff9f-0e18-44f9-9e78-2db4d6a63389.png">
-    <img width="247.5" alt="filter dogs" src="https://user-images.githubusercontent.com/112882051/224508478-fc9952fd-f2db-441f-9396-0f8977da2ab1.png">
+    <img width="261" alt="image" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/de63d195-3a6f-448e-8b1d-8482d7ad6ec0">
   </div>
 </details>
 <details>
@@ -201,7 +196,7 @@ No matter the environment, first run `npm install` for all 3 packages (root, cli
 [Terrence Koo](https://github.com/tko0) <br>
 [Bolton Lin](https://github.com/boltonlin) (Architecture Manager) <br>
 [Arpan Shrestha](https://github.com/Pseudo08) <br>
-[Tom Spitz](https://github.com/tjspitz) (UI Co-Manager)
+[Noah Beito](https://github.com/noahbeito) <br>
 
 ## Conclusion
-We hope you love Puppypals as much as we do!
+Find your next adventure!
