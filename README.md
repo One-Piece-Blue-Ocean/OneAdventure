@@ -1,8 +1,6 @@
-# OneAdventure
-
 <h1 align="center">
   <br>
-    # One Adventure
+    One Adventure
     <h3 align="left">
         <i>A social networking mobile application designed to allow users to find and invite friends to nearby outdoor adventures.</i>
       <br>
@@ -22,7 +20,7 @@
 
 ### backend
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Firebase](![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white))
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
 
 ### front-to-back
 ![Socket.io](https://img.shields.io/badge/socket.io-FFF?style=for-the-badge&logo=socket.io&logoColor=black)
@@ -38,7 +36,7 @@ No matter the environment, first run `npm install` in the root directory.
 <br>
 
 ## The App
-<img width="247.5" alt="landing page" src="https://user-images.githubusercontent.com/112882051/224513607-b23c1c25-df1e-42ad-b301-b814d95141f9.png">
+<img width="247.5" alt="sign in" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/5e9dc0d4-6d5e-4810-b43a-4faaf5a44d6a">
 
 <br>
 
@@ -52,8 +50,7 @@ No matter the environment, first run `npm install` in the root directory.
   <li>Redirects to "Home" page on successful login</li>
   <li>Nav Bar (bottom) is rendered upon succesful login</li>
 </ul>
-<img width="247.5" alt="sign in" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/5e9dc0d4-6d5e-4810-b43a-4faaf5a44d6a"
-">
+<img width="247.5" alt="sign in" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/5e9dc0d4-6d5e-4810-b43a-4faaf5a44d6a">
 </details>
 <details>
   <summary>SIGN UP</summary>
@@ -90,12 +87,12 @@ No matter the environment, first run `npm install` in the root directory.
   <summary>DETAIL VIEW</summary>
   <br>
   <ul>
-    <li>Access by tapping main image</li>
-    <li>Shows additional information about current dog & its owner (user)</li>
-    <li>"Friendly" tags are conditionally rendered if they are `true`</li>
-    <li>Swiping/cycling thru dogs is still possible</li>
+    <li>Access by tapping the event card</li>
+    <li>Shows additional information about the event and if any friends are attending</li>
+    <li>Friends conditionally render if they have marked themselves attending that specific event</li>
   </ul>
-  <img width="247.5" alt="more dog info" src="https://user-images.githubusercontent.com/112882051/224508878-1c4e0278-3d77-425f-9547-a77a66f943f3.png">
+  <img width="262" alt="image" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/7024be8b-a4ee-4c7c-929b-fafd36e84861">
+  <img width="263" alt="image" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/30cafdc4-4ab8-426a-9002-7e72c5e16c47">
 </details>
 <br>
 
