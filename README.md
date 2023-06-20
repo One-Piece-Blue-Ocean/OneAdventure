@@ -187,7 +187,7 @@ No matter the environment, first run `npm install` in the root directory.
 <br>
 
 ## The Team
-[Jacob Fink](https://github.com/Bradyhoo) (Project Manager) <br>
+[Sasha Gordin](https://github.com/SashaGordin) (Project Manager) <br>
 [Josh Jang](https://github.com/wooseok0717) <br>
 [Aimee Kang](https://github.com/aimeekang) (UI Co-Manager) <br>
 [Terrence Koo](https://github.com/tko0) <br>
