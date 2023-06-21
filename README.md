@@ -101,6 +101,7 @@ No matter the environment, first run `npm install` in the root directory.
 <details>
   <summary>MAP VIEW</summary>
   <br>
+
   <ul>
     <li>Scroll to view adventures in your area</li>
     <li>Click an event marker for more information</li>
@@ -108,18 +109,18 @@ No matter the environment, first run `npm install` in the root directory.
     <li>Clicking search this area searches current area for events</li>
   </ul>
   <div style="display: flex; flex-direction: row; align-items: space-evenly;">
-    <img width="261" alt="image" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/de63d195-3a6f-448e-8b1d-8482d7ad6ec0">
+    <img width="261" alt="Screenshot 2023-06-20 at 12 23 42 PM" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/55962431/2f2e7210-c8be-4f78-81b8-fed8bc77d9c5">
+    <img width="261" alt="Screenshot 2023-06-20 at 12 23 42 PM" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/55962431/ca5b55ce-cc41-49b6-9609-75077c1184cb">
   </div>
 </details>
 <details>
-  <summary>DETAIL VIEW</summary>
+  <summary>MODAL VIEW</summary>
   <br>
   <ul>
     <li>Shows additional information about the event</li>
     <li>Tap the star on an event card to save the event to your list of interested events</li>
   </ul>
-  <img width="262" alt="image" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/7024be8b-a4ee-4c7c-929b-fafd36e84861">
-  <img width="263" alt="image" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/30cafdc4-4ab8-426a-9002-7e72c5e16c47">
+  <img width="264" alt="Screenshot 2023-06-20 at 12 24 22 PM" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/55962431/b11bc945-0782-4e99-92e6-01769e44d5b3">  
 </details>
 <br>
 
