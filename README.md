@@ -203,7 +203,8 @@ No matter the environment, first run `npm install` in the root directory.
     <li>Tap a friend to follow them</li>
   </ul>
   <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/2eea0d31-8e70-4772-8bdc-d64f91b4b1ed' width=180/>
-  
+  </video>details>
+<details>
   <summary>Unfollowing Friends</summary>
   <br>
   <ul>
@@ -220,7 +221,7 @@ No matter the environment, first run `npm install` in the root directory.
 [Aimee Kang](https://github.com/aimeekang) (UI Co-Manager) <br>
 [Terrence Koo](https://github.com/tko0) <br>
 [Bolton Lin](https://github.com/boltonlin) (Architecture Manager) <br>
-[Arpan Shrestha](https://github.com/Pseudo08) <br>
+[Tyler O'Neill](https://github.com/jtoneill) <br>
 [Noah Beito](https://github.com/noahbeito) <br>
 
 ## Conclusion
