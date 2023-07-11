@@ -124,7 +124,7 @@ No matter the environment, first run `npm install` in the root directory.
 </details>
 <br>
 
-### 🐩 Invites & Messaging
+### Invites & Messaging
 <hr>
 <details>
   <summary>PENDING INVITES</summary>
@@ -148,7 +148,7 @@ No matter the environment, first run `npm install` in the root directory.
 </details>
 <br>
 
-### 🌭 Events
+### Events
 <hr>
 <details>
   <summary>INVITES & ATTENDING</summary>
@@ -217,10 +217,6 @@ No matter the environment, first run `npm install` in the root directory.
 
 ## The Team
 [Sasha Gordin](https://github.com/SashaGordin) (Project Manager) <br>
-[Josh Jang](https://github.com/wooseok0717) <br>
-[Aimee Kang](https://github.com/aimeekang) (UI Co-Manager) <br>
-[Terrence Koo](https://github.com/tko0) <br>
-[Bolton Lin](https://github.com/boltonlin) (Architecture Manager) <br>
 [Tyler O'Neill](https://github.com/jtoneill) <br>
 [Noah Beito](https://github.com/noahbeito) <br>
 
