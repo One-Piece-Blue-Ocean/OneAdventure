@@ -196,14 +196,15 @@ No matter the environment, first run `npm install` in the root directory.
   <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/716fdc83-65db-4674-b85d-6c92eb3a313c' width=180/>
 </details>
 <details>
-  <summary>Following / Unfollow Friends</summary>
+  <summary>Following Friends</summary>
   <br>
   <ul>
     <li>To find friends to follow, tap the search button on the Friends List</li>
     <li>Tap a friend to follow them</li>
   </ul>
   <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/2eea0d31-8e70-4772-8bdc-d64f91b4b1ed' width=180/>
-  </video>details>
+  </video>
+</details>
 <details>
   <summary>Unfollowing Friends</summary>
   <br>
