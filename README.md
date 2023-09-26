@@ -8,6 +8,9 @@
     <br>
 </h1>
 
+## 🎬 Video Walkthrough of the App: 
+[Click here](https://youtu.be/xXJcnzJeXUs) for a video of the app on YouTube!
+
 ## Technologies Used
 
 ### setup & configuration
@@ -21,10 +24,6 @@
 ### backend
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
-
-### front-to-back
-![Socket.io](https://img.shields.io/badge/socket.io-FFF?style=for-the-badge&logo=socket.io&logoColor=black)
-<br>
 
 ## 🚀 Getting Started
 
@@ -124,53 +123,26 @@ No matter the environment, first run `npm install` in the root directory.
 </details>
 <br>
 
-### Invites & Messaging
+### Messaging
 <hr>
 <details>
-  <summary>PENDING INVITES</summary>
+  <summary>BROWSE MESSAGE THREADS</summary>
   <br>
   <ul>
-    <li>Shows "invites", i.e. other users who have swiped right on your dog</li>
-    <li>Similar to home page, swipe right to accept invite, swipe left to reject</li>
-    <li><em>Future Enhancement: </em>tap invite to see associated profile</li>
+    <li>Shows a list of current and past conversations</li>
   </ul>
-  <img width="247.5" alt="accept invite" src="https://user-images.githubusercontent.com/112882051/224509002-5d1d29cf-c09d-4a62-805f-cad1945d6227.png">
+  <img width="264" alt="Messaging Home" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/da6dc222-14fc-4a8a-bb52-864f79bcb95c">
 </details>
 <details>
-  <summary>ACCEPTED & MESSAGING</summary>
+  <summary>CHAT WITH FRIENDS</summary>
   <br>
   <ul>
-    <li>"Accepted" layout same as "Pending</li>
-    <li>"Contains users whom you have swiped right to accept their invite, or vice-versa</li>
-    <li>Tapping on a user in "accepted" brings up a chat view, with real-time messaging & emoji reaction capability</li>
+    <li>Real time chat with a friend of group of friends</li>
+    <li>Send media easily via chat</li>
+    <li>Tap on a message to add a reaction or choose from a list of actions</li>
   </ul>
-  <img width="247.5" alt="messaging" src="https://user-images.githubusercontent.com/112882051/224509310-e9e62ac1-dbf8-44a7-9ff1-36cb95f9660e.png">
-</details>
-<br>
-
-### Events
-<hr>
-<details>
-  <summary>INVITES & ATTENDING</summary>
-  <br>
-  <ul>
-    <li>Shows events user is invited to/attending, based upon selected view</li>
-    <li>Tapping on an event brings up details for the associated event</li>
-    <li>User can RSVP to an event ("Invited" view) within event details modal</li>
-  </ul>
-  <div style="display: flex; flex-direction: row; align-items: space-evenly;">
-    <img width="247.5" alt="invite or attending list" src="https://user-images.githubusercontent.com/112882051/224509938-07b4a04a-ed1a-4968-a216-53bcfa427638.png">
-    <img width="247.5" alt="event details" src="https://user-images.githubusercontent.com/112882051/224510068-376694a0-6228-4060-96c4-6423a571b0e9.png">
-  </div>
-</details>
-<details>
-  <summary>CREATE EVENT</summary>
-  <br>
-  <ul>
-    <li>Upon tapping ➕ icon, user can create a new event</li>
-    <li>User can invite friends to the event before saving/creating</li>
-  </ul>
-  <img width="247.5" alt="invite or attending list" src="https://user-images.githubusercontent.com/112882051/224510147-10f3f24f-d058-4d8a-b059-5c49756a0bcb.png">
+  <img width="264" alt="Messaging Thread" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/8a8394e8-ee85-489f-ae0a-dfa84c47324d">
+  <img width="264" alt="Add a reaction to a message" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/4a99f4d1-0e32-4884-8aa0-a2ace0f2878e">
 </details>
 <br>
 
@@ -219,6 +191,9 @@ No matter the environment, first run `npm install` in the root directory.
 [Sasha Gordin](https://github.com/SashaGordin) (Project Manager) <br>
 [Tyler O'Neill](https://github.com/jtoneill) <br>
 [Noah Beito](https://github.com/noahbeito) <br>
+[Jacqueline Kelly](https://github.com/Jacqueline-Kelly) <br>
+[Thang Nguyen](https://github.com/thang14nguyen) <br>
+Keith! <br>
 
 ## Conclusion
 Find your next adventure!
