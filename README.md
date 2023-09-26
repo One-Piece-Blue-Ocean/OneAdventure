@@ -42,7 +42,7 @@ No matter the environment, first run `npm install` in the root directory.
 ### Landing Page
 <hr>
 <details>
-<summary>LOGIN</summary>
+<summary>Login</summary>
 <br>
 <ul>
   <li>Authenticates users who have already created an account</li>
@@ -52,7 +52,7 @@ No matter the environment, first run `npm install` in the root directory.
 <img width="247.5" alt="sign in" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/5e9dc0d4-6d5e-4810-b43a-4faaf5a44d6a">
 </details>
 <details>
-  <summary>SIGN UP</summary>
+  <summary>Sign Up</summary>
   <br>
   <ul>
     <li>Allows for creation of new account</li>
@@ -71,7 +71,7 @@ No matter the environment, first run `npm install` in the root directory.
 ### Adventure List 
 <hr>
 <details>
-  <summary>MAIN VIEW</summary>
+  <summary>Main View</summary>
   <br>
   <ul>
     <li>Scroll to view adventures in your area</li>
@@ -83,7 +83,7 @@ No matter the environment, first run `npm install` in the root directory.
   </div>
 </details>
 <details>
-  <summary>DETAIL VIEW</summary>
+  <summary>Detail View</summary>
   <br>
   <ul>
     <li>Access by tapping the event card</li>
@@ -98,7 +98,7 @@ No matter the environment, first run `npm install` in the root directory.
 ### Adventure Map 
 <hr>
 <details>
-  <summary>MAP VIEW</summary>
+  <summary>Map View</summary>
   <br>
 
   <ul>
@@ -113,7 +113,7 @@ No matter the environment, first run `npm install` in the root directory.
   </div>
 </details>
 <details>
-  <summary>MODAL VIEW</summary>
+  <summary>Modal View</summary>
   <br>
   <ul>
     <li>Shows additional information about the event</li>
@@ -126,7 +126,7 @@ No matter the environment, first run `npm install` in the root directory.
 ### Messaging
 <hr>
 <details>
-  <summary>BROWSE MESSAGE THREADS</summary>
+  <summary>Browse Message Threads</summary>
   <br>
   <ul>
     <li>Shows a list of current and past conversations</li>
@@ -134,7 +134,7 @@ No matter the environment, first run `npm install` in the root directory.
   <img width="264" alt="Messaging Home" src="https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/90667844/da6dc222-14fc-4a8a-bb52-864f79bcb95c">
 </details>
 <details>
-  <summary>CHAT WITH FRIENDS</summary>
+  <summary>Chat With Friends</summary>
   <br>
   <ul>
     <li>Real time chat with a friend of group of friends</li>
@@ -175,7 +175,8 @@ No matter the environment, first run `npm install` in the root directory.
     <li>Tap a friend to follow them</li>
   </ul>
   <video src='https://github.com/One-Piece-Blue-Ocean/OneAdventure/assets/19845668/2eea0d31-8e70-4772-8bdc-d64f91b4b1ed' width=180/>
-  </video>details>
+  </video>
+</details>
 <details>
   <summary>Unfollowing Friends</summary>
   <br>
@@ -195,5 +196,5 @@ No matter the environment, first run `npm install` in the root directory.
 [Thang Nguyen](https://github.com/thang14nguyen) <br>
 Keith! <br>
 
-## Conclusion
+
 Find your next adventure!
